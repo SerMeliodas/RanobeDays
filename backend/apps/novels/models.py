@@ -1,7 +1,16 @@
 from django.db import models
+from django.utils import timezone
 
 
-class Novel(models.Model):
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+    updated_at = models.DateTimeField(db_index=True, auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Novel(BaseModel):
     title = models.CharField(max_length=255)
     tags = models.ManyToManyField('Tag')
     genres = models.ManyToManyField('Genre')
@@ -10,7 +19,7 @@ class Novel(models.Model):
         db_table = 'novels'
 
 
-class Chapter(models.Model):
+class Chapter(BaseModel):
     title = models.CharField(max_length=255)
     novel = models.ForeignKey('Novel', on_delete=models.CASCADE)
     text = models.TextField()
