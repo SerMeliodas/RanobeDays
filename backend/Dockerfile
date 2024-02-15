@@ -4,8 +4,8 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
 
-COPY req.txt /code/
+COPY requirements.txt /code/
 
-RUN pip install -r req.txt
+RUN pip install -r requirements.txt
 
 COPY . /code/

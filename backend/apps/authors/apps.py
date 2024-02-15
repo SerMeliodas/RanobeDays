@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BookmarkConfig(AppConfig):
+class AuthorsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.bookmark'
+    name = 'apps.authors'

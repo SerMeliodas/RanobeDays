@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CommentConfig(AppConfig):
+class TranslatorsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.comment'
+    name = 'apps.translators'

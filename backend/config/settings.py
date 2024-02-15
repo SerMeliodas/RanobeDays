@@ -2,7 +2,7 @@ from pathlib import Path
 import environ
 
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, True)
 )
 
 
@@ -29,10 +29,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
-    'apps.novel',
-    'apps.comment',
-    'apps.bookmark'
+    'drf_yasg'
+
+    'apps.novels',
 ]
 
 MIDDLEWARE = [
