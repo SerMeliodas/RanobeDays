@@ -7,9 +7,9 @@ from .views import (
 
 
 novel_patterns = [
-    path('create/', NovelCreatApi.as_view(), name="create"),
-    path('', NovelListApi.as_view(), name="list"),
-    path('<slug:slug>/', NovelGetApi.as_view(), name="get"),
+    path('create/', NovelCreatApi.as_view(), name="create new novel"),
+    path('', NovelListApi.as_view(), name="novels list"),
+    path('<slug:slug>/', NovelGetApi.as_view(), name="get novel"),
 ]
 
 
