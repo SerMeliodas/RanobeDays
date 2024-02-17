@@ -14,7 +14,7 @@ class BaseModel(models.Model):
 
 class Novel(BaseModel):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, default=title)
+    slug = models.SlugField(max_length=255, default=title, db_index=True)
     tags = models.ManyToManyField('Tag', db_index=True)
     genres = models.ManyToManyField('Genre', db_index=True)
 
@@ -30,7 +30,7 @@ class Novel(BaseModel):
         try:
             Novel.objects.get(title=self.title)
             raise ValidationError('Cannot create the novel. This title has'
-                                  'already been in data base')
+                                  'already been taken')
         except self.DoesNotExist:
             pass
 
