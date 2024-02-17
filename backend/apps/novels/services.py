@@ -1,5 +1,5 @@
 from .models import Novel
-from .dataclasses import NovelDTO
+from .types import NovelDTO
 
 
 def create_novel(dto: NovelDTO) -> Novel:
@@ -14,3 +14,8 @@ def create_novel(dto: NovelDTO) -> Novel:
         obj.genres.add(*[i['id'] for i in dto.genres])
 
     return obj
+
+
+# TODO: implement update_novel function
+def update_novel(pk: int, dto: NovelDTO) -> Novel:
+    return Novel()

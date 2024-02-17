@@ -2,12 +2,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .dataclasses import NovelDTO
+from .types import NovelDTO
 from .serializers import NovelSerializer
 
 
 from .services import (
-    create_novel
+    create_novel,
+    update_novel
 )
 from .selectors import (
     novel_list,
@@ -18,7 +19,7 @@ from .selectors import (
 class NovelListApi(APIView):
     """Api view to get the Novel list"""
 
-    def get(self, request):
+    def get(self, request) -> Response:
         novels = novel_list()
 
         data = NovelSerializer(novels, many=True).data
@@ -28,7 +29,7 @@ class NovelListApi(APIView):
 
 class NovelGetApi(APIView):
 
-    def get(self, request, slug):
+    def get(self, request, slug: str) -> Response:
         novel = get_novel(slug=slug)
 
         data = NovelSerializer(novel).data
@@ -39,7 +40,7 @@ class NovelGetApi(APIView):
 class NovelCreatApi(APIView):
     """Api for creating Novel"""
 
-    def post(self, request):
+    def post(self, request) -> Response:
         serializer = NovelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -48,3 +49,16 @@ class NovelCreatApi(APIView):
 
         return Response(data=data,
                         status=status.HTTP_201_CREATED)
+
+
+class NovelUpdateApi(APIView):
+    """Api for updating an instance of Novel"""
+
+    def post(self, request, pk: int) -> Response:
+        serializer = NovelSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        obj = update_novel(pk, NovelDTO(**serializer.validated_data))
+        data = NovelSerializer(obj).data
+
+        return Response(data=data, status=status.HTTP_200_OK)
