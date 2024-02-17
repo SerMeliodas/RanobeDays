@@ -11,7 +11,7 @@ class Tag(TypedDict):
 
 
 @dataclass
-class NovelCreateDTO:
+class NovelDTO:
     title: str
     tags: list[Tag]
     genres: list[Genre]

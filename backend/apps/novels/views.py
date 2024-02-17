@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .dataclasses import NovelCreateDTO
+from .dataclasses import NovelDTO
 from .serializers import NovelSerializer
 
 
@@ -43,7 +43,7 @@ class NovelCreatApi(APIView):
         serializer = NovelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        obj = create_novel(NovelCreateDTO(**serializer.validated_data))
+        obj = create_novel(NovelDTO(**serializer.validated_data))
         data = NovelSerializer(obj).data
 
         return Response(data=data,

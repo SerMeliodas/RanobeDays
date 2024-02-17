@@ -1,8 +1,8 @@
 from .models import Novel
-from .dataclasses import NovelCreateDTO
+from .dataclasses import NovelDTO
 
 
-def create_novel(dto: NovelCreateDTO) -> Novel:
+def create_novel(dto: NovelDTO) -> Novel:
     obj = Novel(title=dto.title)
     obj.isExist()
     obj.save()
