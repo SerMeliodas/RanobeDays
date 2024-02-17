@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 
 
 class BaseModel(models.Model):
@@ -12,11 +14,25 @@ class BaseModel(models.Model):
 
 class Novel(BaseModel):
     title = models.CharField(max_length=255)
-    tags = models.ManyToManyField('Tag')
-    genres = models.ManyToManyField('Genre')
+    slug = models.SlugField(max_length=255, default=title)
+    tags = models.ManyToManyField('Tag', db_index=True)
+    genres = models.ManyToManyField('Genre', db_index=True)
 
     class Meta:
+        ordering = ["-created_at"]
         db_table = 'novels'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Novel, self).save(*args, **kwargs)
+
+    def isExist(self):
+        try:
+            Novel.objects.get(title=self.title)
+            raise ValidationError('Cannot create the novel. This title has'
+                                  'already been in data base')
+        except self.DoesNotExist:
+            pass
 
 
 class Chapter(BaseModel):
