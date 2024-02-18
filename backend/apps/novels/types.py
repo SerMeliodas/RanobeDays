@@ -1,17 +1,17 @@
-from dataclasses import dataclass
-from typing import TypedDict
+from pydantic import BaseModel
 
 
-class Genre(TypedDict):
+class Tag(BaseModel):
     id: int
+    name: str | None = None
 
 
-class Tag(TypedDict):
+class Genre(BaseModel):
     id: int
+    name: str | None = None
 
 
-@dataclass
-class NovelDTO:
+class NovelDTO(BaseModel):
     title: str
     tags: list[Tag]
     genres: list[Genre]
