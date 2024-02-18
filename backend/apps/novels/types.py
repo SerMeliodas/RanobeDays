@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import TypedDict
 
 
@@ -9,7 +10,8 @@ class Tag(TypedDict):
     id: int
 
 
-class NovelDTO(TypedDict):
+@dataclass
+class NovelDTO:
     title: str
     tags: list[Tag]
     genres: list[Genre]
