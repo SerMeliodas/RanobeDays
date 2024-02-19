@@ -1,5 +1,6 @@
 from .models import Novel
 from .types import NovelDTO
+from apps.common.services import model_update
 
 
 def create_novel(dto: NovelDTO) -> Novel:
@@ -7,11 +8,8 @@ def create_novel(dto: NovelDTO) -> Novel:
     obj.isExist()
     obj.save()
 
-    if dto.tags is not None:
-        obj.tags.add(*[i.id for i in dto.tags])
-
-    if dto.genres is not None:
-        obj.genres.add(*[i.id for i in dto.genres])
+    obj.genres.set(dto.genres)
+    obj.tags.set(dto.tags)
 
     return obj
 
