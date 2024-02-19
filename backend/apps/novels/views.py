@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from .types import NovelDTO
-from .serializers import NovelSerializer
+from .serializers import NovelSerializer, NovelDTOSerializer
 
 
 from .services import (
@@ -41,7 +41,7 @@ class NovelCreatApi(APIView):
     """Api for creating Novel"""
 
     def post(self, request) -> Response:
-        serializer = NovelSerializer(data=request.data)
+        serializer = NovelDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         obj = create_novel(NovelDTO(**serializer.validated_data))
@@ -55,7 +55,7 @@ class NovelUpdateApi(APIView):
     """Api for updating an instance of Novel"""
 
     def post(self, request, pk: int) -> Response:
-        serializer = NovelSerializer(data=request.data)
+        serializer = NovelDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         obj = update_novel(pk, NovelDTO(**serializer.validated_data))
