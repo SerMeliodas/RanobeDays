@@ -20,7 +20,7 @@ def model_update(*, instance: models.Model, fields: list[str],
     has_updated = False
     updated_fields = list()
     many_to_many_fields = dict()
-    model_fields = {field.name: field for field in instance._meta.fields}
+    model_fields = {field.name: field for field in instance._meta.fields + instance._meta.many_to_many}
 
     for field in fields:
         if field not in data:
@@ -28,14 +28,13 @@ def model_update(*, instance: models.Model, fields: list[str],
 
         model_field = model_fields.get(field)
 
-        assert model_field is not None, f"{field} is not part of "
-        "{instance.__class__.__name__} fields"
+        assert model_field is not None, f"{field} is not part of {instance.__class__.__name__} fields"
 
-        if isinstance(field, models.ManyToManyField):
+        if isinstance(model_fields[field], models.ManyToManyField):
             many_to_many_fields[field] = data[field]
             continue
 
-        if getattr(field, instance) != data[field]:
+        if getattr(instance, field) != data[field]:
             has_updated = True
             updated_fields.append(field)
             setattr(instance, field, data[field])
@@ -47,7 +46,7 @@ def model_update(*, instance: models.Model, fields: list[str],
                 instance.updated_at = timezone.now()
 
         instance.full_clean()
-        instance.save(updated_fields=updated_fields)
+        instance.save(update_fields=updated_fields)
 
     has_updated = _update_many_to_many_fields(instance, many_to_many_fields)
 
