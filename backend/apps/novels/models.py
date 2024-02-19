@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
-from django.core.exceptions import ValidationError
+
+from apps.common.exceptions import AlreadyExistError
 
 
 class BaseModel(models.Model):
@@ -26,11 +27,10 @@ class Novel(BaseModel):
         self.slug = slugify(self.title)
         super(Novel, self).save(*args, **kwargs)
 
-    def isExist(self):
+    def clean(self):
         try:
-            Novel.objects.get(title=self.title)
-            raise ValidationError('Cannot create the novel. This title has'
-                                  'already been taken')
+            obj = Novel.objects.get(title=self.title)
+            raise AlreadyExistError(obj)
         except self.DoesNotExist:
             pass
 
@@ -51,6 +51,13 @@ class Tag(models.Model):
 
     class Meta:
         db_table = 'tags'
+
+    def clean(self):
+        try:
+            obj = Tag.objects.get(name=self.name)
+            raise AlreadyExistError(obj)
+        except self.DoesNotExist:
+            pass
 
 
 class Genre(models.Model):

@@ -8,6 +8,23 @@ from apps.novels.apis.novel import (
 )
 
 
+from apps.novels.apis.tag import (
+    TagListApi,
+    TagGetApi,
+    TagCreateApi,
+    TagUpdateApi
+)
+
+
+tag_patterns = [
+    path('create/', TagCreateApi.as_view(), name='create new tag'),
+    path('update/<int:pk>/', TagUpdateApi.as_view(),
+         name='update tag instance'),
+    path('', TagListApi.as_view(), name='tag list'),
+    path('<int:pk>/', TagGetApi.as_view(), name='get tag')
+]
+
+
 novel_patterns = [
     path('create/', NovelCreatApi.as_view(), name="create new novel"),
     path('update/<int:pk>/', NovelUpdateApi.as_view(),
@@ -19,4 +36,5 @@ novel_patterns = [
 
 urlpatterns = [
     path('novels/', include((novel_patterns, 'novels'))),
+    path('tags/', include((tag_patterns, 'tags'))),
 ]

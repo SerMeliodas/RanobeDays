@@ -1,13 +1,13 @@
 from pydantic import BaseModel
 
 
-class Tag(BaseModel):
-    id: int
+class TagDTO(BaseModel):
+    id: int | None = None
     name: str | None = None
 
 
-class Genre(BaseModel):
-    id: int
+class GenreDTO(BaseModel):
+    id: int | None = None
     name: str | None = None
 
 
