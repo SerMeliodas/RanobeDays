@@ -17,3 +17,12 @@ class NovelSerializer(serializers.Serializer):
     title = serializers.CharField()
     tags = TagSerializer(many=True)
     genres = GenreSerializer(many=True)
+
+
+class NovelDTOSerializer(NovelSerializer):
+    tags = serializers.ListField(
+        child=serializers.IntegerField(min_value=0)
+    )
+    genres = serializers.ListField(
+        child=serializers.IntegerField(min_value=0)
+    )

@@ -13,5 +13,5 @@ class Genre(BaseModel):
 
 class NovelDTO(BaseModel):
     title: str
-    tags: list[Tag]
-    genres: list[Genre]
+    tags: list[int]
+    genres: list[int]
