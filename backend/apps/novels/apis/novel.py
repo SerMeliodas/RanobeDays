@@ -2,15 +2,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .types import NovelDTO
-from .serializers import NovelSerializer, NovelDTOSerializer
+from apps.novels.types import NovelDTO
+from apps.novels.serializers import NovelSerializer, NovelDTOSerializer
 
 
-from .services import (
+from apps.novels.services import (
     create_novel,
     update_novel
 )
-from .selectors import (
+from apps.novels.selectors import (
     novel_list,
     get_novel
 )
@@ -28,6 +28,7 @@ class NovelListApi(APIView):
 
 
 class NovelGetApi(APIView):
+    """Api for getting novel by slug field"""
 
     def get(self, request, slug: str) -> Response:
         novel = get_novel(slug=slug)

@@ -1,5 +1,6 @@
 from django.urls import path, include
-from .views import (
+
+from apps.novels.apis.novel import (
     NovelListApi,
     NovelGetApi,
     NovelCreatApi,
