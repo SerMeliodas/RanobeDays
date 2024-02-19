@@ -16,6 +16,12 @@ def create_novel(dto: NovelDTO) -> Novel:
     return obj
 
 
-# TODO: implement update_novel function
 def update_novel(pk: int, dto: NovelDTO) -> Novel:
-    return Novel()
+    novel = Novel.objects.get(pk=pk)
+    fields = ['title', 'genres', 'tags']
+
+    novel, updated = model_update(instance=novel, fields=fields,
+                                  data=dto.dict(),
+                                  auto_updated_at=True)
+
+    return novel
