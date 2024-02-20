@@ -27,11 +27,6 @@ def update_novel(pk: int, dto: NovelDTO) -> Novel:
     return novel
 
 
-def delete_novel(pk: int) -> None:
-    novel = Novel.objects.get(pk=pk)
-    novel.delete()
-
-
 def update_tag(pk: int, dto: TagDTO) -> Tag:
     """Service for updating the tag instance"""
     tag = Tag.objects.get(pk=pk)

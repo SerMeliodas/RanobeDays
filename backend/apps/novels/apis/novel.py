@@ -2,21 +2,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apps.novels.types import NovelDTO
-from apps.novels.serializers import NovelSerializer, NovelDTOSerializer
-
 from django.core.exceptions import ObjectDoesNotExist
-
 
 from apps.novels.services import (
     create_novel,
     update_novel,
-    delete_novel
 )
 from apps.novels.selectors import (
     novel_list,
     get_novel
 )
+
+from apps.novels.models import Novel
+from apps.novels.types import NovelDTO
+from apps.novels.serializers import NovelSerializer, NovelDTOSerializer
+from apps.common.services import delete_model
 
 
 class NovelListApi(APIView):
@@ -76,7 +76,7 @@ class NovelDeleteApi(APIView):
 
     def delete(self, request, pk: int) -> Response:
         try:
-            delete_novel(pk=pk)
+            delete_model(model=Novel, pk=pk)
         except ObjectDoesNotExist:
             return Response(data={
                 "message": f"The novel with id {pk} does not exist"
