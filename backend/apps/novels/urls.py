@@ -13,12 +13,15 @@ from apps.novels.apis.tag import (
     TagListApi,
     TagGetApi,
     TagCreateApi,
-    TagUpdateApi
+    TagUpdateApi,
+    TagDeleteApi
 )
 
 
 tag_patterns = [
     path('create/', TagCreateApi.as_view(), name='create new tag'),
+    path('delete/<int:pk>/', TagDeleteApi.as_view(),
+         name='delete tag instance'),
     path('update/<int:pk>/', TagUpdateApi.as_view(),
          name='update tag instance'),
     path('', TagListApi.as_view(), name='tag list'),
