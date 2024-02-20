@@ -4,7 +4,8 @@ from apps.novels.apis.novel import (
     NovelListApi,
     NovelGetApi,
     NovelCreatApi,
-    NovelUpdateApi
+    NovelUpdateApi,
+    NovelDeleteApi
 )
 
 
@@ -27,6 +28,8 @@ tag_patterns = [
 
 novel_patterns = [
     path('create/', NovelCreatApi.as_view(), name="create new novel"),
+    path('delete/<int:pk>/', NovelDeleteApi.as_view(),
+         name="delete novel instance"),
     path('update/<int:pk>/', NovelUpdateApi.as_view(),
          name="update novel instance"),
     path('', NovelListApi.as_view(), name="novels list"),

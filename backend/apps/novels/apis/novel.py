@@ -10,7 +10,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from apps.novels.services import (
     create_novel,
-    update_novel
+    update_novel,
+    delete_novel
 )
 from apps.novels.selectors import (
     novel_list,
@@ -68,3 +69,21 @@ class NovelUpdateApi(APIView):
         data = NovelSerializer(obj).data
 
         return Response(data=data, status=status.HTTP_200_OK)
+
+
+class NovelDeleteApi(APIView):
+    """Api for deleting novels from db"""
+
+    def delete(self, request, pk: int) -> Response:
+        try:
+            delete_novel(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(data={
+                "message": f"The novel with id {pk} does not exist"
+            },
+                status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data={
+            "message": f"The novel with id {pk} was successfuly deleted"
+        },
+            status=status.HTTP_200_OK)
