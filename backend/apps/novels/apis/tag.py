@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from django.core.exceptions import ObjectDoesNotExist
 
 from apps.novels.types import TagDTO
 from apps.novels.serializers import TagSerializer
@@ -33,7 +34,11 @@ class TagGetApi(APIView):
     """Api for getting the tag by primary key"""
 
     def get(self, request, pk: int):
-        tag = get_tag(pk=pk)
+
+        try:
+            tag = get_tag(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         data = TagSerializer(tag).data
 
