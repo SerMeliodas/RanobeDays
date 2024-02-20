@@ -5,6 +5,8 @@ from rest_framework import status
 from apps.novels.types import NovelDTO
 from apps.novels.serializers import NovelSerializer, NovelDTOSerializer
 
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from apps.novels.services import (
     create_novel,
@@ -31,7 +33,10 @@ class NovelGetApi(APIView):
     """Api for getting novel by slug field"""
 
     def get(self, request, slug: str) -> Response:
-        novel = get_novel(slug=slug)
+        try:
+            novel = get_novel(slug=slug)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         data = NovelSerializer(novel).data
 
