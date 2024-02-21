@@ -1,5 +1,5 @@
-from .models import Novel, Tag
-from .types import NovelDTO, TagDTO
+from .models import Novel, Tag, Genre
+from .types import NovelDTO, TagDTO, GenreDTO
 from apps.common.services import model_update
 
 
@@ -45,3 +45,22 @@ def create_tag(dto: TagDTO) -> Tag:
     obj.save()
 
     return obj
+
+
+def create_genre(dto: GenreDTO) -> Genre:
+    obj = Genre(name=dto.name)
+    obj.full_clean()
+    obj.save()
+
+    return obj
+
+
+def update_genre(pk: int, dto: GenreDTO) -> Genre:
+    genre = Genre.objects.get(pk=pk)
+
+    fields = ['name']
+
+    genre, _ = model_update(instance=genre, fields=fields,
+                            data=dto.dict())
+
+    return genre
