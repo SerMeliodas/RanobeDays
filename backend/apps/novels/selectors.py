@@ -22,4 +22,4 @@ def get_genre(pk: int) -> Genre:
 
 
 def genre_list() -> list[Genre]:
-    return Genre.objets.all()
+    return Genre.objects.all()
