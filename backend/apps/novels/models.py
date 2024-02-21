@@ -65,3 +65,10 @@ class Genre(models.Model):
 
     class Meta:
         db_table = "genres"
+
+    def clean(self):
+        try:
+            obj = Genre.objects.get(name=self.name)
+            raise AlreadyExistError(obj)
+        except self.DoesNotExist:
+            pass
