@@ -13,6 +13,8 @@ class GenreSerializer(serializers.Serializer):
 
 class NovelSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
+    created_at = serializers.DateTimeField(required=False)
+    updated_at = serializers.DateTimeField(required=False)
     slug = serializers.SlugField(required=False)
     title = serializers.CharField()
     tags = TagSerializer(many=True)
