@@ -18,4 +18,4 @@ class Chapter(BaseModel):
         instance = Chapter.objects.get(title=self.title, novel=self.novel)
 
         if instance and instance.pk != self.pk:
-            raise AlreadyExistError(Chapter)
+            raise AlreadyExistError(instance)
