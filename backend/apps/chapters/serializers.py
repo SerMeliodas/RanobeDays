@@ -1,12 +1,8 @@
 from rest_framework import serializers
-from apps.novels.serializers import NovelSerializer
 
 
 class ChapterSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
     title = serializers.CharField()
-    novel = NovelSerializer()
+    novel = serializers.IntegerField(source='novel.id')
     text = serializers.CharField()
-
-
-class ChapterDTOSerializer(ChapterSerializer):
-    novel = serializers.IntegerField()
