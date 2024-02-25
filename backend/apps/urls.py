@@ -29,5 +29,6 @@ docpatterns = [
 
 urlpatterns = [
     path('', include('apps.novels.urls')),
+    path('chapters/', include('apps.chapters.urls')),
     path('documentation/', include((docpatterns, "documentation")))
 ]
