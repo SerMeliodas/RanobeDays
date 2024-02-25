@@ -5,7 +5,7 @@ from apps.novels.models import Novel
 from apps.common.services import model_update
 
 
-def crete_chapter(dto: ChapterDTO) -> Chapter:
+def create_chapter(dto: ChapterDTO) -> Chapter:
     novel = Novel.objects.get(pk=dto.novel)
     chapter = Chapter(title=dto.title, novel=novel, text=dto.text)
     chapter.full_clean()
