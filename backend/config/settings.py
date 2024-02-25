@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
 
+    'apps.common',
     'apps.novels',
     'apps.chapters',
-    'apps.common'
 ]
 
 MIDDLEWARE = [
