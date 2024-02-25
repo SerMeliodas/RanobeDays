@@ -11,4 +11,4 @@ class Chapter(BaseModel):
     class Meta:
         db_table = "chapters"
         default_related_name = "chapters"
-        ordering = ["novel"]
+        ordering = ["novel", "-created_at"]
