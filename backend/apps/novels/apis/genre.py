@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
+from apps.common.exceptions import AlreadyExistError
 
 from apps.novels.services import (
     update_genre,
@@ -34,15 +35,13 @@ class GenreGetApi(APIView):
     """Api for getting genre by id"""
 
     def get(self, request, pk: int):
-        genre = get_genre(pk=pk)
-
         try:
-            data = GenreSerializer(genre).data
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"The genre with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+            genre = get_genre(pk=pk)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        data = GenreSerializer(genre).data
 
         return Response(data=data)
 
@@ -54,7 +53,12 @@ class GenreCreateApi(APIView):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
-        obj = create_genre(GenreDTO(**serializer.validated_data))
+        try:
+            obj = create_genre(GenreDTO(**serializer.validated_data))
+        except AlreadyExistError as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         data = GenreSerializer(obj).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
@@ -69,11 +73,9 @@ class GenreUpdateApi(APIView):
 
         try:
             obj = update_genre(pk, GenreDTO(**serializer.validated_data))
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"The genre with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         data = GenreSerializer(obj).data
 
@@ -86,11 +88,9 @@ class GenreDeleteApi(APIView):
     def delete(self, request, pk: int):
         try:
             delete_model(model=Genre, pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"The genre with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data={
             "message": f"The novel with id {pk} was successfuly deleted"

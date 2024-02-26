@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
+from apps.common.exceptions import AlreadyExistError
 
 from apps.novels.services import (
     create_novel,
@@ -36,8 +37,9 @@ class NovelGetApi(APIView):
     def get(self, request, slug: str) -> Response:
         try:
             novel = get_novel(slug=slug)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         data = NovelSerializer(novel).data
 
@@ -51,7 +53,12 @@ class NovelCreatApi(APIView):
         serializer = NovelDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        obj = create_novel(NovelDTO(**serializer.validated_data))
+        try:
+            obj = create_novel(NovelDTO(**serializer.validated_data))
+        except AlreadyExistError as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         data = NovelSerializer(obj).data
 
         return Response(data=data,
@@ -65,7 +72,12 @@ class NovelUpdateApi(APIView):
         serializer = NovelDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        obj = update_novel(pk, NovelDTO(**serializer.validated_data))
+        try:
+            obj = update_novel(pk, NovelDTO(**serializer.validated_data))
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         data = NovelSerializer(obj).data
 
         return Response(data=data, status=status.HTTP_200_OK)
@@ -77,11 +89,9 @@ class NovelDeleteApi(APIView):
     def delete(self, request, pk: int) -> Response:
         try:
             delete_model(model=Novel, pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"The novel with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data={
             "message": f"The novel with id {pk} was successfuly deleted"

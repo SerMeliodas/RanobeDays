@@ -15,7 +15,7 @@ class Chapter(BaseModel):
         ordering = ["novel", "-created_at"]
 
     def clean(self):
-        instance = Chapter.objects.get(title=self.title, novel=self.novel)
+        instance = Chapter.objects.filter(title=self.title, novel=self.novel)
 
-        if instance and instance.pk != self.pk:
-            raise AlreadyExistError(instance)
+        if instance.exists():
+            raise AlreadyExistError(self)

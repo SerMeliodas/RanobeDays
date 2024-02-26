@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
+from apps.common.exceptions import AlreadyExistError
 
 from apps.novels.models import Tag
 from apps.novels.types import TagDTO
@@ -39,8 +40,9 @@ class TagGetApi(APIView):
 
         try:
             tag = get_tag(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         data = TagSerializer(tag).data
 
@@ -54,7 +56,12 @@ class TagCreateApi(APIView):
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = create_tag(TagDTO(**serializer.validated_data))
+        try:
+            instance = create_tag(TagDTO(**serializer.validated_data))
+        except AlreadyExistError as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         data = TagSerializer(instance).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
@@ -67,7 +74,13 @@ class TagUpdateApi(APIView):
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = update_tag(pk=pk, dto=TagDTO(**serializer.validated_data))
+        try:
+            instance = update_tag(pk=pk,
+                                  dto=TagDTO(**serializer.validated_data))
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         data = TagSerializer(instance).data
 
         return Response(data=data, status=status.HTTP_200_OK)
@@ -79,11 +92,9 @@ class TagDeleteApi(APIView):
     def delete(self, request, pk: int) -> Response:
         try:
             delete_model(model=Tag, pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"Tag with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data={
             "message": f"The tag with id {pk} was successfuly deleted"

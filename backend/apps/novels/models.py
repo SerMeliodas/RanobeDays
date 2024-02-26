@@ -20,10 +20,10 @@ class Novel(BaseModel):
         super(Novel, self).save(*args, **kwargs)
 
     def clean(self):
-        instance = Novel.objects.get(title=self.title)
+        instance = Novel.objects.filter(title=self.title)
 
-        if instance and instance.pk != self.pk:
-            raise AlreadyExistError(instance)
+        if instance.exists():
+            raise AlreadyExistError(self)
 
 
 class Tag(models.Model):
@@ -33,10 +33,10 @@ class Tag(models.Model):
         db_table = "tags"
 
     def clean(self):
-        instance = Tag.objects.get(name=self.name)
+        instance = Tag.objects.filter(name=self.name)
 
-        if instance and instance.pk != self.pk:
-            raise AlreadyExistError(instance)
+        if instance.exists():
+            raise AlreadyExistError(self)
 
 
 class Genre(models.Model):
@@ -46,7 +46,8 @@ class Genre(models.Model):
         db_table = "genres"
 
     def clean(self):
-        instance = Genre.objects.get(name=self.name)
+        instance = Genre.objects.filter(name=self.name)
+        print(instance)
 
-        if instance and instance.pk != self.pk:
-            raise AlreadyExistError(instance)
+        if instance.exists():
+            raise AlreadyExistError(self)
