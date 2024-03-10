@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "ranobedays-back"
+version = "0.1.0"
+description = "Backend for RanobeDays"
+authors = ["SerMeliodas <oliver9574@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.3"
+djangorestframework = "^3.14.0"
+dj-rest-auth = "^5.0.2"
+drf-yasg = "^1.21.7"
+django-cors-headers = "^4.3.1"
+psycopg2 = "^2.9.9"
+pydantic = "^2.6.3"
+django-environ = "^0.11.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
