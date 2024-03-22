@@ -29,5 +29,4 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', include((register_patterns, 'authentication')),
          name='register'),
-    # TODO email confirmation endpoints
 ]
