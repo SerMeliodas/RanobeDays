@@ -119,6 +119,24 @@ REST_FRAMEWORK = {
     ]
 }
 
+# dj-rest-auth settings
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'apps.authentication.serializers.RegisterSerializer',
+}
 
 # Email setup
+EMAIL_CONFIRM_REDIRECT_BASE_URL = 'http://localhost:8000/email/confirm/'
+PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = \
+    'http://localhost:8000/password-reset/confirm/'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+# alluth
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
