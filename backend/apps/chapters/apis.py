@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -61,6 +62,8 @@ class ChapterGetListByNovelApi(APIView):
 class ChapterCreateApi(APIView):
     """Api for creating the chapter instances"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         serializer = ChapterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -73,6 +76,8 @@ class ChapterCreateApi(APIView):
 
 class ChapterUpdateApi(APIView):
     """Api for updating the chapter instances"""
+
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, pk: int):
         serializer = ChapterSerializer(data=request.data)
@@ -94,6 +99,8 @@ class ChapterUpdateApi(APIView):
 
 class ChapterDeleteApi(APIView):
     """Api for deleting the chapter instances"""
+
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int):
         try:

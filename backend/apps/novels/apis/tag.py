@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 
@@ -52,6 +53,8 @@ class TagGetApi(APIView):
 class TagCreateApi(APIView):
     """Api for creating tag instance"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request) -> Response:
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -69,6 +72,8 @@ class TagCreateApi(APIView):
 
 class TagUpdateApi(APIView):
     """Api for updating an instance of tag"""
+
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, pk: int) -> Response:
         serializer = TagSerializer(data=request.data)
@@ -88,6 +93,8 @@ class TagUpdateApi(APIView):
 
 class TagDeleteApi(APIView):
     """Api for deleting an instance of tag"""
+
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int) -> Response:
         try:

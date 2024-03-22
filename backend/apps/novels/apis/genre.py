@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -49,6 +50,8 @@ class GenreGetApi(APIView):
 class GenreCreateApi(APIView):
     """Api for creating genre"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
@@ -67,6 +70,8 @@ class GenreCreateApi(APIView):
 class GenreUpdateApi(APIView):
     """Api for updating genre"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk: int):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
@@ -84,6 +89,8 @@ class GenreUpdateApi(APIView):
 
 class GenreDeleteApi(APIView):
     """Api for deleting genre"""
+
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int):
         try:
