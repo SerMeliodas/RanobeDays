@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -49,6 +50,8 @@ class NovelGetApi(APIView):
 class NovelCreatApi(APIView):
     """Api for creating Novel"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request) -> Response:
         serializer = NovelDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -68,6 +71,8 @@ class NovelCreatApi(APIView):
 class NovelUpdateApi(APIView):
     """Api for updating an instance of Novel"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk: int) -> Response:
         serializer = NovelDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -85,6 +90,8 @@ class NovelUpdateApi(APIView):
 
 class NovelDeleteApi(APIView):
     """Api for deleting novels from db"""
+
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int) -> Response:
         try:
