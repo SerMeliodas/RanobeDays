@@ -30,5 +30,6 @@ docpatterns = [
 urlpatterns = [
     path('', include('apps.novels.urls')),
     path('chapters/', include('apps.chapters.urls')),
-    path('documentation/', include((docpatterns, "documentation")))
+    path('documentation/', include((docpatterns, "documentation"))),
+    path('auth/', include('apps.authentication.urls'))
 ]
