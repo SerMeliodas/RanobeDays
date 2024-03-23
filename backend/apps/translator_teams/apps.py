@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TranslatorsConfig(AppConfig):
+class translator_teamsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.translators'
+    name = 'apps.translator_teams'

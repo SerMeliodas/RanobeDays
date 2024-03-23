@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # third-party
     'rest_framework',
 
     # authentication
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'apps.novels',
     'apps.chapters',
     'apps.users',
+    'apps.translator_teams',
     'apps.authentication'
 ]
 
