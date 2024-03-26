@@ -31,5 +31,6 @@ urlpatterns = [
     path('', include('apps.novels.urls')),
     path('chapters/', include('apps.chapters.urls')),
     path('documentation/', include((docpatterns, "documentation"))),
-    path('auth/', include('apps.authentication.urls'))
+    path('auth/', include('apps.authentication.urls')),
+    path('translator-teams/', include('apps.translator_teams.urls'))
 ]
