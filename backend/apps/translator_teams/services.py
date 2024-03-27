@@ -3,7 +3,7 @@ from .types import TranslatorTeamDTO
 from apps.common.services import model_update
 
 
-def create_translator_team(dto: TranslatorTeamDTO) -> TranslatorTeam:
+def create_translator_team(dto: TranslatorTeamDTO):
     team = TranslatorTeam(name=dto.name)
     team.save()
 
