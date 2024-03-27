@@ -50,16 +50,10 @@ class TranslatorTeamsCreateApi(APIView):
         serializer = TranslatorTeamDTOSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            team = create_translator_team(
-                TranslatorTeamDTO(**serializer.validated_data))
-        except IntegrityError:
-            return Response(data={
-                "message": "Novel or User with id listed in request \
-                    does not exist"},
-                status=status.HTTP_404_NOT_FOUND)
+        instance = create_translator_team(
+            TranslatorTeamDTO(**serializer.validated_data))
 
-        data = TranslatorTeamSerializer(team).data
+        data = TranslatorTeamSerializer(instance).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
@@ -85,12 +79,48 @@ class TranslatorTeamsDeleteApi(APIView):
 
     permission_classes = (IsAuthenticated,)
 
-    def delete(self, request):
+    def delete(self, request, pk: int):
         ...
 
 
 class TranslatorTeamsUpdateApi(APIView):
     """Api endpoint for creating translators teams"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        ...
+
+
+class TranslatorTeamsDeleteNovelApi(APIView):
+    """Api endpoint for deleting from list of translator team"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request):
+        ...
+
+
+class TranslatorTeamsAddNovelApi(APIView):
+    """Api endpoint for adding from list of translator team"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        ...
+
+
+class TranslatorTeamsDeleteUserApi(APIView):
+    """Api endpoint for deleting from list of translator team"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request):
+        ...
+
+
+class TranslatorTeamsAddUserlApi(APIView):
+    """Api endpoint for adding from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
