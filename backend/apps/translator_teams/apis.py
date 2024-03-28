@@ -5,9 +5,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
+from apps.common.services import delete_model
+from .models import TranslatorTeam
+
 from .serializers import (
     TranslatorTeamSerializer,
-    TranslatorTeamDTOSerializer
+    TranslatorTeamDTOSerializer,
+    TranslatorTeamUpdateSerializer
 )
 
 from .types import TranslatorTeamDTO
@@ -80,7 +84,17 @@ class TranslatorTeamsDeleteApi(APIView):
     permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int):
-        ...
+        try:
+            delete_model(model=TranslatorTeam, pk=pk)
+        except ObjectDoesNotExist:
+            return Response(data={
+                "message": f"Translator team with id {pk} does not exist"
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data={
+            "message": f"The translators team with id {pk} \
+was successfuly deleted"
+        }, status=status.HTTP_200_OK)
 
 
 class TranslatorTeamsUpdateApi(APIView):
@@ -88,8 +102,21 @@ class TranslatorTeamsUpdateApi(APIView):
 
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
-        ...
+    def post(self, request, pk: int):
+        serializer = TranslatorTeamUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            team = update_translator_team(
+                pk, TranslatorTeamDTO(**serializer.validated_data))
+
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        data = TranslatorTeamSerializer(team).data
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class TranslatorTeamsDeleteNovelApi(APIView):

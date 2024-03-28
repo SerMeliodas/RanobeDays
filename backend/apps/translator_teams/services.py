@@ -14,7 +14,7 @@ def create_translator_team(dto: TranslatorTeamDTO):
 
 
 def update_translator_team(team_id: int, dto: TranslatorTeamDTO) -> dict:
-    team = TranslatorTeam(id=team_id)
+    team = TranslatorTeam.objects.get(pk=team_id)
     fields = ['name', 'user', 'teams']
 
     team, _ = model_update(instance=team,

@@ -12,4 +12,4 @@ class TranslatorTeam(models.Model):
         db_table = 'translators-teams'
 
     def __str__(self):
-        return f"Group {self.name}"
+        return f"Group '{self.name}' with id: {self.pk}"
