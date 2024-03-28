@@ -54,3 +54,8 @@ class TranslatorTeamDTOSerializer(TranslatorTeamSerializer):
     novels = serializers.ListField(
         child=serializers.IntegerField(min_value=0)
     )
+
+
+class TranslatorTeamUpdateSerializer(TranslatorTeamDTOSerializer):
+    def validate_name(self, data):
+        return data
