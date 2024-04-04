@@ -1,23 +1,14 @@
 from django.urls import path
 
+
 from .apis import (
-    ChapterCreateAPI,
-    ChapterGetAPI,
-    ChapterDeleteAPI,
-    ChapterGetListByNovelAPI,
-    ChapterUpdateAPI
+    ChapterGetDeleteUpdateAPI,
+    ChapterListOrCreateAPI
 )
 
 
 urlpatterns = [
-    path('<int:pk>/', ChapterGetAPI.as_view(),
-         name='get chapter instance by id'),
-    path('novel/<int:novel_id>/', ChapterGetListByNovelAPI.as_view(),
-         name='get novel chapters'),
-    path('create/', ChapterCreateAPI.as_view(),
-         name='create chapter instance'),
-    path('delete/<int:pk>/', ChapterDeleteAPI.as_view(),
-         name='delete chapter instance'),
-    path('update/<int:pk>/', ChapterUpdateAPI.as_view(),
-         name='update chapter instance'),
+    path('', ChapterListOrCreateAPI.as_view(), name='list-or-create-chapter'),
+    path('<int:pk>', ChapterGetDeleteUpdateAPI.as_view(),
+         name='get-delete-update-chpater')
 ]
