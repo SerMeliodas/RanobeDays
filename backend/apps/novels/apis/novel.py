@@ -68,10 +68,7 @@ class NovelGetDeleteUpdateAPI(APIView):
             case "GET":
                 self.permission_classes = (AllowAny,)
 
-            case "DELETE":
-                self.permission_classes = (IsAuthenticated,)
-
-            case "PATCH":
+            case "DELETE", "PATCH":
                 self.permission_classes = (IsAuthenticated,)
 
         return super(NovelGetDeleteUpdateAPI, self).get_permissions()

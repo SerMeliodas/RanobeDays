@@ -7,11 +7,8 @@ from apps.novels.apis.novel import (
 
 
 from apps.novels.apis.tag import (
-    TagListAPI,
-    TagGetAPI,
-    TagCreateAPI,
-    TagUpdateAPI,
-    TagDeleteAPI
+    TagListOrCreateAPI,
+    TagGetDeleteUpdateAPI
 )
 
 
@@ -36,13 +33,9 @@ genre_patterns = [
 
 
 tag_patterns = [
-    path('create/', TagCreateAPI.as_view(), name='create new tag'),
-    path('delete/<int:pk>/', TagDeleteAPI.as_view(),
-         name='delete tag instance'),
-    path('update/<int:pk>/', TagUpdateAPI.as_view(),
-         name='update tag instance'),
-    path('', TagListAPI.as_view(), name='tag list'),
-    path('<int:pk>/', TagGetAPI.as_view(), name='get tag')
+    path('', TagListOrCreateAPI.as_view(), name='list-or-create-tag'),
+    path('<int:pk>/', TagGetDeleteUpdateAPI.as_view(),
+         name='get-delete-update-tag')
 ]
 
 

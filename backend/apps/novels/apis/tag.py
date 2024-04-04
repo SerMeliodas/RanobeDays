@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework import status
 
@@ -23,8 +23,17 @@ from apps.novels.services import (
 )
 
 
-class TagListAPI(APIView):
-    """API for getting list of tags"""
+class TagListOrCreateAPI(APIView):
+    """API for getting list of tags or creating instances"""
+
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
+            case "POST":
+                self.permission_classes = (IsAuthenticated,)
+
+        return super(TagListOrCreateAPI, self).get_permissions()
 
     def get(self, request) -> Response:
         queryset = tag_list()
@@ -32,28 +41,6 @@ class TagListAPI(APIView):
         data = TagSerializer(queryset, many=True).data
 
         return Response(data)
-
-
-class TagGetAPI(APIView):
-    """API for getting the tag by primary key"""
-
-    def get(self, request, pk: int) -> Response:
-
-        try:
-            tag = get_tag(pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        data = TagSerializer(tag).data
-
-        return Response(data)
-
-
-class TagCreateAPI(APIView):
-    """API for creating tag instance"""
-
-    permission_classes = (IsAuthenticated,)
 
     def post(self, request) -> Response:
         serializer = TagSerializer(data=request.data)
@@ -70,12 +57,32 @@ class TagCreateAPI(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TagUpdateAPI(APIView):
-    """API for updating an instance of tag"""
+class TagGetDeleteUpdateAPI(APIView):
+    """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (IsAuthenticated,)
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
 
-    def post(self, request, pk: int) -> Response:
+            case "DELETE", "PATCH":
+                self.permission_classes = (IsAuthenticated,)
+
+        return super(TagGetDeleteUpdateAPI, self).get_permissions()
+
+    def get(self, request, pk: int) -> Response:
+
+        try:
+            tag = get_tag(pk=pk)
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        data = TagSerializer(tag).data
+
+        return Response(data)
+
+    def patch(self, request, pk: int) -> Response:
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -89,12 +96,6 @@ class TagUpdateAPI(APIView):
         data = TagSerializer(instance).data
 
         return Response(data=data, status=status.HTTP_200_OK)
-
-
-class TagDeleteAPI(APIView):
-    """API for deleting an instance of tag"""
-
-    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int) -> Response:
         try:
