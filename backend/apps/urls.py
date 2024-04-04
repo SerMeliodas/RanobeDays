@@ -16,17 +16,10 @@ schema_view = get_schema_view(
 )
 
 
-docpatterns = [
-    path("swagger<format>/", schema_view.without_ui(cache_timeout=0),
-         name="schema-json"),
-    path("swagger/", schema_view.with_ui('swagger', cache_timeout=0),
-         name="schema-swagger-ui"),
-]
-
-
 urlpatterns = [
     path('', include('apps.novels.urls')),
     path('chapters/', include('apps.chapters.urls')),
-    path('documentation/', include((docpatterns, "documentation"))),
+    path('documentation/', schema_view.with_ui('swagger', cache_timeout=0),
+         name="schema-swagger-ui"),
     path('auth/', include('apps.authentication.urls'))
 ]
