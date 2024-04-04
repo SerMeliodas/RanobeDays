@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 
@@ -6,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.common.exceptions import AlreadyExistError
 
 from apps.novels.models import Tag
-from apps.novels.types import TagDTO
+from apps.novels.types import TagObject
 from apps.novels.serializers import TagSerializer
 from apps.common.services import delete_model
 
@@ -52,12 +53,14 @@ class TagGetApi(APIView):
 class TagCreateApi(APIView):
     """Api for creating tag instance"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request) -> Response:
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         try:
-            instance = create_tag(TagDTO(**serializer.validated_data))
+            instance = create_tag(TagObject(**serializer.validated_data))
         except AlreadyExistError as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -70,13 +73,15 @@ class TagCreateApi(APIView):
 class TagUpdateApi(APIView):
     """Api for updating an instance of tag"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk: int) -> Response:
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         try:
             instance = update_tag(pk=pk,
-                                  dto=TagDTO(**serializer.validated_data))
+                                  dto=TagObject(**serializer.validated_data))
         except ObjectDoesNotExist as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -88,6 +93,8 @@ class TagUpdateApi(APIView):
 
 class TagDeleteApi(APIView):
     """Api for deleting an instance of tag"""
+
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int) -> Response:
         try:

@@ -16,7 +16,7 @@ from apps.novels.selectors import (
 )
 
 from apps.novels.models import Genre
-from apps.novels.types import GenreDto
+from apps.novels.types import GenreObject
 from apps.novels.serializers import GenreSerializer
 from apps.common.services import delete_model
 
@@ -57,7 +57,7 @@ class GenreCreateApi(APIView):
         serializer.is_valid()
 
         try:
-            obj = create_genre(GenreDto(**serializer.validated_data))
+            obj = create_genre(GenreObject(**serializer.validated_data))
         except AlreadyExistError as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -77,7 +77,7 @@ class GenreUpdateApi(APIView):
         serializer.is_valid()
 
         try:
-            obj = update_genre(pk, GenreDto(**serializer.validated_data))
+            obj = update_genre(pk, GenreObject(**serializer.validated_data))
         except ObjectDoesNotExist as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)

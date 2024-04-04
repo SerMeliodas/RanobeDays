@@ -1,17 +1,17 @@
 from pydantic import BaseModel
 
 
-class TagDto(BaseModel):
+class TagObject(BaseModel):
     id: int | None = None
     name: str | None = None
 
 
-class GenreDto(BaseModel):
+class GenreObject(BaseModel):
     id: int | None = None
     name: str | None = None
 
 
-class NovelDto(BaseModel):
+class NovelObject(BaseModel):
     title: str
     tags: list[int]
     genres: list[int]
