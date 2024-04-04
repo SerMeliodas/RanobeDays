@@ -88,7 +88,7 @@ class TagGetDeleteUpdateAPI(APIView):
 
         try:
             instance = update_tag(pk=pk,
-                                  dto=TagObject(**serializer.validated_data))
+                                  data=TagObject(**serializer.validated_data))
         except ObjectDoesNotExist as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
