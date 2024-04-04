@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -21,8 +21,17 @@ from apps.novels.serializers import GenreSerializer
 from apps.common.services import delete_model
 
 
-class GenreListAPI(APIView):
-    """API for getting list of genres"""
+class GenreListOrCreateAPI(APIView):
+    """API for getting list of genres or creating instances"""
+
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
+            case "POST":
+                self.permission_classes = (IsAuthenticated,)
+
+        return super(GenreListOrCreateAPI, self).get_permissions()
 
     def get(self, request):
         genres = genre_list()
@@ -30,27 +39,6 @@ class GenreListAPI(APIView):
         data = GenreSerializer(genres, many=True).data
 
         return Response(data=data)
-
-
-class GenreGetAPI(APIView):
-    """API for getting genre by id"""
-
-    def get(self, request, pk: int):
-        try:
-            genre = get_genre(pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        data = GenreSerializer(genre).data
-
-        return Response(data=data)
-
-
-class GenreCreateAPI(APIView):
-    """API for creating genre"""
-
-    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         serializer = GenreSerializer(data=request.data)
@@ -67,30 +55,29 @@ class GenreCreateAPI(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class GenreUpdateAPI(APIView):
-    """API for updating genre"""
+class GenreGetDeleteUpdateAPI(APIView):
+    """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (IsAuthenticated,)
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
 
-    def post(self, request, pk: int):
-        serializer = GenreSerializer(data=request.data)
-        serializer.is_valid()
+            case "DELETE", "PATCH":
+                self.permission_classes = (IsAuthenticated,)
 
+        return super(GenreGetDeleteUpdateAPI, self).get_permissions()
+
+    def get(self, request, pk: int):
         try:
-            obj = update_genre(pk, GenreObject(**serializer.validated_data))
+            genre = get_genre(pk=pk)
         except ObjectDoesNotExist as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        data = GenreSerializer(obj).data
+        data = GenreSerializer(genre).data
 
-        return Response(data=data, status=status.HTTP_200_OK)
-
-
-class GenreDeleteAPI(APIView):
-    """API for deleting genre"""
-
-    permission_classes = (IsAuthenticated,)
+        return Response(data=data)
 
     def delete(self, request, pk: int):
         try:
@@ -103,3 +90,17 @@ class GenreDeleteAPI(APIView):
             "message": f"The novel with id {pk} was successfuly deleted"
         },
             status=status.HTTP_200_OK)
+
+    def patch(self, request, pk: int):
+        serializer = GenreSerializer(data=request.data)
+        serializer.is_valid()
+
+        try:
+            obj = update_genre(pk, GenreObject(**serializer.validated_data))
+        except ObjectDoesNotExist as e:
+            return Response(data={"message": f"{e}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        data = GenreSerializer(obj).data
+
+        return Response(data=data, status=status.HTTP_200_OK)

@@ -13,22 +13,15 @@ from apps.novels.apis.tag import (
 
 
 from apps.novels.apis.genre import (
-    GenreGetAPI,
-    GenreListAPI,
-    GenreUpdateAPI,
-    GenreDeleteAPI,
-    GenreCreateAPI
+    GenreListOrCreateAPI,
+    GenreGetDeleteUpdateAPI
 )
 
 
 genre_patterns = [
-    path('create/', GenreCreateAPI.as_view(), name='create new genre'),
-    path('delete/<int:pk>/', GenreDeleteAPI.as_view(),
-         name='delete genre instance'),
-    path('update/<int:pk>/', GenreUpdateAPI.as_view(),
-         name='update genre instance'),
-    path('', GenreListAPI.as_view(), name='genre list'),
-    path('<int:pk>/', GenreGetAPI.as_view(), name='get genre')
+    path('', GenreListOrCreateAPI.as_view(), name='list-or-create-genre'),
+    path('<int:pk>/', GenreGetDeleteUpdateAPI.as_view(),
+         name='get-delete-update-genre')
 ]
 
 
