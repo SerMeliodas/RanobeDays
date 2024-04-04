@@ -11,7 +11,8 @@ class GenreSerializer(serializers.Serializer):
     name = serializers.CharField(required=False)
 
 
-class NovelSerializer(serializers.Serializer):
+# Novel serializers
+class NovelBaseSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     created_at = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
@@ -21,10 +22,20 @@ class NovelSerializer(serializers.Serializer):
     genres = GenreSerializer(many=True)
 
 
-class NovelDTOSerializer(NovelSerializer):
+class NovelCreateSerializer(NovelBaseSerializer):
     tags = serializers.ListField(
-        child=serializers.IntegerField(min_value=0)
+        child=serializers.IntegerField(min_value=1)
     )
     genres = serializers.ListField(
-        child=serializers.IntegerField(min_value=0)
+        child=serializers.IntegerField(min_value=1)
+    )
+
+
+class NovelUpdateSerializer(NovelBaseSerializer):
+    title = serializers.CharField(required=False)
+    tags = serializers.ListField(
+        child=serializers.IntegerField(min_value=1)
+    )
+    genres = serializers.ListField(
+        child=serializers.IntegerField(min_value=1)
     )

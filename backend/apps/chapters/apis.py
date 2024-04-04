@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.common.services import delete_model
 
 from .models import Chapter
-from .types import ChapterDTO
+from .types import ChapterObject
 
 from .serializers import (
     ChapterSerializer,
@@ -21,12 +21,21 @@ from .services import (
 
 from .selectors import (
     get_chapter_by_id,
-    get_chapters_list_by_novel
+    get_chapters_list
 )
 
 
-class ChapterGetApi(APIView):
-    """Api for getting the chapter by id"""
+class ChapterGetDeleteUpdateAPI(APIView):
+    """API for getting list of tags or creating instances"""
+
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
+            case "DELETE", "PATCH":
+                self.permission_classes = (IsAuthenticated,)
+
+        return super(ChapterGetDeleteUpdateAPI, self).get_permissions()
 
     def get(self, request, pk: int):
         try:
@@ -41,50 +50,22 @@ class ChapterGetApi(APIView):
 
         return Response(data=data)
 
-
-class ChapterGetListByNovelApi(APIView):
-    """Api for getting the chapters filtered by novel"""
-
-    def get(self, request, novel_id: int):
+    def delete(self, request, pk: int):
         try:
-            chapters = get_chapters_list_by_novel(novel_id=novel_id)
+            delete_model(model=Chapter, pk=pk)
         except ObjectDoesNotExist:
             return Response(data={
-                "message": f"Novel with id {novel_id} does not exist"
+                "message": f"Chapter with id {pk} does not exist"
             },
                 status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_200_OK)
 
-        data = ChapterSerializer(chapters, many=True).data
-
-        return Response(data)
-
-
-class ChapterCreateApi(APIView):
-    """Api for creating the chapter instances"""
-
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request):
-        serializer = ChapterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        chapter = create_chapter(ChapterDTO(**serializer.data))
-        data = ChapterSerializer(chapter).data
-
-        return Response(data=data, status=status.HTTP_201_CREATED)
-
-
-class ChapterUpdateApi(APIView):
-    """Api for updating the chapter instances"""
-
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request, pk: int):
+    def patch(self, request, pk: int):
         serializer = ChapterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         try:
-            chapter = update_chapter(ChapterDTO(
+            chapter = update_chapter(ChapterObject(
                 **serializer.validated_data), pk)
         except ObjectDoesNotExist:
             return Response(data={
@@ -97,17 +78,30 @@ class ChapterUpdateApi(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ChapterDeleteApi(APIView):
-    """Api for deleting the chapter instances"""
+class ChapterListOrCreateAPI(APIView):
+    """API for getting list of chapters or creating instances"""
+    
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
+            case "POST":
+                self.permission_classes = (IsAuthenticated,)
 
-    permission_classes = (IsAuthenticated,)
+        return super(ChapterListOrCreateAPI, self).get_permissions()
 
-    def delete(self, request, pk: int):
-        try:
-            delete_model(model=Chapter, pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"Chapter with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_200_OK)
+    def get(self, request):
+        queryset = get_chapters_list()
+
+        data = ChapterSerializer(queryset, many=True).data
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = ChapterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        chapter = create_chapter(ChapterObject(**serializer.data))
+        data = ChapterSerializer(chapter).data
+
+        return Response(data=data, status=status.HTTP_201_CREATED)
