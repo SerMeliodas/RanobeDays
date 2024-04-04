@@ -25,8 +25,8 @@ from .selectors import (
 )
 
 
-class ChapterGetApi(APIView):
-    """Api for getting the chapter by id"""
+class ChapterGetAPI(APIView):
+    """API for getting the chapter by id"""
 
     def get(self, request, pk: int):
         try:
@@ -42,8 +42,8 @@ class ChapterGetApi(APIView):
         return Response(data=data)
 
 
-class ChapterGetListByNovelApi(APIView):
-    """Api for getting the chapters filtered by novel"""
+class ChapterGetListByNovelAPI(APIView):
+    """API for getting the chapters filtered by novel"""
 
     def get(self, request, novel_id: int):
         try:
@@ -59,8 +59,8 @@ class ChapterGetListByNovelApi(APIView):
         return Response(data)
 
 
-class ChapterCreateApi(APIView):
-    """Api for creating the chapter instances"""
+class ChapterCreateAPI(APIView):
+    """API for creating the chapter instances"""
 
     permission_classes = (IsAuthenticated,)
 
@@ -74,8 +74,8 @@ class ChapterCreateApi(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class ChapterUpdateApi(APIView):
-    """Api for updating the chapter instances"""
+class ChapterUpdateAPI(APIView):
+    """API for updating the chapter instances"""
 
     permission_classes = (IsAuthenticated,)
 
@@ -97,8 +97,8 @@ class ChapterUpdateApi(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ChapterDeleteApi(APIView):
-    """Api for deleting the chapter instances"""
+class ChapterDeleteAPI(APIView):
+    """API for deleting the chapter instances"""
 
     permission_classes = (IsAuthenticated,)
 

@@ -23,8 +23,8 @@ from apps.novels.services import (
 )
 
 
-class TagListApi(APIView):
-    """Api for getting list of tags"""
+class TagListAPI(APIView):
+    """API for getting list of tags"""
 
     def get(self, request) -> Response:
         queryset = tag_list()
@@ -34,8 +34,8 @@ class TagListApi(APIView):
         return Response(data)
 
 
-class TagGetApi(APIView):
-    """Api for getting the tag by primary key"""
+class TagGetAPI(APIView):
+    """API for getting the tag by primary key"""
 
     def get(self, request, pk: int) -> Response:
 
@@ -50,8 +50,8 @@ class TagGetApi(APIView):
         return Response(data)
 
 
-class TagCreateApi(APIView):
-    """Api for creating tag instance"""
+class TagCreateAPI(APIView):
+    """API for creating tag instance"""
 
     permission_classes = (IsAuthenticated,)
 
@@ -70,8 +70,8 @@ class TagCreateApi(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TagUpdateApi(APIView):
-    """Api for updating an instance of tag"""
+class TagUpdateAPI(APIView):
+    """API for updating an instance of tag"""
 
     permission_classes = (IsAuthenticated,)
 
@@ -91,8 +91,8 @@ class TagUpdateApi(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class TagDeleteApi(APIView):
-    """Api for deleting an instance of tag"""
+class TagDeleteAPI(APIView):
+    """API for deleting an instance of tag"""
 
     permission_classes = (IsAuthenticated,)
 

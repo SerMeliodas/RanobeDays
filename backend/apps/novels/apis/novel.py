@@ -25,7 +25,7 @@ from apps.novels.serializers import (
 from apps.common.services import delete_model
 
 
-class NovelListOrCreateApi(APIView):
+class NovelListOrCreateAPI(APIView):
     """API for getting list of novels or creating novel instance"""
 
     def get_permissions(self):
@@ -35,7 +35,7 @@ class NovelListOrCreateApi(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(NovelListOrCreateApi, self).get_permissions()
+        return super(NovelListOrCreateAPI, self).get_permissions()
 
     def post(self, request) -> Response:
         serializer = NovelCreateSerializer(data=request.data)
@@ -60,7 +60,7 @@ class NovelListOrCreateApi(APIView):
         return Response(data)
 
 
-class NovelGetDeleteUpdateApi(APIView):
+class NovelGetDeleteUpdateAPI(APIView):
     """API for getting, deletin, updating the instance of novel"""
 
     def get_permissions(self):
@@ -74,7 +74,7 @@ class NovelGetDeleteUpdateApi(APIView):
             case "PATCH":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(NovelGetDeleteUpdateApi, self).get_permissions()
+        return super(NovelGetDeleteUpdateAPI, self).get_permissions()
 
     def get(self, request, slug: str) -> Response:
         try:
