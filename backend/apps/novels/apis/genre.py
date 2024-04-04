@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,7 +16,7 @@ from apps.novels.selectors import (
 )
 
 from apps.novels.models import Genre
-from apps.novels.types import GenreDTO
+from apps.novels.types import GenreDto
 from apps.novels.serializers import GenreSerializer
 from apps.common.services import delete_model
 
@@ -49,12 +50,14 @@ class GenreGetApi(APIView):
 class GenreCreateApi(APIView):
     """Api for creating genre"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
         try:
-            obj = create_genre(GenreDTO(**serializer.validated_data))
+            obj = create_genre(GenreDto(**serializer.validated_data))
         except AlreadyExistError as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -67,12 +70,14 @@ class GenreCreateApi(APIView):
 class GenreUpdateApi(APIView):
     """Api for updating genre"""
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, pk: int):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
         try:
-            obj = update_genre(pk, GenreDTO(**serializer.validated_data))
+            obj = update_genre(pk, GenreDto(**serializer.validated_data))
         except ObjectDoesNotExist as e:
             return Response(data={"message": f"{e}"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -84,6 +89,8 @@ class GenreUpdateApi(APIView):
 
 class GenreDeleteApi(APIView):
     """Api for deleting genre"""
+
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, pk: int):
         try:

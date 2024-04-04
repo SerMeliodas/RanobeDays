@@ -1,9 +1,9 @@
 from .models import Novel, Tag, Genre
-from .types import NovelDTO, TagDTO, GenreDTO
+from .types import NovelDto, TagDto, GenreDto
 from apps.common.services import model_update
 
 
-def create_novel(dto: NovelDTO) -> Novel:
+def create_novel(dto: NovelDto) -> Novel:
     """Service for creating the novel instance"""
     obj = Novel(title=dto.title)
     obj.clean()
@@ -15,9 +15,9 @@ def create_novel(dto: NovelDTO) -> Novel:
     return obj
 
 
-def update_novel(pk: int, dto: NovelDTO) -> Novel:
+def update_novel(slug: str, dto: NovelDto) -> Novel:
     """Service for updating the novel instance"""
-    novel = Novel.objects.get(pk=pk)
+    novel = Novel.objects.get(slug=slug)
     fields = ['title', 'genres', 'tags']
 
     novel, _ = model_update(instance=novel, fields=fields,
@@ -27,7 +27,7 @@ def update_novel(pk: int, dto: NovelDTO) -> Novel:
     return novel
 
 
-def update_tag(pk: int, dto: TagDTO) -> Tag:
+def update_tag(pk: int, dto: TagDto) -> Tag:
     """Service for updating the tag instance"""
     tag = Tag.objects.get(pk=pk)
 
@@ -39,7 +39,7 @@ def update_tag(pk: int, dto: TagDTO) -> Tag:
     return tag
 
 
-def create_tag(dto: TagDTO) -> Tag:
+def create_tag(dto: TagDto) -> Tag:
     obj = Tag(name=dto.name)
     obj.full_clean()
     obj.save()
@@ -47,7 +47,7 @@ def create_tag(dto: TagDTO) -> Tag:
     return obj
 
 
-def create_genre(dto: GenreDTO) -> Genre:
+def create_genre(dto: GenreDto) -> Genre:
     obj = Genre(name=dto.name)
     obj.full_clean()
     obj.save()
@@ -55,7 +55,7 @@ def create_genre(dto: GenreDTO) -> Genre:
     return obj
 
 
-def update_genre(pk: int, dto: GenreDTO) -> Genre:
+def update_genre(pk: int, dto: GenreDto) -> Genre:
     genre = Genre.objects.get(pk=pk)
 
     fields = ['name']

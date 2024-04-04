@@ -2,9 +2,13 @@ from django.db import models
 from django.utils import timezone
 
 
-def delete_model(*, model: models.Model, pk: int):
+def delete_model(*, model: models.Model, pk: int | None = None,
+                 slug: str | None = None):
     """Function thats delete the model instance from data base"""
-    model.objects.get(pk=pk).delete()
+    if pk:
+        model.objects.get(pk=pk).delete()
+    elif slug:
+        model.objects.get(slug=slug).delete()
 
 
 def _update_many_to_many_fields(instance: models.Model,
