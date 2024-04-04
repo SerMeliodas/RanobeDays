@@ -80,7 +80,7 @@ class ChapterGetDeleteUpdateAPI(APIView):
 
 class ChapterListOrCreateAPI(APIView):
     """API for getting list of chapters or creating instances"""
-
+    
     def get_permissions(self):
         match self.request.method:
             case "GET":

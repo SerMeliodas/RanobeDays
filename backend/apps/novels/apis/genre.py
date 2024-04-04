@@ -68,6 +68,7 @@ class GenreGetDeleteUpdateAPI(APIView):
 
         return super(GenreGetDeleteUpdateAPI, self).get_permissions()
 
+
     def get(self, request, pk: int):
         try:
             genre = get_genre(pk=pk)
@@ -78,6 +79,7 @@ class GenreGetDeleteUpdateAPI(APIView):
         data = GenreSerializer(genre).data
 
         return Response(data=data)
+
 
     def delete(self, request, pk: int):
         try:

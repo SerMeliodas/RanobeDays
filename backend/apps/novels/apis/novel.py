@@ -37,6 +37,8 @@ class NovelListOrCreateAPI(APIView):
 
         return super(NovelListOrCreateAPI, self).get_permissions()
 
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request) -> Response:
         serializer = NovelCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -85,6 +87,7 @@ class NovelGetDeleteUpdateAPI(APIView):
         return Response(data)
 
     def delete(self, request, slug: str) -> Response:
+
         try:
             delete_model(model=Novel, slug=slug)
         except ObjectDoesNotExist as e:
