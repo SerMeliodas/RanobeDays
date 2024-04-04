@@ -22,7 +22,7 @@ class NovelBaseSerializer(serializers.Serializer):
     genres = GenreSerializer(many=True)
 
 
-class NovelCreateDtoSerializer(NovelBaseSerializer):
+class NovelCreateSerializer(NovelBaseSerializer):
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1)
     )
@@ -31,7 +31,7 @@ class NovelCreateDtoSerializer(NovelBaseSerializer):
     )
 
 
-class NovelUpdateDtoSerializer(NovelBaseSerializer):
+class NovelUpdateSerializer(NovelBaseSerializer):
     title = serializers.CharField(required=False)
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1)

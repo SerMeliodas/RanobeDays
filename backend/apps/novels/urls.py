@@ -1,11 +1,8 @@
 from django.urls import path, include
 
 from apps.novels.apis.novel import (
-    NovelListApi,
-    NovelGetApi,
-    NovelCreatApi,
-    NovelUpdateApi,
-    NovelDeleteApi
+    NovelListOrCreateApi,
+    NovelGetDeleteUpdateApi
 )
 
 
@@ -50,18 +47,14 @@ tag_patterns = [
 
 
 novel_patterns = [
-    path('create/', NovelCreatApi.as_view(), name="create new novel"),
-    path('delete/<int:pk>/', NovelDeleteApi.as_view(),
-         name="delete novel instance"),
-    path('update/<int:pk>/', NovelUpdateApi.as_view(),
-         name="update novel instance"),
-    path('', NovelListApi.as_view(), name="novels list"),
-    path('<slug:slug>/', NovelGetApi.as_view(), name="get novel"),
+    path('', NovelListOrCreateApi.as_view(), name='list-or-create-novel'),
+    path('<slug:slug>/', NovelGetDeleteUpdateApi.as_view(),
+         name='get-delete-update-novel')
 ]
 
 
 urlpatterns = [
     path('novels/', include((novel_patterns, 'novels'))),
     path('tags/', include((tag_patterns, 'tags'))),
-    path('genres/', include((genre_patterns, 'genres'))),
+    path('genres/', include((genre_patterns, 'genres')))
 ]
