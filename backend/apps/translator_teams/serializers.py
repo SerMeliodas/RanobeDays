@@ -47,7 +47,7 @@ class TranslatorTeamSerializer(serializers.Serializer):
         return data
 
 
-class TranslatorTeamDTOSerializer(TranslatorTeamSerializer):
+class TranslatorTeamCreateSerializer(TranslatorTeamSerializer):
     users = serializers.ListField(
         child=serializers.IntegerField(min_value=0)
     )
@@ -56,6 +56,6 @@ class TranslatorTeamDTOSerializer(TranslatorTeamSerializer):
     )
 
 
-class TranslatorTeamUpdateSerializer(TranslatorTeamDTOSerializer):
+class TranslatorTeamUpdateSerializer(TranslatorTeamCreateSerializer):
     def validate_name(self, data):
         return data

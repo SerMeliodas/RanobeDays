@@ -1,7 +1,6 @@
-from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -10,7 +9,7 @@ from .models import TranslatorTeam
 
 from .serializers import (
     TranslatorTeamSerializer,
-    TranslatorTeamDTOSerializer,
+    TranslatorTeamCreateSerializer,
     TranslatorTeamUpdateSerializer
 )
 
@@ -19,39 +18,33 @@ from .types import TranslatorTeamDTO
 from .services import (
     create_translator_team,
     update_translator_team,
-    add_user_to_translator_team,
-    delete_user_from_translator_team,
-    add_novel_to_translator_team,
-    delete_novel_from_translator_team
 )
 
 from .selectors import (
     get_translator_teams_list,
     get_translator_team_by_id,
-    get_translator_teams_by_novel_id
 )
 
 
-class TranslatorTeamsListApi(APIView):
-    """Api endpoint for getting list of all teams"""
+class TranslatorTeamsListOrCreateAPI(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
+            case "POST":
+                self.permission_classes = (IsAuthenticated,)
+
+        return super(TranslatorTeamsListOrCreateAPI, self).get_permissions()
 
     def get(self, request):
         teams_list = get_translator_teams_list()
-
         data = TranslatorTeamSerializer(teams_list, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-
-class TranslatorTeamsCreateApi(APIView):
-    """Api endpoint for creating translators teams"""
-
-    permission_classes = (IsAuthenticated,)
-
     def post(self, request):
-        serializer = TranslatorTeamDTOSerializer(data=request.data)
+        serializer = TranslatorTeamCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         instance = create_translator_team(
@@ -62,8 +55,16 @@ class TranslatorTeamsCreateApi(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TranslatorTeamsGetApi(APIView):
-    """Api endpoint that returns team instance by id"""
+class TranslatorTeamsGetDeleteUpdateAPI(APIView):
+
+    def get_permissions(self):
+        match self.request.method:
+            case "GET":
+                self.permission_classes = (AllowAny,)
+            case "PATCH", "DELETE":
+                self.permission_classes = (IsAuthenticated,)
+
+        return super(TranslatorTeamsGetDeleteUpdateAPI, self).get_permissions()
 
     def get(self, request, pk: int):
         try:
@@ -77,12 +78,6 @@ class TranslatorTeamsGetApi(APIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-
-class TranslatorTeamsDeleteApi(APIView):
-    """Api endpoint for creating translators teams"""
-
-    permission_classes = (IsAuthenticated,)
-
     def delete(self, request, pk: int):
         try:
             delete_model(model=TranslatorTeam, pk=pk)
@@ -95,12 +90,6 @@ class TranslatorTeamsDeleteApi(APIView):
             "message": f"The translators team with id {pk} \
 was successfuly deleted"
         }, status=status.HTTP_200_OK)
-
-
-class TranslatorTeamsUpdateApi(APIView):
-    """Api endpoint for creating translators teams"""
-
-    permission_classes = (IsAuthenticated,)
 
     def post(self, request, pk: int):
         serializer = TranslatorTeamUpdateSerializer(data=request.data)
@@ -119,8 +108,8 @@ class TranslatorTeamsUpdateApi(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class TranslatorTeamsDeleteNovelApi(APIView):
-    """Api endpoint for deleting from list of translator team"""
+class TranslatorTeamsDeleteNovelAPI(APIView):
+    """API endpoint for deleting from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
@@ -128,17 +117,17 @@ class TranslatorTeamsDeleteNovelApi(APIView):
         ...
 
 
-class TranslatorTeamsAddNovelApi(APIView):
-    """Api endpoint for adding from list of translator team"""
+class TranslatorTeamsAddNovelAPI(APIView):
+    """API endpoint for adding from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
+    def patch(self, request):
         ...
 
 
-class TranslatorTeamsDeleteUserApi(APIView):
-    """Api endpoint for deleting from list of translator team"""
+class TranslatorTeamsDeleteUserAPI(APIView):
+    """API endpoint for deleting from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
@@ -146,10 +135,10 @@ class TranslatorTeamsDeleteUserApi(APIView):
         ...
 
 
-class TranslatorTeamsAddUserlApi(APIView):
-    """Api endpoint for adding from list of translator team"""
+class TranslatorTeamsAddUserlAPI(APIView):
+    """API endpoint for adding from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
+    def patch(self, request):
         ...
