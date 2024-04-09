@@ -26,7 +26,7 @@ from .selectors import (
 )
 
 
-class TranslatorTeamsListOrCreateAPI(APIView):
+class TranslatorTeamsAPI(APIView):
 
     def get_permissions(self):
         match self.request.method:
@@ -35,7 +35,7 @@ class TranslatorTeamsListOrCreateAPI(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TranslatorTeamsListOrCreateAPI, self).get_permissions()
+        return super(TranslatorTeamsAPI, self).get_permissions()
 
     def get(self, request):
         teams_list = get_translator_teams_list()
@@ -55,7 +55,7 @@ class TranslatorTeamsListOrCreateAPI(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TranslatorTeamsGetDeleteUpdateAPI(APIView):
+class TranslatorTeamsDetailAPI(APIView):
 
     def get_permissions(self):
         match self.request.method:
@@ -64,7 +64,7 @@ class TranslatorTeamsGetDeleteUpdateAPI(APIView):
             case "PATCH", "DELETE":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TranslatorTeamsGetDeleteUpdateAPI, self).get_permissions()
+        return super(TranslatorTeamsDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
         try:
@@ -108,37 +108,25 @@ was successfuly deleted"
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class TranslatorTeamsDeleteNovelAPI(APIView):
+class TranslatorTeamsNovelAPI(APIView):
     """API endpoint for deleting from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
     def delete(self, request):
         ...
-
-
-class TranslatorTeamsAddNovelAPI(APIView):
-    """API endpoint for adding from list of translator team"""
-
-    permission_classes = (IsAuthenticated,)
 
     def patch(self, request):
         ...
 
 
-class TranslatorTeamsDeleteUserAPI(APIView):
+class TranslatorTeamsUserAPI(APIView):
     """API endpoint for deleting from list of translator team"""
 
     permission_classes = (IsAuthenticated,)
 
     def delete(self, request):
         ...
-
-
-class TranslatorTeamsAddUserlAPI(APIView):
-    """API endpoint for adding from list of translator team"""
-
-    permission_classes = (IsAuthenticated,)
 
     def patch(self, request):
         ...

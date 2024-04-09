@@ -1,14 +1,14 @@
 from django.urls import path
 
 from .apis import (
-    TranslatorTeamsListOrCreateAPI,
-    TranslatorTeamsGetDeleteUpdateAPI
+    TranslatorTeamsAPI,
+    TranslatorTeamsDetailAPI
 )
 
 
 urlpatterns = [
-    path('', TranslatorTeamsListOrCreateAPI.as_view(),
+    path('', TranslatorTeamsAPI.as_view(),
          name='list-or-create-translator-team'),
-    path('<int:pk>', TranslatorTeamsGetDeleteUpdateAPI.as_view(),
+    path('<int:pk>', TranslatorTeamsDetailAPI.as_view(),
          name='get-delete-update-translator-team')
 ]
