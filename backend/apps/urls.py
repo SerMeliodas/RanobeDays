@@ -19,7 +19,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('', include('apps.novels.urls')),
     path('chapters/', include('apps.chapters.urls')),
+    path('translator-teams/', include('apps.translator_teams.urls')),
+
     path('documentation/', schema_view.with_ui('swagger', cache_timeout=0),
          name="schema-swagger-ui"),
-    path('auth/', include('apps.authentication.urls'))
+    path('auth/', include('apps.authentication.urls')),
 ]
