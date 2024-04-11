@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.users.serializers import UserSerializer
-from apps.novels.serializers import NovelSerializer
+from apps.novels.serializers import NovelBaseSerializer
 from apps.novels.models import Novel
 from apps.users.models import User
 from .models import TranslatorTeam
@@ -10,7 +10,7 @@ class TranslatorTeamSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     name = serializers.CharField(max_length=150)
     users = UserSerializer(many=True)
-    novels = NovelSerializer(many=True)
+    novels = NovelBaseSerializer(many=True)
 
     def validate_name(self, data):
         if TranslatorTeam.objects.filter(name=data).exists():
