@@ -78,7 +78,7 @@ class TranslatorTeamsDetailAPI(APIView):
                 "message": f"Translator team with id {pk} does not exist"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        data = TranslatorTeamSerializer(team)
+        data = TranslatorTeamSerializer(team).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
