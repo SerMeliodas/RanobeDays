@@ -6,18 +6,22 @@ from rest_framework import status
 
 from apps.common.services import delete_model
 from .models import TranslatorTeam
-
 from .serializers import (
     TranslatorTeamSerializer,
     TranslatorTeamCreateSerializer,
     TranslatorTeamUpdateSerializer
 )
 
-from .types import TranslatorTeamDTO
+from .types import TranslatorTeamObject
 
 from .services import (
     create_translator_team,
     update_translator_team,
+
+    delete_user_from_translator_team,
+    add_user_to_translator_team,
+    delete_novel_from_translator_team,
+    add_novel_to_translator_team
 )
 
 from .selectors import (
@@ -48,7 +52,7 @@ class TranslatorTeamsAPI(APIView):
         serializer.is_valid(raise_exception=True)
 
         instance = create_translator_team(
-            TranslatorTeamDTO(**serializer.validated_data))
+            TranslatorTeamObject(**serializer.validated_data))
 
         data = TranslatorTeamSerializer(instance).data
 
@@ -91,13 +95,13 @@ class TranslatorTeamsDetailAPI(APIView):
 was successfuly deleted"
         }, status=status.HTTP_200_OK)
 
-    def post(self, request, pk: int):
+    def patch(self, request, pk: int):
         serializer = TranslatorTeamUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         try:
             team = update_translator_team(
-                pk, TranslatorTeamDTO(**serializer.validated_data))
+                pk, TranslatorTeamObject(**serializer.validated_data))
 
         except ObjectDoesNotExist as e:
             return Response(data={"message": f"{e}"},
@@ -106,27 +110,3 @@ was successfuly deleted"
         data = TranslatorTeamSerializer(team).data
 
         return Response(data=data, status=status.HTTP_200_OK)
-
-
-class TranslatorTeamsNovelAPI(APIView):
-    """API endpoint for deleting from list of translator team"""
-
-    permission_classes = (IsAuthenticated,)
-
-    def delete(self, request):
-        ...
-
-    def patch(self, request):
-        ...
-
-
-class TranslatorTeamsUserAPI(APIView):
-    """API endpoint for deleting from list of translator team"""
-
-    permission_classes = (IsAuthenticated,)
-
-    def delete(self, request):
-        ...
-
-    def patch(self, request):
-        ...
