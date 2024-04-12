@@ -25,7 +25,7 @@ from .selectors import (
 )
 
 
-class ChapterGetDeleteUpdateAPI(APIView):
+class ChapterDetailAPI(APIView):
     """API for getting list of tags or creating instances"""
 
     def get_permissions(self):
@@ -35,7 +35,7 @@ class ChapterGetDeleteUpdateAPI(APIView):
             case "DELETE", "PATCH":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(ChapterGetDeleteUpdateAPI, self).get_permissions()
+        return super(ChapterDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
         try:
@@ -78,9 +78,9 @@ class ChapterGetDeleteUpdateAPI(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ChapterListOrCreateAPI(APIView):
+class ChapterAPI(APIView):
     """API for getting list of chapters or creating instances"""
-    
+
     def get_permissions(self):
         match self.request.method:
             case "GET":
@@ -88,7 +88,7 @@ class ChapterListOrCreateAPI(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(ChapterListOrCreateAPI, self).get_permissions()
+        return super(ChapterAPI, self).get_permissions()
 
     def get(self, request):
         queryset = get_chapters_list()

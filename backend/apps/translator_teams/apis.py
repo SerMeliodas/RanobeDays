@@ -17,11 +17,6 @@ from .types import TranslatorTeamObject
 from .services import (
     create_translator_team,
     update_translator_team,
-
-    delete_user_from_translator_team,
-    add_user_to_translator_team,
-    delete_novel_from_translator_team,
-    add_novel_to_translator_team
 )
 
 from .selectors import (
@@ -31,7 +26,6 @@ from .selectors import (
 
 
 class TranslatorTeamsAPI(APIView):
-
     def get_permissions(self):
         match self.request.method:
             case "GET":
@@ -60,7 +54,6 @@ class TranslatorTeamsAPI(APIView):
 
 
 class TranslatorTeamsDetailAPI(APIView):
-
     def get_permissions(self):
         match self.request.method:
             case "GET":

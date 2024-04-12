@@ -24,7 +24,7 @@ from apps.novels.services import (
 )
 
 
-class TagListOrCreateAPI(APIView):
+class TagAPI(APIView):
     """API for getting list of tags or creating instances"""
 
     def get_permissions(self):
@@ -34,7 +34,7 @@ class TagListOrCreateAPI(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TagListOrCreateAPI, self).get_permissions()
+        return super(TagAPI, self).get_permissions()
 
     def get(self, request) -> Response:
         queryset = tag_list()
@@ -58,7 +58,7 @@ class TagListOrCreateAPI(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TagGetDeleteUpdateAPI(APIView):
+class TagDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
     def get_permissions(self):
@@ -69,7 +69,7 @@ class TagGetDeleteUpdateAPI(APIView):
             case "DELETE", "PATCH":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TagGetDeleteUpdateAPI, self).get_permissions()
+        return super(TagDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int) -> Response:
 

@@ -21,7 +21,7 @@ from apps.novels.serializers import GenreSerializer
 from apps.common.services import delete_model
 
 
-class GenreListOrCreateAPI(APIView):
+class GenreAPI(APIView):
     """API for getting list of genres or creating instances"""
 
     def get_permissions(self):
@@ -31,7 +31,7 @@ class GenreListOrCreateAPI(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(GenreListOrCreateAPI, self).get_permissions()
+        return super(GenreAPI, self).get_permissions()
 
     def get(self, request):
         genres = genre_list()
@@ -55,7 +55,7 @@ class GenreListOrCreateAPI(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class GenreGetDeleteUpdateAPI(APIView):
+class GenreDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
     def get_permissions(self):
@@ -66,8 +66,7 @@ class GenreGetDeleteUpdateAPI(APIView):
             case "DELETE", "PATCH":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(GenreGetDeleteUpdateAPI, self).get_permissions()
-
+        return super(GenreDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
         try:
@@ -79,7 +78,6 @@ class GenreGetDeleteUpdateAPI(APIView):
         data = GenreSerializer(genre).data
 
         return Response(data=data)
-
 
     def delete(self, request, pk: int):
         try:
