@@ -100,8 +100,9 @@ class NovelDetailAPI(APIView):
             status=status.HTTP_200_OK)
 
     def patch(self, request, slug: str) -> Response:
-        serializer = NovelUpdateSerializer(data=request.data)
+        serializer = NovelUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
 
         try:
             obj = update_novel(slug, NovelObject(

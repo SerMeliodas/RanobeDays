@@ -18,7 +18,12 @@ def create_novel(data: NovelObject) -> Novel:
 def update_novel(slug: str, data: NovelObject) -> Novel:
     """Service for updating the novel instance"""
     novel = Novel.objects.get(slug=slug)
-    fields = ['title', 'genres', 'tags']
+
+    fields = []
+
+    for field, value in data.dict().items():
+        if value is not None:
+            fields.append(field)
 
     novel, _ = model_update(instance=novel, fields=fields,
                             data=data.dict(),

@@ -12,6 +12,6 @@ class GenreObject(BaseModel):
 
 
 class NovelObject(BaseModel):
-    title: str
-    tags: list[int]
-    genres: list[int]
+    title: str | None = None
+    tags: list[int] | None = None
+    genres: list[int] | None = None
