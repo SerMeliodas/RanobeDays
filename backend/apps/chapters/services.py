@@ -15,9 +15,14 @@ def create_chapter(data: ChapterObject) -> Chapter:
 
 
 def update_chapter(data: ChapterObject, pk: int) -> Chapter:
-    fields = ["title", "novel", "text"]
+    chapter = Chapter.objects.get(pk=pk)
+    fields = []
 
-    chapter, _ = model_update(instance=Chapter, fields=fields,
+    for field, value in data.dict().items():
+        if value is not None:
+            fields.append(field)
+
+    chapter, _ = model_update(instance=chapter, fields=fields,
                               data=data.dict(), auto_updated_at=True)
 
     return chapter

@@ -12,6 +12,7 @@ from .types import ChapterObject
 
 from .serializers import (
     ChapterSerializer,
+    ChapterUpdateSerializer
 )
 
 from .services import (
@@ -61,15 +62,15 @@ class ChapterDetailAPI(APIView):
         return Response(status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
-        serializer = ChapterSerializer(data=request.data)
+        serializer = ChapterUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
         try:
             chapter = update_chapter(ChapterObject(
                 **serializer.validated_data), pk)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as e:
             return Response(data={
-                "message": f"Chapter with id {pk} does not exist"
+                "message": f"{e}"
             },
                 status=status.HTTP_404_NOT_FOUND)
 

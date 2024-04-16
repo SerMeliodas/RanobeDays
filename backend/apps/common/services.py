@@ -11,6 +11,15 @@ def delete_model(*, model: models.Model, pk: int | None = None,
         model.objects.get(slug=slug).delete()
 
 
+def _update_foreign_key_fields(instance: models.Model,
+                               fields: dict[str, int]) -> bool:
+    for field, value in fields.items():
+        model = instance._meta.get_field(field).remote_field.model
+        setattr(instance, field, model.objects.get(pk=value))
+
+    return True
+
+
 def _update_many_to_many_fields(instance: models.Model,
                                 many_to_many_fields:
                                 dict[str, models.ManyToManyField]
@@ -29,6 +38,7 @@ def model_update(*, instance: models.Model, fields: list[str],
     has_updated = False
     updated_fields = list()
     many_to_many_fields = dict()
+    foreign_key_fields = dict()
     model_fields = {field.name: field for field in instance._meta.fields
                     + instance._meta.many_to_many}
 
@@ -46,6 +56,9 @@ def model_update(*, instance: models.Model, fields: list[str],
             continue
 
         if getattr(instance, field) != data[field]:
+            if isinstance(model_fields[field], models.ForeignKey):
+                foreign_key_fields[field] = data[field]
+                continue
             has_updated = True
             updated_fields.append(field)
             setattr(instance, field, data[field])
@@ -61,5 +74,6 @@ def model_update(*, instance: models.Model, fields: list[str],
         instance.save(update_fields=updated_fields)
 
     has_updated = _update_many_to_many_fields(instance, many_to_many_fields)
+    has_updated = _update_foreign_key_fields(instance, foreign_key_fields)
 
     return instance, has_updated

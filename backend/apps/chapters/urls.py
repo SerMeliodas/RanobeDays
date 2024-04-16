@@ -9,6 +9,6 @@ from .apis import (
 
 urlpatterns = [
     path('', ChapterAPI.as_view(), name='list-or-create-chapter'),
-    path('<int:pk>', ChapterDetailAPI.as_view(),
+    path('<int:pk>/', ChapterDetailAPI.as_view(),
          name='get-delete-update-chpater')
 ]

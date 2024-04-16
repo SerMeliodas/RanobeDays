@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class ChapterObject(BaseModel):
-    title: str
-    novel: int  # novel id
-    text: str
+    title: str | None = None
+    novel: int | None = None  # novel id
+    text: str | None = None
