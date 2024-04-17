@@ -3,23 +3,27 @@ from .types import TranslatorTeamObject
 from apps.common.services import model_update
 
 
-def create_translator_team(dto: TranslatorTeamObject):
-    team = TranslatorTeam(name=dto.name)
+def create_translator_team(data: TranslatorTeamObject):
+    team = TranslatorTeam(name=data.name)
     team.save()
 
-    team.users.set(dto.users)
-    team.novels.set(dto.novels)
+    team.users.set(data.users)
+    team.novels.set(data.novels)
 
     return team
 
 
-def update_translator_team(team_id: int, dto: TranslatorTeamObject) -> dict:
+def update_translator_team(team_id: int, data: TranslatorTeamObject) -> dict:
     team = TranslatorTeam.objects.get(pk=team_id)
-    fields = ['name', 'user', 'teams']
+    fields = []
+
+    for field, value in data.dict().items():
+        if value is not None:
+            fields.append(field)
 
     team, _ = model_update(instance=team,
                            fields=fields,
-                           data=dto.dict())
+                           data=data.dict())
 
     return team
 

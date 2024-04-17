@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class TranslatorTeamObject(BaseModel):
-    id: None | int = None
-    name: str
-    users: list[int]
-    novels: list[int]
+    id: int | None = None
+    name: str | None = None
+    users: list[int] | None = None
+    novels: list[int] | None = None

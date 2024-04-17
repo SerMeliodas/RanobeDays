@@ -57,5 +57,15 @@ class TranslatorTeamCreateSerializer(TranslatorTeamSerializer):
 
 
 class TranslatorTeamUpdateSerializer(TranslatorTeamCreateSerializer):
+    name = serializers.CharField(max_length=150, required=False)
+    users = serializers.ListField(
+        child=serializers.IntegerField(min_value=0),
+        required=False
+    )
+    novels = serializers.ListField(
+        child=serializers.IntegerField(min_value=0),
+        required=False
+    )
+
     def validate_name(self, data):
         return data
