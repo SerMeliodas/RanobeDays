@@ -23,7 +23,6 @@ class NovelBaseSerializer(serializers.Serializer):
 
 
 class NovelCreateSerializer(NovelBaseSerializer):
-    title = serializers.CharField()
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1)
     )
