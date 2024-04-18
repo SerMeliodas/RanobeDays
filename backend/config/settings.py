@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'apps.chapters',
     'apps.users',
     'apps.translator_teams',
-    'apps.authentication'
+    'apps.authentication',
+    'apps.libraries',
 ]
 
 MIDDLEWARE = [
