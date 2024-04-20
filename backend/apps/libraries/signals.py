@@ -1,8 +1,10 @@
 from django.db.models.signals import post_save
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
-from .models import Library
 
+from .services import (
+    create_library
+)
 
 DEFAULT_LIBRARY_NAMES = [
     'Читаю',
@@ -16,4 +18,4 @@ DEFAULT_LIBRARY_NAMES = [
 def create_default_libraries(sender, ** kwargs):
     if kwargs['created']:
         for name in DEFAULT_LIBRARY_NAMES:
-            Library(name=name, user=kwargs["instance"]).save()
+            create_library(name=name, user=kwargs['instance'])
