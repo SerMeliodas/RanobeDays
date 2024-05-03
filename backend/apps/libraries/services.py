@@ -1,6 +1,3 @@
-from django.contrib.auth import get_user_model
-
-from apps.novels.models import Novel
 from apps.common.services import model_update, get_fields_to_update
 
 from .models import Library, LibraryItem
@@ -8,13 +5,17 @@ from .types import LibraryObject, LibraryItemObject
 
 
 # service function thats create the new instance of Library model
-def create_library(name: str, user: get_user_model()) -> Library:
-    return Library(name=name, user=user).save()
+def create_library(data: LibraryObject) -> Library:
+    library = Library(name=data.name, user=data.user)
+    library.save()
+    return library
 
 
 # service function thats create the new instance of LibraryItem model
-def create_library_item(library: Library, novel: Novel) -> LibraryItem:
-    return LibraryItem(library=library, novel=novel).save()
+def create_library_item(data: LibraryItemObject) -> LibraryItem:
+    item = LibraryItem(library=data.library, novel=data.novel)
+    item.save()
+    return item
 
 
 # service function thats update the instance of Library model

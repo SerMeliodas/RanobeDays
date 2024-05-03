@@ -9,6 +9,11 @@ class LibrarySerializer(serializers.Serializer):
     user = UserSerializer()
 
 
+class LibraryCreateUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    # user = serializers.IntegerField()
+
+
 class LibraryItemSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     library = LibrarySerializer()
