@@ -18,3 +18,8 @@ class LibraryItemSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     library = LibrarySerializer()
     novel = NovelBaseSerializer()
+
+
+class LibraryItemCreateUpdateSerializer(serializers.Serializer):
+    library = serializers.IntegerField()
+    novel = serializers.IntegerField()

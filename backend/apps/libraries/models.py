@@ -31,4 +31,4 @@ class LibraryItem(BaseModel):
 
     class Meta:
         db_table = 'libraries_items'
-        ordering = ['-created_at']
+        ordering = ['library', '-created_at']

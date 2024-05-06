@@ -369,6 +369,21 @@ django = ">=3.0"
 pytz = "*"
 
 [[package]]
+name = "drf-debug"
+version = "1.2.1"
+description = "API tracking package."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "drf-debug-1.2.1.tar.gz", hash = "sha256:befe33b2d303a12c55a1905e7ff56f7f73c03438e72500b61697e1864212ca60"},
+    {file = "drf_debug-1.2.1-py3-none-any.whl", hash = "sha256:a5b02c4fb88b7ee87870c2ec6c305263d9a55823bdd45ffb44c04536ba556086"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+djangorestframework = ">=3.11"
+
+[[package]]
 name = "drf-yasg"
 version = "1.21.7"
 description = "Automated generation of real Swagger/OpenAPI 2.0 schemas from Django Rest Framework code."
@@ -801,4 +816,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "d579088cf5e03b0678e2738037e4eef200fb2adfe0d7bef0bcf96e286fad2567"
+content-hash = "a035df91e907368e173e6a645ed8bc89e5786622433e8efe2653f802ad3ce2b0"

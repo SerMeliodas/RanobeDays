@@ -12,3 +12,7 @@ def get_libraries() -> QuerySet:
 
 def get_library_item(pk: int) -> LibraryItem:
     return LibraryItem.objects.get(pk=pk)
+
+
+def get_library_items() -> QuerySet:
+    return LibraryItem.objects.all()
