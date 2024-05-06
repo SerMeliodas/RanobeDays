@@ -16,6 +16,7 @@ psycopg2 = "^2.9.9"
 pydantic = "^2.6.3"
 django-environ = "^0.11.2"
 django-allauth = "^0.61.1"
+drf-debug = "^1.2.1"
 
 
 [build-system]

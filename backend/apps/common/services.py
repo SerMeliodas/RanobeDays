@@ -1,6 +1,18 @@
 from django.db import models
 from django.utils import timezone
 
+from pydantic import BaseModel
+
+
+def get_fields_to_update(data: BaseModel):
+    fields = []
+
+    for field, value in data.dict().items():
+        if value is not None:
+            fields.append(field)
+
+    return fields
+
 
 def delete_model(*, model: models.Model, pk: int | None = None,
                  slug: str | None = None):

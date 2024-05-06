@@ -1,6 +1,6 @@
 from .models import Novel, Tag, Genre
 from .types import NovelObject, TagObject, GenreObject
-from apps.common.services import model_update
+from apps.common.services import model_update, get_fields_to_update
 
 
 def create_novel(data: NovelObject) -> Novel:
@@ -19,11 +19,7 @@ def update_novel(slug: str, data: NovelObject) -> Novel:
     """Service for updating the novel instance"""
     novel = Novel.objects.get(slug=slug)
 
-    fields = []
-
-    for field, value in data.dict().items():
-        if value is not None:
-            fields.append(field)
+    fields = get_fields_to_update(data)
 
     novel, _ = model_update(instance=novel, fields=fields,
                             data=data.dict(),
