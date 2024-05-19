@@ -126,6 +126,7 @@ REST_FRAMEWORK = {
 # dj-rest-auth settings
 REST_AUTH = {
     'REGISTER_SERIALIZER': 'apps.authentication.serializers.RegisterSerializer',
+    'LOGIN_SERIALIZER': 'apps.authentication.serializers.LoginSerializer'
 }
 
 # Email setup
@@ -142,5 +143,6 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
 # allauth
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
