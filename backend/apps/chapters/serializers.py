@@ -12,3 +12,7 @@ class ChapterUpdateSerializer(ChapterSerializer):
     title = serializers.CharField(required=False)
     novel = serializers.IntegerField(required=False)
     text = serializers.CharField(required=False)
+
+
+class ChapterNovelSerializer(serializers.Serializer):
+    title = serializers.CharField()
