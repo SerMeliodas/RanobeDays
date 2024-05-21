@@ -5,6 +5,12 @@ import django_filters
 
 class ChapterFilter(django_filters.FilterSet):
     novel = django_filters.NumberFilter(field_name='novel')
+    order_by = django_filters.OrderingFilter(
+        fields=(
+            ('updated_at', 'updated'),
+            ('created_at', 'added')
+        )
+    )
 
     class Meta:
         model = Chapter

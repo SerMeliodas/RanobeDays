@@ -9,7 +9,8 @@ class ChapterSerializer(serializers.Serializer):
 
 
 class ChapterFilterSerializer(serializers.Serializer):
-    novel = serializers.IntegerField(min_value=1)
+    novel = serializers.IntegerField(min_value=1, required=False)
+    order_by = serializers.CharField(required=False)
 
 
 class ChapterUpdateSerializer(ChapterSerializer):

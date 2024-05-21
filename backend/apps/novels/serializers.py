@@ -27,7 +27,7 @@ class NovelBaseSerializer(serializers.Serializer):
 class NovelFilterSerializer(serializers.Serializer):
     tags = serializers.IntegerField(min_value=1, required=False)
     genres = serializers.IntegerField(min_value=1, required=False)
-    order_by = serializers.CharField()
+    order_by = serializers.CharField(required=False)
 
 
 class NovelCreateSerializer(NovelBaseSerializer):
