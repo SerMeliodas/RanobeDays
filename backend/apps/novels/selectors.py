@@ -3,6 +3,14 @@ import django_filters
 
 
 class NovelFilter(django_filters.FilterSet):
+    order_by = django_filters.OrderingFilter(
+        fields=(
+            ('title', 'title'),
+            ('updated_at', 'updated'),
+            ('created_at', 'added')
+        )
+    )
+
     tags = django_filters.NumberFilter(field_name='tags')
     genres = django_filters.NumberFilter(field_name='genres')
 

@@ -22,8 +22,7 @@ def update_novel(slug: str, data: NovelObject) -> Novel:
     fields = get_fields_to_update(data)
 
     novel, _ = model_update(instance=novel, fields=fields,
-                            data=data.dict(),
-                            auto_updated_at=True)
+                            data=data.dict())
 
     return novel
 
