@@ -20,7 +20,8 @@ from apps.novels.types import NovelObject
 from apps.novels.serializers import (
     NovelBaseSerializer,
     NovelCreateSerializer,
-    NovelUpdateSerializer
+    NovelUpdateSerializer,
+    NovelFilterSerializer
 )
 from apps.common.services import delete_model
 
@@ -55,7 +56,10 @@ class NovelAPI(APIView):
                         status=status.HTTP_201_CREATED)
 
     def get(self, request) -> Response:
-        novels = novel_list()
+        filter_serializer = NovelFilterSerializer(data=request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        novels = novel_list(filters=filter_serializer.validated_data)
 
         data = NovelBaseSerializer(novels, many=True).data
 

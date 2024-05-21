@@ -24,6 +24,11 @@ class NovelBaseSerializer(serializers.Serializer):
     genres = GenreSerializer(many=True)
 
 
+class NovelFilterSerializer(serializers.Serializer):
+    tags = serializers.IntegerField(min_value=1, required=False)
+    genres = serializers.IntegerField(min_value=1, required=False)
+
+
 class NovelCreateSerializer(NovelBaseSerializer):
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1)
