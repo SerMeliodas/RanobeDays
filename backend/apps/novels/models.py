@@ -47,7 +47,6 @@ class Genre(models.Model):
 
     def clean(self):
         instance = Genre.objects.filter(name=self.name)
-        print(instance)
 
         if instance.exists():
             raise AlreadyExistError(self)

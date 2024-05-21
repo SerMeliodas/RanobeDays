@@ -1,4 +1,22 @@
 from .models import Novel, Tag, Genre
+import django_filters
+
+
+class NovelFilter(django_filters.FilterSet):
+    order_by = django_filters.OrderingFilter(
+        fields=(
+            ('title', 'title'),
+            ('updated_at', 'updated'),
+            ('created_at', 'added')
+        )
+    )
+
+    tags = django_filters.NumberFilter(field_name='tags')
+    genres = django_filters.NumberFilter(field_name='genres')
+
+    class Meta:
+        model = Novel
+        fields = ['tags', 'genres']
 
 
 def tag_list() -> list[Tag]:
@@ -9,8 +27,13 @@ def get_tag(pk: int) -> Tag:
     return Tag.objects.get(pk=pk)
 
 
-def novel_list() -> list[Novel]:
-    return Novel.objects.all()
+def novel_list(*, filters=None):
+    filters = filters or {}
+
+    qs = Novel.objects.all()
+    filter = NovelFilter(filters, qs)
+
+    return filter.qs
 
 
 def get_novel(slug: str) -> Novel:

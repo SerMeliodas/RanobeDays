@@ -12,7 +12,8 @@ from .types import ChapterObject
 
 from .serializers import (
     ChapterSerializer,
-    ChapterUpdateSerializer
+    ChapterUpdateSerializer,
+    ChapterFilterSerializer
 )
 
 from .services import (
@@ -92,7 +93,10 @@ class ChapterAPI(APIView):
         return super(ChapterAPI, self).get_permissions()
 
     def get(self, request):
-        queryset = get_chapters_list()
+        filter_serializer = ChapterFilterSerializer(data=request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        queryset = get_chapters_list(filters=filter_serializer.validated_data)
 
         data = ChapterSerializer(queryset, many=True).data
 
