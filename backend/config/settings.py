@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.translator_teams',
     'apps.authentication',
     'apps.libraries',
+    'apps.bookmarks'
 ]
 
 MIDDLEWARE = [
