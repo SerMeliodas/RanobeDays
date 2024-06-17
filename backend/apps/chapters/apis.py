@@ -28,7 +28,7 @@ from .selectors import (
 
 
 class ChapterDetailAPI(APIView):
-    """API for getting list of tags or creating instances"""
+    """API for getting, updating, deleting the instance of Chapter"""
 
     def get_permissions(self):
         match self.request.method:

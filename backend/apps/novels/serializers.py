@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.chapters.serializers import ChapterNovelSerializer
+from apps.chapters.serializers import ChapterSerializer
 
 
 class TagSerializer(serializers.Serializer):
@@ -18,7 +18,7 @@ class NovelBaseSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
     slug = serializers.SlugField(required=False)
-    chapters = ChapterNovelSerializer(many=True, required=False)
+    chapters = ChapterSerializer(many=True, required=False)
     title = serializers.CharField()
     tags = TagSerializer(many=True)
     genres = GenreSerializer(many=True)
