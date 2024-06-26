@@ -1,17 +1,20 @@
 from rest_framework import serializers
 from apps.novels.serializers import NovelBaseSerializer
-from apps.chapters.serializers import ChapterSerializer
 from apps.users.serializers import UserSerializer
 
 
-class BookmarkSerializer(serializers.Serializer):
+class BookmarkBaseSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     user = UserSerializer()
-    novel = NovelBaseSerializer()
-    chapter = ChapterSerializer()
+    novel = serializers.IntegerField(source='novel.id')
+    chapter = serializers.IntegerField(source='chapter.id')
 
 
-class BookmrakCreateSerializer(serializers.Serializer):
+class BookmarkCreateSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     novel = serializers.IntegerField()
+    chapter = serializers.IntegerField()
+
+
+class BookmarkUpdateSerializer(serializers.Serializer):
     chapter = serializers.IntegerField()

@@ -13,7 +13,4 @@ class BookmarkObject(BaseModel):
 
 
 class BookmarkUpdateObject(BaseModel):
-    id: int | None = None
-    user: int | None = None
-    novel: int | None = None
     chapter: int | None = None
