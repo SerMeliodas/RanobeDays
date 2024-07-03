@@ -3,8 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.core.exceptions import ObjectDoesNotExist
-from apps.common.exceptions import AlreadyExistError
 from apps.common.services import delete_model
 
 from .models import Library, LibraryItem
@@ -63,11 +61,7 @@ class LibraryAPI(APIView):
         library_object = LibraryObject(
             name=serializer.validated_data["name"], user=request.user)
 
-        try:
-            library = create_library(library_object)
-        except AlreadyExistError as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        library = create_library(library_object)
 
         data = LibrarySerializer(library).data
         return Response(data=data, status=status.HTTP_200_OK)
@@ -87,11 +81,7 @@ class LibraryDetailAPI(APIView):
         return super(self.__class__, self).get_permissions()
 
     def get(self, request, pk: int) -> Response:
-        try:
-            library = get_library(pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        library = get_library(pk)
 
         data = LibrarySerializer(library).data
 
@@ -101,24 +91,16 @@ class LibraryDetailAPI(APIView):
         serializer = LibraryCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            library_object = LibraryObject(
-                name=serializer.validated_data['name'], user=request.user)
+        library_object = LibraryObject(
+            name=serializer.validated_data['name'], user=request.user)
 
-            library = update_library(pk, library_object)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        library = update_library(pk, library_object)
 
         data = LibrarySerializer(library).data
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int) -> Response:
-        try:
-            delete_model(model=Library, pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        delete_model(model=Library, pk=pk)
 
         return Response(data={}, status=status.HTTP_200_OK)
 
@@ -148,12 +130,8 @@ class LibraryItemAPI(APIView):
         serializer = LibraryItemCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            item_object = LibraryItemObject(**serializer.validated_data)
-            item = create_library_item(item_object)
-        except AlreadyExistError as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        item_object = LibraryItemObject(**serializer.validated_data)
+        item = create_library_item(item_object)
 
         data = LibraryItemSerializer(item).data
         return Response(data=data, status=status.HTTP_200_OK)
@@ -173,11 +151,7 @@ class LibraryItemDetailAPI(APIView):
         return super(self.__class__, self).get_permissions()
 
     def get(self, request, pk: int):
-        try:
-            item = get_library_item(pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        item = get_library_item(pk)
 
         data = LibraryItemSerializer(item).data
         return Response(data=data, status=status.HTTP_200_OK)
@@ -186,21 +160,13 @@ class LibraryItemDetailAPI(APIView):
         serializer = LibraryItemCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            item_object = LibraryItemObject(**serializer.validated_data)
-            item = update_library_item(pk, item_object)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        item_object = LibraryItemObject(**serializer.validated_data)
+        item = update_library_item(pk, item_object)
 
         data = LibraryItemSerializer(item).data
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
-        try:
-            delete_model(model=LibraryItem, pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        delete_model(model=LibraryItem, pk=pk)
 
         return Response(data={}, status=status.HTTP_200_OK)

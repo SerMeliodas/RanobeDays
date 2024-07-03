@@ -4,9 +4,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework import status
 
-from django.core.exceptions import ObjectDoesNotExist
-from apps.common.exceptions import AlreadyExistError
-
 from apps.novels.models import Tag
 from apps.novels.types import TagObject
 from apps.novels.serializers import TagSerializer
@@ -47,11 +44,7 @@ class TagAPI(APIView):
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            instance = create_tag(TagObject(**serializer.validated_data))
-        except AlreadyExistError as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        instance = create_tag(TagObject(**serializer.validated_data))
 
         data = TagSerializer(instance).data
 
@@ -72,12 +65,7 @@ class TagDetailAPI(APIView):
         return super(TagDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int) -> Response:
-
-        try:
-            tag = get_tag(pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        tag = get_tag(pk=pk)
 
         data = TagSerializer(tag).data
 
@@ -88,23 +76,15 @@ class TagDetailAPI(APIView):
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            instance = update_tag(pk=pk,
-                                  data=TagObject(**serializer.validated_data))
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        instance = update_tag(pk=pk, data=TagObject(
+            **serializer.validated_data))
 
         data = TagSerializer(instance).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int) -> Response:
-        try:
-            delete_model(model=Tag, pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        delete_model(model=Tag, pk=pk)
 
         return Response(data={
             "message": f"The tag with id {pk} was successfuly deleted"

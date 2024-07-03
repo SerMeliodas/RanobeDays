@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -64,41 +63,23 @@ class TranslatorTeamsDetailAPI(APIView):
         return super(TranslatorTeamsDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
-        try:
-            team = get_translator_team_by_id(pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"Translator team with id {pk} does not exist"
-            }, status=status.HTTP_404_NOT_FOUND)
+        team = get_translator_team_by_id(pk)
 
         data = TranslatorTeamSerializer(team).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
-        try:
-            delete_model(model=TranslatorTeam, pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"Translator team with id {pk} does not exist"
-            }, status=status.HTTP_404_NOT_FOUND)
+        delete_model(model=TranslatorTeam, pk=pk)
 
-        return Response(data={
-            "message": f"The translators team with id {pk} \
-was successfuly deleted"
-        }, status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
         serializer = TranslatorTeamUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            team = update_translator_team(
-                pk, TranslatorTeamObject(**serializer.validated_data))
-
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        team = update_translator_team(
+            pk, TranslatorTeamObject(**serializer.validated_data))
 
         data = TranslatorTeamSerializer(team).data
 

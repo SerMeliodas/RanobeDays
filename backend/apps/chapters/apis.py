@@ -3,8 +3,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
-from django.core.exceptions import ObjectDoesNotExist
-
 from apps.common.services import delete_model
 
 from .models import Chapter
@@ -40,40 +38,23 @@ class ChapterDetailAPI(APIView):
         return super(ChapterDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
-        try:
-            chapter = get_chapter_by_id(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"Chapter with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        chapter = get_chapter_by_id(pk=pk)
 
         data = ChapterSerializer(chapter).data
 
         return Response(data=data)
 
     def delete(self, request, pk: int):
-        try:
-            delete_model(model=Chapter, pk=pk)
-        except ObjectDoesNotExist:
-            return Response(data={
-                "message": f"Chapter with id {pk} does not exist"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        delete_model(model=Chapter, pk=pk)
+
         return Response(status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
         serializer = ChapterUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            chapter = update_chapter(ChapterObject(
-                **serializer.validated_data), pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={
-                "message": f"{e}"
-            },
-                status=status.HTTP_404_NOT_FOUND)
+        chapter = update_chapter(ChapterObject(
+            **serializer.validated_data), pk)
 
         data = ChapterSerializer(chapter).data
 

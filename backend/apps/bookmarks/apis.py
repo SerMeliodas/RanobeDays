@@ -3,10 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
-from django.core.exceptions import ObjectDoesNotExist
 
 from apps.common.services import delete_model
-from apps.common.exceptions import AlreadyExistError
 
 from .models import Bookmark
 
@@ -58,11 +56,7 @@ class BookmarkAPI(APIView):
         bookmark_object = BookmarkObject(
             **serializer.validated_data, user=request.user)
 
-        try:
-            bookmark = create_bookmark(bookmark_object)
-        except AlreadyExistError as e:
-            return Response(data={'message': f'{e}'},
-                            status=status.HTTP_400_BAD_REQUEST)
+        bookmark = create_bookmark(bookmark_object)
 
         data = BookmarkBaseSerializer(bookmark).data
 
@@ -82,21 +76,13 @@ class BookmarkDetailAPI(APIView):
         return super(self.__class__, self).get_permissions()
 
     def get(self, request, pk: int):
-        try:
-            bookmark = get_bookmark(pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        bookmark = get_bookmark(pk)
 
         data = BookmarkBaseSerializer(bookmark).data
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
-        try:
-            delete_model(model=Bookmark, pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        delete_model(model=Bookmark, pk=pk)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -104,12 +90,8 @@ class BookmarkDetailAPI(APIView):
         serializer = BookmarkUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            bookmark_object = BookmarkUpdateObject(**serializer.validated_data)
-            bookmark = update_bookmark(pk, bookmark_object)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_404_NOT_FOUND)
+        bookmark_object = BookmarkUpdateObject(**serializer.validated_data)
+        bookmark = update_bookmark(pk, bookmark_object)
 
         data = BookmarkBaseSerializer(bookmark).data
         return Response(data=data, status=status.HTTP_200_OK)

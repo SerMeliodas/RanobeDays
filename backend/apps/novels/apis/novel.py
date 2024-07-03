@@ -3,9 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
-from django.core.exceptions import ObjectDoesNotExist
-from apps.common.exceptions import AlreadyExistError
-
 from apps.novels.services import (
     create_novel,
     update_novel,
@@ -44,11 +41,7 @@ class NovelAPI(APIView):
         serializer = NovelCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            obj = create_novel(NovelObject(**serializer.validated_data))
-        except AlreadyExistError as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        obj = create_novel(NovelObject(**serializer.validated_data))
 
         data = NovelBaseSerializer(obj).data
 
@@ -80,40 +73,22 @@ class NovelDetailAPI(APIView):
         return super(NovelDetailAPI, self).get_permissions()
 
     def get(self, request, slug: str) -> Response:
-        try:
-            novel = get_novel(slug=slug)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        novel = get_novel(slug=slug)
 
         data = NovelBaseSerializer(novel).data
 
         return Response(data)
 
     def delete(self, request, slug: str) -> Response:
+        delete_model(model=Novel, slug=slug)
 
-        try:
-            delete_model(model=Novel, slug=slug)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(data={
-            "message": f"The novel with slug {slug} was successfuly deleted"
-        },
-            status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, slug: str) -> Response:
         serializer = NovelUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            obj = update_novel(slug, NovelObject(
-                **serializer.validated_data)
-            )
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        obj = update_novel(slug, NovelObject(**serializer.validated_data))
 
         data = NovelBaseSerializer(obj).data
 

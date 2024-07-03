@@ -3,8 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
-from django.core.exceptions import ObjectDoesNotExist
-from apps.common.exceptions import AlreadyExistError
 
 from apps.novels.services import (
     update_genre,
@@ -44,11 +42,7 @@ class GenreAPI(APIView):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
-        try:
-            obj = create_genre(GenreObject(**serializer.validated_data))
-        except AlreadyExistError as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        obj = create_genre(GenreObject(**serializer.validated_data))
 
         data = GenreSerializer(obj).data
 
@@ -69,37 +63,22 @@ class GenreDetailAPI(APIView):
         return super(GenreDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
-        try:
-            genre = get_genre(pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        genre = get_genre(pk=pk)
 
         data = GenreSerializer(genre).data
 
         return Response(data=data)
 
     def delete(self, request, pk: int):
-        try:
-            delete_model(model=Genre, pk=pk)
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        delete_model(model=Genre, pk=pk)
 
-        return Response(data={
-            "message": f"The novel with id {pk} was successfuly deleted"
-        },
-            status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
-        try:
-            obj = update_genre(pk, GenreObject(**serializer.validated_data))
-        except ObjectDoesNotExist as e:
-            return Response(data={"message": f"{e}"},
-                            status=status.HTTP_400_BAD_REQUEST)
+        obj = update_genre(pk, GenreObject(**serializer.validated_data))
 
         data = GenreSerializer(obj).data
 
