@@ -8,7 +8,8 @@ def create_translator_team(data: TranslatorTeamObject):
     team.save()
 
     team.users.set(data.users)
-    team.novels.set(data.novels)
+    if data.novels is not None:
+        team.novels.set(data.novels)
 
     return team
 

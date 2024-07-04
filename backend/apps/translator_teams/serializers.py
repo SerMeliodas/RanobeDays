@@ -52,7 +52,7 @@ class TranslatorTeamCreateSerializer(TranslatorTeamSerializer):
         child=serializers.IntegerField(min_value=0)
     )
     novels = serializers.ListField(
-        child=serializers.IntegerField(min_value=0)
+        child=serializers.IntegerField(min_value=0), required=False
     )
 
 
