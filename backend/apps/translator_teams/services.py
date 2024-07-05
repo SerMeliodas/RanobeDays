@@ -1,8 +1,11 @@
 from .models import TranslatorTeam
 from .types import TranslatorTeamObject
 from apps.common.services import model_update
+from apps.common.services import get_fields_to_update
+from django.db import transaction
 
 
+@transaction.atomic
 def create_translator_team(data: TranslatorTeamObject):
     team = TranslatorTeam(name=data.name)
     team.save()
@@ -16,11 +19,8 @@ def create_translator_team(data: TranslatorTeamObject):
 
 def update_translator_team(team_id: int, data: TranslatorTeamObject) -> dict:
     team = TranslatorTeam.objects.get(pk=team_id)
-    fields = []
 
-    for field, value in data.dict().items():
-        if value is not None:
-            fields.append(field)
+    fields = get_fields_to_update(data)
 
     team, _ = model_update(instance=team,
                            fields=fields,
@@ -29,6 +29,7 @@ def update_translator_team(team_id: int, data: TranslatorTeamObject) -> dict:
     return team
 
 
+# maybe in future i just delete this services
 def add_novel_to_translator_team(team_id: int, novel_id: int)\
         -> TranslatorTeam:
     team = TranslatorTeam.objects.get(pk=team_id)

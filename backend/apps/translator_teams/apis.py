@@ -19,8 +19,8 @@ from .services import (
 )
 
 from .selectors import (
-    get_translator_teams_list,
-    get_translator_team_by_id,
+    get_translator_teams,
+    get_translator_team,
 )
 
 
@@ -35,7 +35,7 @@ class TranslatorTeamsAPI(APIView):
         return super(TranslatorTeamsAPI, self).get_permissions()
 
     def get(self, request):
-        teams_list = get_translator_teams_list()
+        teams_list = get_translator_teams()
         data = TranslatorTeamSerializer(teams_list, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
@@ -63,7 +63,7 @@ class TranslatorTeamsDetailAPI(APIView):
         return super(TranslatorTeamsDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
-        team = get_translator_team_by_id(pk)
+        team = get_translator_team(pk)
 
         data = TranslatorTeamSerializer(team).data
 

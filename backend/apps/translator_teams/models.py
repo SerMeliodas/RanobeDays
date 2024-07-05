@@ -8,7 +8,7 @@ class TranslatorTeam(models.Model):
     novels = models.ManyToManyField("novels.Novel")
 
     class Meta:
-        db_table = 'translators-teams'
+        db_table = 'translator-teams'
 
     def __str__(self):
         return f"Group '{self.name}' with id: {self.pk}"
