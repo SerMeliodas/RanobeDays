@@ -1,18 +1,18 @@
 from django.urls import path, include
 
-from apps.novels.apis.novel import (
+from .apis.novel import (
     NovelAPI,
     NovelDetailAPI
 )
 
 
-from apps.novels.apis.tag import (
+from .apis.tag import (
     TagAPI,
     TagDetailAPI
 )
 
 
-from apps.novels.apis.genre import (
+from .apis.genre import (
     GenreAPI,
     GenreDetailAPI
 )

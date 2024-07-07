@@ -1,8 +1,10 @@
 from .models import Novel, Tag, Genre
 from .types import NovelObject, TagObject, GenreObject
 from apps.common.services import model_update, get_fields_to_update
+from django.db import transaction
 
 
+@transaction.atomic
 def create_novel(data: NovelObject) -> Novel:
     """Service for creating the novel instance"""
     obj = Novel(title=data.title)

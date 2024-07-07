@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from apps.novels.serializers import NovelBaseSerializer
 from apps.users.serializers import UserSerializer
 
 

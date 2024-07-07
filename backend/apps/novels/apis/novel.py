@@ -15,7 +15,7 @@ from apps.novels.selectors import (
 from apps.novels.models import Novel
 from apps.novels.types import NovelObject
 from apps.novels.serializers import (
-    NovelBaseSerializer,
+    NovelSerializer,
     NovelCreateSerializer,
     NovelUpdateSerializer,
     NovelFilterSerializer
@@ -43,7 +43,7 @@ class NovelAPI(APIView):
 
         obj = create_novel(NovelObject(**serializer.validated_data))
 
-        data = NovelBaseSerializer(obj).data
+        data = NovelSerializer(obj).data
 
         return Response(data=data,
                         status=status.HTTP_201_CREATED)
@@ -54,7 +54,7 @@ class NovelAPI(APIView):
 
         novels = novel_list(filters=filter_serializer.validated_data)
 
-        data = NovelBaseSerializer(novels, many=True).data
+        data = NovelSerializer(novels, many=True).data
 
         return Response(data)
 
@@ -75,7 +75,7 @@ class NovelDetailAPI(APIView):
     def get(self, request, slug: str) -> Response:
         novel = get_novel(slug=slug)
 
-        data = NovelBaseSerializer(novel).data
+        data = NovelSerializer(novel).data
 
         return Response(data)
 
@@ -90,6 +90,6 @@ class NovelDetailAPI(APIView):
 
         obj = update_novel(slug, NovelObject(**serializer.validated_data))
 
-        data = NovelBaseSerializer(obj).data
+        data = NovelSerializer(obj).data
 
         return Response(data=data, status=status.HTTP_200_OK)

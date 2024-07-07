@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.novels.serializers import NovelBaseSerializer
+from apps.novels.serializers import NovelSerializer
 from apps.users.serializers import UserSerializer
 
 
@@ -17,7 +17,7 @@ class LibraryCreateUpdateSerializer(serializers.Serializer):
 class LibraryItemSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     library = LibrarySerializer()
-    novel = NovelBaseSerializer()
+    novel = NovelSerializer()
 
 
 class LibraryItemCreateUpdateSerializer(serializers.Serializer):

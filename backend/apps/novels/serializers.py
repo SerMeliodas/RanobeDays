@@ -13,7 +13,7 @@ class GenreSerializer(serializers.Serializer):
 
 
 # Novel serializers
-class NovelBaseSerializer(serializers.Serializer):
+class NovelSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     created_at = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
@@ -30,7 +30,7 @@ class NovelFilterSerializer(serializers.Serializer):
     order_by = serializers.CharField(required=False)
 
 
-class NovelCreateSerializer(NovelBaseSerializer):
+class NovelCreateSerializer(NovelSerializer):
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1)
     )
@@ -39,7 +39,7 @@ class NovelCreateSerializer(NovelBaseSerializer):
     )
 
 
-class NovelUpdateSerializer(NovelBaseSerializer):
+class NovelUpdateSerializer(NovelSerializer):
     title = serializers.CharField(required=False)
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1),
