@@ -1,6 +1,7 @@
 from pathlib import Path
 import environ
 
+
 env = environ.Env(
     DEBUG=(bool, True)
 )
@@ -152,3 +153,47 @@ DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "request": {
+            "format": "[{levelname}:{asctime}:{request.user}]: {message}",
+            "style": "{"
+        },
+        "debug": {
+            "format": "[{levelname}:{asctime}]: {message}",
+            "style": "{"
+        }
+    },
+
+    "handlers": {
+        "debug_file": {
+            "formatter": "debug",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 1024*10,
+            "backupCount": 5,
+            "filename": "debug.log"
+        },
+        "request_file": {
+            "formatter": "request",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 1024*10,
+            "backupCount": 5,
+            "filename": "request.log"
+        }
+    },
+
+    "loggers": {
+        "": {
+            "handlers": ["debug_file"],
+        },
+        "django.request": {
+            "handlers": ["request_file"],
+            "propagate": False
+        }
+    }
+}
