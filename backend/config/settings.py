@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'apps.translator_teams',
     'apps.authentication',
     'apps.libraries',
-    'apps.bookmarks'
+    'apps.bookmarks',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.common.middlewares.RequestLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -161,7 +162,7 @@ LOGGING = {
 
     "formatters": {
         "request": {
-            "format": "[{levelname}:{asctime}:{request.user}]: {message}",
+            "format": "[{levelname}:{asctime}]: {message}",
             "style": "{"
         },
         "debug": {
@@ -172,28 +173,31 @@ LOGGING = {
 
     "handlers": {
         "debug_file": {
+            "level": "DEBUG",
             "formatter": "debug",
             "class": "logging.handlers.RotatingFileHandler",
-            "maxBytes": 1024*10,
+            "maxBytes": 1024*100,
             "backupCount": 5,
             "filename": "debug.log"
         },
         "request_file": {
+            "level": "DEBUG",
             "formatter": "request",
             "class": "logging.handlers.RotatingFileHandler",
-            "maxBytes": 1024*10,
+            "maxBytes": 1024*100,
             "backupCount": 5,
-            "filename": "request.log"
+            "filename": "requests.log"
         }
     },
 
     "loggers": {
+        "drf_requests": {
+            "level": "DEBUG",
+            "handlers": ["request_file"],
+        },
         "": {
+            "level": "DEBUG",
             "handlers": ["debug_file"],
         },
-        "django.request": {
-            "handlers": ["request_file"],
-            "propagate": False
-        }
     }
 }
