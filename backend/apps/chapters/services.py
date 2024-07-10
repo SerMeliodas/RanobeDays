@@ -5,6 +5,11 @@ from apps.novels.models import Novel
 from apps.translator_teams.models import TranslatorTeam
 from apps.common.services import model_update, get_fields_to_update
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 def create_chapter(data: ChapterObject) -> Chapter:
     novel = Novel.objects.get(pk=data.novel)
@@ -13,6 +18,8 @@ def create_chapter(data: ChapterObject) -> Chapter:
                       translator_team=translator_team)
     chapter.full_clean()
     chapter.save()
+
+    logger.info(f"Chapter {chapter.pk} for novel {novel.pk} was created")
 
     return chapter
 
@@ -24,5 +31,7 @@ def update_chapter(data: ChapterObject, pk: int) -> Chapter:
 
     chapter, _ = model_update(instance=chapter, fields=fields,
                               data=data.dict(), auto_updated_at=True)
+
+    logger.info(f"Chapter {chapter.pk} data: {data.dict()} was updated")
 
     return chapter

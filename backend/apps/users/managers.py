@@ -1,4 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class UserManager(BaseUserManager):
@@ -10,6 +14,8 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
+
+        logger.info(f"User {email} was created")
 
         return user
 

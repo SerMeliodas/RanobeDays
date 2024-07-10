@@ -1,6 +1,5 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer as BaseRegisterSerializer
 from dj_rest_auth.serializers import LoginSerializer as BaseLoginSerializer
-import pdb
 
 
 class RegisterSerializer(BaseRegisterSerializer):

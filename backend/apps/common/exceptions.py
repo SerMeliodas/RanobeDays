@@ -5,6 +5,11 @@ from rest_framework import status
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class AlreadyExistError(Exception):
     """Raised when the instance of model is already exist in data base"""
@@ -23,13 +28,16 @@ def api_exception_handler(exc, context):
         return response
 
     elif isinstance(exc, IntegrityError):
+        logger.debug(str(exc))
         return Response(data={"detail": str(exc)},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     elif isinstance(exc, AlreadyExistError):
+        logger.debug(str(exc))
         return Response(data={"detail": str(exc)},
                         status=status.HTTP_400_BAD_REQUEST)
 
     elif isinstance(exc, ObjectDoesNotExist):
+        logger.debug(str(exc))
         return Response(data={"detail": str(exc)},
                         status=status.HTTP_404_NOT_FOUND)

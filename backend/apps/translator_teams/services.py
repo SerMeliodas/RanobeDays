@@ -4,6 +4,11 @@ from apps.common.services import model_update
 from apps.common.services import get_fields_to_update
 from django.db import transaction
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 @transaction.atomic
 def create_translator_team(data: TranslatorTeamObject):
@@ -13,6 +18,8 @@ def create_translator_team(data: TranslatorTeamObject):
     team.users.set(data.users)
     if data.novels is not None:
         team.novels.set(data.novels)
+
+    logger.info(f"Translator \"{team.name}\" was created")
 
     return team
 
@@ -26,10 +33,12 @@ def update_translator_team(team_id: int, data: TranslatorTeamObject) -> dict:
                            fields=fields,
                            data=data.dict())
 
+    logger.info(f"Translator team {team.name} data: {data.dict()} was updated")
+
     return team
 
 
-# maybe in future i just delete this services
+# maybe in future i just delete this services >
 def add_novel_to_translator_team(team_id: int, novel_id: int)\
         -> TranslatorTeam:
     team = TranslatorTeam.objects.get(pk=team_id)

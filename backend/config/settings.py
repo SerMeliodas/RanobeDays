@@ -178,7 +178,7 @@ LOGGING = {
             "class": "logging.handlers.RotatingFileHandler",
             "maxBytes": 1024*100,
             "backupCount": 5,
-            "filename": "debug.log"
+            "filename": "./logs/debug.log"
         },
         "request_file": {
             "level": "DEBUG",
@@ -186,7 +186,7 @@ LOGGING = {
             "class": "logging.handlers.RotatingFileHandler",
             "maxBytes": 1024*100,
             "backupCount": 5,
-            "filename": "requests.log"
+            "filename": "./logs/requests.log"
         }
     },
 
