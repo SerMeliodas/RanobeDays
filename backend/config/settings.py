@@ -161,20 +161,16 @@ LOGGING = {
     "disable_existing_loggers": False,
 
     "formatters": {
-        "request": {
+        "simple": {
             "format": "[{levelname}:{asctime}]: {message}",
             "style": "{"
         },
-        "debug": {
-            "format": "[{levelname}:{asctime}]: {message}",
-            "style": "{"
-        }
     },
 
     "handlers": {
         "debug_file": {
             "level": "DEBUG",
-            "formatter": "debug",
+            "formatter": "simple",
             "class": "logging.handlers.RotatingFileHandler",
             "maxBytes": 1024*100,
             "backupCount": 5,
@@ -182,11 +178,16 @@ LOGGING = {
         },
         "request_file": {
             "level": "DEBUG",
-            "formatter": "request",
+            "formatter": "simple",
             "class": "logging.handlers.RotatingFileHandler",
             "maxBytes": 1024*100,
             "backupCount": 5,
             "filename": "./logs/requests.log"
+        },
+        "console": {
+            "level": "INFO",
+            "formatter": "simple",
+            "class": "logging.StreamHandler",
         }
     },
 
@@ -194,6 +195,10 @@ LOGGING = {
         "drf_requests": {
             "level": "DEBUG",
             "handlers": ["request_file"],
+        },
+        "apps": {
+            "level": "INFO",
+            "handlers": ["console"]
         },
         "": {
             "level": "DEBUG",
