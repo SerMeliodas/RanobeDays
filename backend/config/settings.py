@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'apps.novels',
     'apps.chapters',
     'apps.users',
-    'apps.translator_teams',
+    'apps.teams',
     'apps.authentication',
     'apps.libraries',
     'apps.bookmarks',

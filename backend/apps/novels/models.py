@@ -17,7 +17,8 @@ class Novel(BaseModel):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super(Novel, self).save(*args, **kwargs)
+
+        super(self.__class__, self).save(*args, **kwargs)
 
     def clean(self):
         instance = Novel.objects.filter(title=self.title)
