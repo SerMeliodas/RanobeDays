@@ -17,6 +17,7 @@ class Library(models.Model):
 
     class Meta:
         db_table = 'libraries'
+        ordering = ['user']
 
 
 class LibraryItem(BaseModel):

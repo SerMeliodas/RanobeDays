@@ -6,13 +6,13 @@ from django.utils.translation import gettext_lazy as _
 class Team(models.Model):
 
     TEAM_TYPES = {
-        (1, _("Autor")),
-        (2, _("Translator"))
+        (1, _('Autor')),
+        (2, _('Translator'))
     }
 
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(get_user_model())
-    novels = models.ManyToManyField("novels.Novel")
+    novels = models.ManyToManyField('novels.Novel')
     team_type = models.IntegerField(choices=TEAM_TYPES, default=1)
     description = models.TextField(null=True)
 
