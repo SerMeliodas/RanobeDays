@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 
 @transaction.atomic
 def create_team(data: TeamObject):
-    team = Team(name=data.name)
+    team = Team(name=data.name, team_type=data.team_type,
+                description=data.description)
     team.save()
 
     team.users.set(data.users)

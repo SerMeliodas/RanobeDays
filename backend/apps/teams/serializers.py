@@ -8,9 +8,11 @@ from .models import Team
 
 class TeamSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
+    team_type = serializers.IntegerField()
     name = serializers.CharField(max_length=150)
     users = UserSerializer(many=True)
     novels = NovelSerializer(many=True)
+    description = serializers.CharField(required=False)
 
     def validate_name(self, data):
         if Team.objects.filter(name=data).exists():
