@@ -5,10 +5,10 @@ from django.utils.translation import gettext_lazy as _
 
 class Team(models.Model):
 
-    TEAM_TYPES = {
+    TEAM_TYPES = (
         (1, _('Autor')),
         (2, _('Translator'))
-    }
+    )
 
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(get_user_model())

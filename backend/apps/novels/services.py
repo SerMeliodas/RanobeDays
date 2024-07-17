@@ -1,4 +1,4 @@
-from .models import Novel, Tag, Genre
+from .models import Novel, Tag, Genre, Language, Country
 from .types import NovelObject, TagObject, GenreObject
 from apps.common.services import model_update, get_fields_to_update
 from django.db import transaction
@@ -12,14 +12,27 @@ logger = logging.getLogger(__name__)
 @transaction.atomic
 def create_novel(data: NovelObject) -> Novel:
     """Service for creating the novel instance"""
-    obj = Novel(title=data.title)
+    obj = Novel(title=data.title, status=data.status,
+                country=Country.objects.get(pk=data.country),
+                language=Language.objects.get(pk=data.language))
+
+    if data.original_title:
+        obj.original_title = data.original_title
+
+    if data.translate_language:
+        obj.translate_language = Language.objects.get(
+            pk=data.translate_language)
+
+    if data.synopsys:
+        obj.synopsys = data.synopsys
+
     obj.clean()
     obj.save()
 
     obj.genres.set(data.genres)
     obj.tags.set(data.tags)
 
-    logger.info(f"Novel {obj.name} was created")
+    logger.info(f"Novel {obj.title} was created")
 
     return obj
 
