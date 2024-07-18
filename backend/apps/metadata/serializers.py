@@ -4,7 +4,7 @@ from rest_framework import serializers
 class LanguageSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     name = serializers.CharField(required=False)
-    abbrevation = serializers.CharField()
+    abbreviation = serializers.CharField()
 
 
 class CountrySerializer(serializers.Serializer):
