@@ -2,7 +2,7 @@ from .models import Chapter
 from .types import ChapterObject
 
 from apps.novels.models import Novel
-from apps.translator_teams.models import TranslatorTeam
+from apps.teams.models import Team
 from apps.common.services import model_update, get_fields_to_update
 
 import logging
@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 def create_chapter(data: ChapterObject) -> Chapter:
     novel = Novel.objects.get(pk=data.novel)
-    translator_team = TranslatorTeam.objects.get(pk=data.translator_team)
+    team = Team.objects.get(pk=data.team)
     chapter = Chapter(title=data.title, novel=novel, text=data.text,
-                      translator_team=translator_team)
+                      team=team, number=data.number, volume=data.volume)
     chapter.full_clean()
     chapter.save()
 

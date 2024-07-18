@@ -4,27 +4,27 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from apps.common.services import delete_model
-from .models import TranslatorTeam
+from .models import Team
 from .serializers import (
-    TranslatorTeamSerializer,
-    TranslatorTeamCreateSerializer,
-    TranslatorTeamUpdateSerializer
+    TeamSerializer,
+    TeamCreateSerializer,
+    TeamUpdateSerializer
 )
 
-from .types import TranslatorTeamObject
+from .types import TeamObject
 
 from .services import (
-    create_translator_team,
-    update_translator_team,
+    create_team,
+    update_team,
 )
 
 from .selectors import (
-    get_translator_teams,
-    get_translator_team,
+    get_teams,
+    get_team,
 )
 
 
-class TranslatorTeamsAPI(APIView):
+class TeamsAPI(APIView):
     def get_permissions(self):
         match self.request.method:
             case "GET":
@@ -32,27 +32,27 @@ class TranslatorTeamsAPI(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TranslatorTeamsAPI, self).get_permissions()
+        return super(TeamsAPI, self).get_permissions()
 
     def get(self, request):
-        teams_list = get_translator_teams()
-        data = TranslatorTeamSerializer(teams_list, many=True).data
+        teams_list = get_teams()
+        data = TeamSerializer(teams_list, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = TranslatorTeamCreateSerializer(data=request.data)
+        serializer = TeamCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = create_translator_team(
-            TranslatorTeamObject(**serializer.validated_data))
+        instance = create_team(
+            TeamObject(**serializer.validated_data))
 
-        data = TranslatorTeamSerializer(instance).data
+        data = TeamSerializer(instance).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TranslatorTeamsDetailAPI(APIView):
+class TeamsDetailAPI(APIView):
     def get_permissions(self):
         match self.request.method:
             case "GET":
@@ -60,27 +60,27 @@ class TranslatorTeamsDetailAPI(APIView):
             case "PATCH", "DELETE":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TranslatorTeamsDetailAPI, self).get_permissions()
+        return super(TeamsDetailAPI, self).get_permissions()
 
     def get(self, request, pk: int):
-        team = get_translator_team(pk)
+        team = get_team(pk)
 
-        data = TranslatorTeamSerializer(team).data
+        data = TeamSerializer(team).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
-        delete_model(model=TranslatorTeam, pk=pk)
+        delete_model(model=Team, pk=pk)
 
         return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
-        serializer = TranslatorTeamUpdateSerializer(data=request.data)
+        serializer = TeamUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        team = update_translator_team(
-            pk, TranslatorTeamObject(**serializer.validated_data))
+        team = update_team(
+            pk, TeamObject(**serializer.validated_data))
 
-        data = TranslatorTeamSerializer(team).data
+        data = TeamSerializer(team).data
 
         return Response(data=data, status=status.HTTP_200_OK)

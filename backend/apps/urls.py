@@ -17,13 +17,14 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('', include('apps.novels.urls')),
-    path('chapters/', include('apps.chapters.urls')),
-    path('translator-teams/', include('apps.translator_teams.urls')),
-    path('libraries/', include('apps.libraries.urls')),
-
     path('documentation/', schema_view.with_ui('swagger', cache_timeout=0),
          name="schema-swagger-ui"),
+
+    path('', include('apps.novels.urls')),
+    path('chapters/', include('apps.chapters.urls')),
+    path('teams/', include('apps.teams.urls')),
+    path('libraries/', include('apps.libraries.urls')),
     path('auth/', include('apps.authentication.urls')),
-    path('bookmarks/', include('apps.bookmarks.urls'))
+    path('bookmarks/', include('apps.bookmarks.urls')),
+    path('metadata/', include('apps.metadata.urls'))
 ]

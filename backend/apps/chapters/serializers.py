@@ -4,9 +4,10 @@ from rest_framework import serializers
 class ChapterSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField()
-    novel = serializers.IntegerField(source="novel.id", required=False)
-    translator_team = serializers.IntegerField(
-        source="translator_team.id", required=False)
+    volume = serializers.IntegerField()
+    number = serializers.IntegerField()
+    novel = serializers.IntegerField(source="novel.id")
+    team = serializers.IntegerField(source="team.id")
     text = serializers.CharField()
 
 

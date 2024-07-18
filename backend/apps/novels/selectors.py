@@ -1,4 +1,4 @@
-from .models import Novel, Tag, Genre
+from .models import Novel
 import django_filters
 
 
@@ -19,14 +19,6 @@ class NovelFilter(django_filters.FilterSet):
         fields = ['tags', 'genres']
 
 
-def tag_list() -> list[Tag]:
-    return Tag.objects.all()
-
-
-def get_tag(pk: int) -> Tag:
-    return Tag.objects.get(pk=pk)
-
-
 def novel_list(*, filters=None):
     filters = filters or {}
 
@@ -38,11 +30,3 @@ def novel_list(*, filters=None):
 
 def get_novel(slug: str) -> Novel:
     return Novel.objects.get(slug=slug)
-
-
-def get_genre(pk: int) -> Genre:
-    return Genre.objects.get(pk=pk)
-
-
-def genre_list() -> list[Genre]:
-    return Genre.objects.all()

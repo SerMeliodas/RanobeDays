@@ -4,24 +4,24 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apps.novels.models import Tag
-from apps.novels.types import TagObject
-from apps.novels.serializers import TagSerializer
+from apps.metadata.models import Country
+from apps.metadata.types import CountryObject
+from apps.metadata.serializers import CountrySerializer
 from apps.common.services import delete_model
 
-from apps.novels.selectors import (
-    tag_list,
-    get_tag
+from apps.metadata.selectors import (
+    country_list,
+    get_country
 )
 
 
-from apps.novels.services import (
-    update_tag,
-    create_tag
+from apps.metadata.services import (
+    update_country,
+    create_country
 )
 
 
-class TagAPI(APIView):
+class CountryAPI(APIView):
     """API for getting list of tags or creating instances"""
 
     def get_permissions(self):
@@ -31,27 +31,27 @@ class TagAPI(APIView):
             case "POST":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TagAPI, self).get_permissions()
+        return super(self.__class__, self).get_permissions()
 
     def get(self, request) -> Response:
-        queryset = tag_list()
+        queryset = country_list()
 
-        data = TagSerializer(queryset, many=True).data
+        data = CountrySerializer(queryset, many=True).data
 
         return Response(data)
 
     def post(self, request) -> Response:
-        serializer = TagSerializer(data=request.data)
+        serializer = CountrySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = create_tag(TagObject(**serializer.validated_data))
+        instance = create_country(CountryObject(**serializer.validated_data))
 
-        data = TagSerializer(instance).data
+        data = CountrySerializer(instance).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class TagDetailAPI(APIView):
+class CountryDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
     def get_permissions(self):
@@ -62,29 +62,29 @@ class TagDetailAPI(APIView):
             case "DELETE", "PATCH":
                 self.permission_classes = (IsAuthenticated,)
 
-        return super(TagDetailAPI, self).get_permissions()
+        return super(self.__class__, self).get_permissions()
 
     def get(self, request, pk: int) -> Response:
-        tag = get_tag(pk=pk)
+        tag = get_country(pk=pk)
 
-        data = TagSerializer(tag).data
+        data = CountrySerializer(tag).data
 
         return Response(data)
 
     def patch(self, request, pk: int) -> Response:
 
-        serializer = TagSerializer(data=request.data)
+        serializer = CountrySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = update_tag(pk=pk, data=TagObject(
+        instance = update_country(pk=pk, data=CountryObject(
             **serializer.validated_data))
 
-        data = TagSerializer(instance).data
+        data = CountrySerializer(instance).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int) -> Response:
-        delete_model(model=Tag, pk=pk)
+        delete_model(model=Country, pk=pk)
 
         return Response(data={
             "message": f"The tag with id {pk} was successfuly deleted"

@@ -3,17 +3,19 @@ from apps.users.serializers import UserSerializer
 from apps.novels.serializers import NovelSerializer
 from apps.novels.models import Novel
 from apps.users.models import User
-from .models import TranslatorTeam
+from .models import Team
 
 
-class TranslatorTeamSerializer(serializers.Serializer):
+class TeamSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
+    team_type = serializers.IntegerField()
     name = serializers.CharField(max_length=150)
     users = UserSerializer(many=True)
     novels = NovelSerializer(many=True)
+    description = serializers.CharField(required=False)
 
     def validate_name(self, data):
-        if TranslatorTeam.objects.filter(name=data).exists():
+        if Team.objects.filter(name=data).exists():
             raise serializers.ValidationError(
                 "Team with this name already exist"
             )
@@ -47,7 +49,7 @@ class TranslatorTeamSerializer(serializers.Serializer):
         return data
 
 
-class TranslatorTeamCreateSerializer(TranslatorTeamSerializer):
+class TeamCreateSerializer(TeamSerializer):
     users = serializers.ListField(
         child=serializers.IntegerField(min_value=0)
     )
@@ -56,7 +58,7 @@ class TranslatorTeamCreateSerializer(TranslatorTeamSerializer):
     )
 
 
-class TranslatorTeamUpdateSerializer(TranslatorTeamCreateSerializer):
+class TeamUpdateSerializer(TeamCreateSerializer):
     name = serializers.CharField(max_length=150, required=False)
     users = serializers.ListField(
         child=serializers.IntegerField(min_value=0),
