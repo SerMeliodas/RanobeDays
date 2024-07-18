@@ -4,18 +4,18 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
 
-from apps.novels.services import (
+from apps.metadata.services import (
     update_genre,
     create_genre
 )
-from apps.novels.selectors import (
+from apps.metadata.selectors import (
     get_genre,
     genre_list
 )
 
-from apps.novels.models import Genre
-from apps.novels.types import GenreObject
-from apps.novels.serializers import GenreSerializer
+from apps.metadata.models import Genre
+from apps.metadata.types import GenreObject
+from apps.metadata.serializers import GenreSerializer
 from apps.common.services import delete_model
 
 

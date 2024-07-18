@@ -1,29 +1,13 @@
 from rest_framework import serializers
 from apps.chapters.serializers import ChapterSerializer
+from apps.metadata.serializers import (
+    TagSerializer,
+    CountrySerializer,
+    LanguageSerializer,
+    GenreSerializer
+)
 
 
-class LanguageSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField(required=False)
-    abbrevation = serializers.CharField()
-
-
-class CountrySerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField()
-
-
-class TagSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField(required=False)
-
-
-class GenreSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField(required=False)
-
-
-# Novel serializers
 class NovelSerializer(serializers.Serializer):
     STATUS = (
         (1, "Continues"),

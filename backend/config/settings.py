@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     # local apps
     'apps.common',
+    'apps.metadata',
     'apps.novels',
     'apps.chapters',
     'apps.users',

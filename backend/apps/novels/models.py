@@ -16,20 +16,21 @@ class Novel(BaseModel):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, default=title, db_index=True)
     original_title = models.CharField(max_length=255, null=True)
-    language = models.ForeignKey("Language", db_index=True,
+    language = models.ForeignKey("metadata.Language", db_index=True,
                                  on_delete=models.DO_NOTHING,
                                  related_name="novels",
                                  default=None)
-    translate_language = models.ForeignKey("Language", db_index=True,
+    translate_language = models.ForeignKey("metadata.Language",
+                                           db_index=True,
                                            on_delete=models.DO_NOTHING,
                                            related_name="translated_novels",
                                            null=True)
-    country = models.ForeignKey("Country", db_index=True,
+    country = models.ForeignKey("metadata.Country", db_index=True,
                                 on_delete=models.DO_NOTHING,
                                 default=None)
     status = models.IntegerField(choices=STATUS, default=1)
-    tags = models.ManyToManyField("Tag", db_index=True)
-    genres = models.ManyToManyField("Genre", db_index=True)
+    tags = models.ManyToManyField("metadata.Tag", db_index=True)
+    genres = models.ManyToManyField("metadata.Genre", db_index=True)
     synopsys = models.TextField(null=True)
 
     class Meta:
@@ -43,59 +44,6 @@ class Novel(BaseModel):
 
     def clean(self):
         instance = Novel.objects.filter(title=self.title)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = "tags"
-
-    def clean(self):
-        instance = Tag.objects.filter(name=self.name)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
-
-
-class Genre(models.Model):
-    name = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = "genres"
-
-    def clean(self):
-        instance = Genre.objects.filter(name=self.name)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
-
-
-class Country(models.Model):
-    name = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = "countries"
-
-    def clean(self):
-        instance = Country.objects.filter(name=self.name)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
-
-
-class Language(models.Model):
-    name = models.CharField(max_length=50)
-    abbrevation = models.CharField(max_length=5)
-
-    class Meta:
-        db_table = "language"
-
-    def clean(self):
-        instance = Language.objects.filter(name=self.name)
 
         if instance.exists():
             raise AlreadyExistError(self)
