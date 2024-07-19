@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 
 from apps.novels.services import (
@@ -12,6 +12,7 @@ from apps.novels.selectors import (
     get_novel
 )
 
+from apps.teams.permissions import IsInTeam
 from apps.novels.models import Novel
 from apps.novels.types import NovelObject
 from apps.novels.serializers import (
@@ -26,16 +27,7 @@ from apps.common.services import delete_model
 class NovelAPI(APIView):
     """API for getting list of novels or creating novel instance"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(NovelAPI, self).get_permissions()
-
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def post(self, request) -> Response:
         serializer = NovelCreateSerializer(data=request.data)
@@ -62,15 +54,7 @@ class NovelAPI(APIView):
 class NovelDetailAPI(APIView):
     """API for getting, deletin, updating the instance of novel"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-
-            case "DELETE", "PATCH":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(NovelDetailAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request, slug: str) -> Response:
         novel = get_novel(slug=slug)
@@ -85,6 +69,9 @@ class NovelDetailAPI(APIView):
         return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, slug: str) -> Response:
+        novel = get_novel(slug)
+        self.check_object_permissions(request, novel)
+
         serializer = NovelUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 

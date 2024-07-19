@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -25,14 +25,7 @@ from .selectors import (
 
 
 class TeamsAPI(APIView):
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(TeamsAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request):
         teams_list = get_teams()
@@ -53,14 +46,7 @@ class TeamsAPI(APIView):
 
 
 class TeamsDetailAPI(APIView):
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "PATCH", "DELETE":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(TeamsDetailAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request, pk: int):
         team = get_team(pk)

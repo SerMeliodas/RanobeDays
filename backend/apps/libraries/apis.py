@@ -1,4 +1,4 @@
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -37,15 +37,7 @@ from .selectors import (
 class LibraryAPI(APIView):
     """API thats return list of Library instances or creates the instance"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(self.__class__, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request) -> Response:
         libraries = get_libraries()
@@ -70,15 +62,7 @@ class LibraryAPI(APIView):
 class LibraryDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Library"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-
-            case "DELETE", "PATCH":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(self.__class__, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request, pk: int) -> Response:
         library = get_library(pk)
@@ -109,15 +93,7 @@ class LibraryItemAPI(APIView):
     """API thats return list of LibraryItem instances or
     creates the instance"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(self.__class__, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request):
         items = get_library_items()
@@ -140,15 +116,7 @@ class LibraryItemAPI(APIView):
 class LibraryItemDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Library"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-
-            case "DELETE", "PATCH":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(self.__class__, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request, pk: int):
         item = get_library_item(pk)

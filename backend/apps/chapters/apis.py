@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 
 from apps.common.services import delete_model
@@ -28,14 +28,7 @@ from .selectors import (
 class ChapterDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Chapter"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "DELETE", "PATCH":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(ChapterDetailAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request, pk: int):
         chapter = get_chapter_by_id(pk=pk)
@@ -64,14 +57,7 @@ class ChapterDetailAPI(APIView):
 class ChapterAPI(APIView):
     """API for getting list of chapters or creating instances"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(ChapterAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request):
         filter_serializer = ChapterFilterSerializer(data=request.query_params)

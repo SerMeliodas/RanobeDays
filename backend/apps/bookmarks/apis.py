@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 
 
@@ -33,14 +33,7 @@ from .serializers import (
 class BookmarkAPI(APIView):
     """API for getting list of bookmarks or creating instances"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(self.__class__, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request):
         bookmarks = get_bookmarks()
@@ -66,14 +59,7 @@ class BookmarkAPI(APIView):
 class BookmarkDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Bookmark"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "DELETE", "PATCH":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(self.__class__, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request, pk: int):
         bookmark = get_bookmark(pk)

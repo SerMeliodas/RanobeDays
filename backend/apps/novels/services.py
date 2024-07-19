@@ -47,6 +47,6 @@ def update_novel(slug: str, data: NovelObject) -> Novel:
     novel, _ = model_update(instance=novel, fields=fields,
                             data=data.dict())
 
-    logger.info(f"Novel {novel.name} data: {data.dict()} was updated")
+    logger.info(f"Novel {novel.title} data: {data.dict()} was updated")
 
     return novel

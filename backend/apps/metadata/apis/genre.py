@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 
 
@@ -22,14 +22,7 @@ from apps.common.services import delete_model
 class GenreAPI(APIView):
     """API for getting list of genres or creating instances"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-            case "POST":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(GenreAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request):
         genres = genre_list()
@@ -52,15 +45,7 @@ class GenreAPI(APIView):
 class GenreDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    def get_permissions(self):
-        match self.request.method:
-            case "GET":
-                self.permission_classes = (AllowAny,)
-
-            case "DELETE", "PATCH":
-                self.permission_classes = (IsAuthenticated,)
-
-        return super(GenreDetailAPI, self).get_permissions()
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request, pk: int):
         genre = get_genre(pk=pk)
