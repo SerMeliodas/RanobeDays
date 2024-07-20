@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework import status
 
 from apps.novels.services import (
@@ -12,7 +12,7 @@ from apps.novels.selectors import (
     get_novel
 )
 
-from apps.teams.permissions import IsInTeam
+from apps.teams.permissions import IsTeamUser
 from apps.novels.models import Novel
 from apps.novels.types import NovelObject
 from apps.novels.serializers import (
@@ -27,7 +27,8 @@ from apps.common.services import delete_model
 class NovelAPI(APIView):
     """API for getting list of novels or creating novel instance"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          (IsAdminUser | IsTeamUser))
 
     def post(self, request) -> Response:
         serializer = NovelCreateSerializer(data=request.data)
@@ -54,7 +55,8 @@ class NovelAPI(APIView):
 class NovelDetailAPI(APIView):
     """API for getting, deletin, updating the instance of novel"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          (IsAdminUser | IsTeamUser))
 
     def get(self, request, slug: str) -> Response:
         novel = get_novel(slug=slug)
@@ -64,6 +66,9 @@ class NovelDetailAPI(APIView):
         return Response(data)
 
     def delete(self, request, slug: str) -> Response:
+        novel = get_novel(slug)
+        self.check_object_permissions(request, novel)
+
         delete_model(model=Novel, slug=slug)
 
         return Response(data={}, status=status.HTTP_200_OK)

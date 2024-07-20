@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
 
 from apps.common.services import delete_model
+
+from .permissions import IsTeamUser
 from .models import Team
 from .serializers import (
     TeamSerializer,
@@ -25,7 +27,8 @@ from .selectors import (
 
 
 class TeamsAPI(APIView):
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          (IsAdminUser | IsTeamUser))
 
     def get(self, request):
         teams_list = get_teams()
@@ -46,7 +49,8 @@ class TeamsAPI(APIView):
 
 
 class TeamsDetailAPI(APIView):
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          (IsAdminUser | IsTeamUser))
 
     def get(self, request, pk: int):
         team = get_team(pk)
