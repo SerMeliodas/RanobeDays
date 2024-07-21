@@ -17,6 +17,7 @@ def create_team(data: TeamObject):
     team.save()
 
     team.users.set(data.users)
+
     if data.novels is not None:
         team.novels.set(data.novels)
 
@@ -35,38 +36,5 @@ def update_team(team_id: int, data: TeamObject) -> dict:
                            data=data.dict())
 
     logger.info(f"Translator team {team.name} data: {data.dict()} was updated")
-
-    return team
-
-
-# maybe in future i just delete this services >
-def add_novel_to_team(team_id: int, novel_id: int)\
-        -> Team:
-    team = Team.objects.get(pk=team_id)
-    team.novels.add(novel_id)
-
-    return team
-
-
-def delete_novel_from_team(team_id: int, novel_id: int)\
-        -> Team:
-    team = Team.objects.get(pk=team_id)
-    team.novels.remove(novel_id)
-
-    return team
-
-
-def add_user_to_team(team_id: int, user_id: int)\
-        -> Team:
-    team = Team.objects.get(pk=team_id)
-    team.users.remove(user_id)
-
-    return team
-
-
-def delete_user_from_team(team_id: int, user_id: int)\
-        -> Team:
-    team = Team.objects.get(pk=team_id)
-    team.users.remove(user_id)
 
     return team

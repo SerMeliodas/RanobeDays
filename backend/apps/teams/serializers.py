@@ -60,6 +60,7 @@ class TeamCreateSerializer(TeamSerializer):
 
 class TeamUpdateSerializer(TeamCreateSerializer):
     name = serializers.CharField(max_length=150, required=False)
+    team_type = serializers.IntegerField(required=False)
     users = serializers.ListField(
         child=serializers.IntegerField(min_value=0),
         required=False

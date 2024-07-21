@@ -60,11 +60,17 @@ class TeamsDetailAPI(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
+        team = get_teams(pk)
+        self.check_object_permissions(request, team)
+
         delete_model(model=Team, pk=pk)
 
         return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
+        team = get_teams(pk)
+        self.check_object_permissions(request, team)
+
         serializer = TeamUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
