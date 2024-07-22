@@ -8,19 +8,17 @@ class IsTeamUser(permissions.BasePermission):
         IsTeamUser.message = "You are not participationg the team"
 
         if request.method in permissions.SAFE_METHODS:
-            print(request.method)
             return True
 
         if request.user.is_authenticated \
                 and len(request.user.team_set.all()) != 0:
-            print(request.method)
             return True
 
         return False
 
     def has_object_permission(self, request, view, obj):
         IsTeamUser.message = f"You are not allowed to edit this {
-            "novel" if obj.__class__.__name__ == "Novel" else "team"}"
+            obj.__class__.__name__}"
 
         if obj.__class__.__name__ == "Novel":
             for team in obj.team_set.all():

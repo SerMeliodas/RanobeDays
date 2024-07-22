@@ -155,3 +155,8 @@ cython_debug/
 
 .notes/
 logs/
+curl/
+
+
+#pyright
+pyproject.toml
