@@ -42,7 +42,7 @@ from .selectors import (
 class LibraryAPI(APIView):
     """API thats return list of Library instances or creates the instance"""
 
-    permission_classes = (IsLibraryOwner, IsAdminUser)
+    permission_classes = (IsLibraryOwner | IsAdminUser, )
 
     def get(self, request) -> Response:
         libraries = get_libraries()
@@ -67,7 +67,7 @@ class LibraryAPI(APIView):
 class LibraryDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Library"""
 
-    permission_classes = (IsLibraryOwner, IsAdminUser)
+    permission_classes = (IsLibraryOwner | IsAdminUser,)
 
     def get(self, request, pk: int) -> Response:
         library = get_library(pk)
@@ -104,7 +104,7 @@ class LibraryItemAPI(APIView):
     """API thats return list of LibraryItem instances or
     creates the instance"""
 
-    permission_classes = (IsLibraryItemOwner, IsAdminUser)
+    permission_classes = (IsLibraryItemOwner | IsAdminUser, )
 
     def get(self, request):
         items = get_library_items()
@@ -127,7 +127,7 @@ class LibraryItemAPI(APIView):
 class LibraryItemDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Library"""
 
-    permission_classes = (IsLibraryItemOwner, IsAdminUser)
+    permission_classes = (IsLibraryItemOwner | IsAdminUser,)
 
     def get(self, request, pk: int):
         item = get_library_item(pk)

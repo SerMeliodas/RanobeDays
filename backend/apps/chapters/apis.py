@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 
 from apps.common.services import delete_model
 
 from .models import Chapter
 from .types import ChapterObject
+from .permissions import IsChapterOwner
 
 from .serializers import (
     ChapterSerializer,
@@ -28,7 +29,7 @@ from .selectors import (
 class ChapterDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Chapter"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsChapterOwner | IsAdminUser, )
 
     def get(self, request, pk: int):
         chapter = get_chapter_by_id(pk=pk)
@@ -57,7 +58,7 @@ class ChapterDetailAPI(APIView):
 class ChapterAPI(APIView):
     """API for getting list of chapters or creating instances"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsChapterOwner | IsAdminUser, )
 
     def get(self, request):
         filter_serializer = ChapterFilterSerializer(data=request.query_params)
