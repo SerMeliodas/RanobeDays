@@ -1,11 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 
 
 from apps.common.services import delete_model
 
+from .permissions import IsBookmarkOwner
 from .models import Bookmark
 
 from .types import (
@@ -33,7 +34,7 @@ from .serializers import (
 class BookmarkAPI(APIView):
     """API for getting list of bookmarks or creating instances"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsBookmarkOwner | IsAdminUser, )
 
     def get(self, request):
         bookmarks = get_bookmarks()
@@ -59,7 +60,7 @@ class BookmarkAPI(APIView):
 class BookmarkDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Bookmark"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsBookmarkOwner | IsAdminUser, )
 
     def get(self, request, pk: int):
         bookmark = get_bookmark(pk)
