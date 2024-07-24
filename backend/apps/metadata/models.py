@@ -2,11 +2,9 @@ from django.db import models
 from apps.common.exceptions import AlreadyExistError
 
 
-class BaseMetadataModel(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=100)
 
-
-class Tag(BaseMetadataModel):
     class Meta:
         db_table = "tags"
 
@@ -17,7 +15,9 @@ class Tag(BaseMetadataModel):
             raise AlreadyExistError(self)
 
 
-class Genre(BaseMetadataModel):
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
+
     class Meta:
         db_table = "genres"
 
@@ -28,7 +28,9 @@ class Genre(BaseMetadataModel):
             raise AlreadyExistError(self)
 
 
-class Country(BaseMetadataModel):
+class Country(models.Model):
+    name = models.CharField(max_length=100)
+
     class Meta:
         db_table = "countries"
 
@@ -39,7 +41,8 @@ class Country(BaseMetadataModel):
             raise AlreadyExistError(self)
 
 
-class Language(BaseMetadataModel):
+class Language(models.Model):
+    name = models.CharField(max_length=100)
     abbreviation = models.CharField(max_length=5)
 
     class Meta:
