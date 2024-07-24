@@ -41,9 +41,3 @@ class Novel(BaseModel):
         self.slug = slugify(self.title)
 
         super(self.__class__, self).save(*args, **kwargs)
-
-    def clean(self):
-        instance = Novel.objects.filter(title=self.title)
-
-        if instance.exists():
-            raise AlreadyExistError(self)

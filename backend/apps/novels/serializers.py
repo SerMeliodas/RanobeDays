@@ -38,8 +38,14 @@ class NovelSerializer(serializers.Serializer):
 
 
 class NovelFilterSerializer(serializers.Serializer):
-    tags = serializers.IntegerField(min_value=1, required=False)
-    genres = serializers.IntegerField(min_value=1, required=False)
+    tags = serializers.ListField(
+        child=serializers.IntegerField(min_value=1),
+        required=False
+    )
+    genres = serializers.ListField(
+        child=serializers.IntegerField(min_value=1),
+        required=False
+    )
     order_by = serializers.CharField(required=False)
 
 

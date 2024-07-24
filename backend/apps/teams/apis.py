@@ -10,7 +10,8 @@ from .models import Team
 from .serializers import (
     TeamSerializer,
     TeamCreateSerializer,
-    TeamUpdateSerializer
+    TeamUpdateSerializer,
+    TeamFilterSerializer
 )
 
 from .types import TeamObject
@@ -31,8 +32,12 @@ class TeamsAPI(APIView):
                           (IsAdminUser | IsTeamUser))
 
     def get(self, request):
-        teams_list = get_teams()
-        data = TeamSerializer(teams_list, many=True).data
+        filter_serializer = TeamFilterSerializer(data=request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        team_list = get_teams(filters=filter_serializer.validated_data)
+
+        data = TeamSerializer(team_list, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 

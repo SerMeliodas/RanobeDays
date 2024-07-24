@@ -72,3 +72,14 @@ class TeamUpdateSerializer(TeamCreateSerializer):
 
     def validate_name(self, data):
         return data
+
+
+class TeamFilterSerializer(serializers.Serializer):
+    team_type = serializers.IntegerField(required=False)
+
+    users = serializers.ListField(
+        child=serializers.IntegerField(min_value=0), required=False
+    )
+    novels = serializers.ListField(
+        child=serializers.IntegerField(min_value=0), required=False
+    )

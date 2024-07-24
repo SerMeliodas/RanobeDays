@@ -11,8 +11,9 @@ class NovelFilter(django_filters.FilterSet):
         )
     )
 
-    tags = django_filters.NumberFilter(field_name='tags')
-    genres = django_filters.NumberFilter(field_name='genres')
+    tags = django_filters.BaseInFilter(field_name='tags__pk', lookup_expr='in')
+    genres = django_filters.BaseInFilter(
+        field_name='genres__pk', lookup_expr='in')
 
     class Meta:
         model = Novel
