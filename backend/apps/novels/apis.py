@@ -12,6 +12,9 @@ from apps.novels.selectors import (
     get_novel
 )
 
+from apps.core.pagination import (
+    get_paginated_response
+)
 from apps.teams.permissions import IsTeamUser
 from apps.novels.models import Novel
 from apps.novels.types import NovelObject
@@ -47,9 +50,12 @@ class NovelAPI(APIView):
 
         novels = novel_list(filters=filter_serializer.validated_data)
 
-        data = NovelSerializer(novels, many=True).data
-
-        return Response(data)
+        return get_paginated_response(
+            serializer_class=NovelSerializer,
+            queryset=novels,
+            view=self,
+            request=request
+        )
 
 
 class NovelDetailAPI(APIView):

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # local apps
+    'apps.core',
     'apps.common',
     'apps.metadata',
     'apps.novels',
@@ -129,13 +130,14 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
-    'EXCEPTION_HANDLER': 'apps.common.exceptions.api_exception_handler'
+    'EXCEPTION_HANDLER': 'apps.common.exceptions.api_exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.LimitOffsetPagination',
 }
 
 # dj-rest-auth settings
 REST_AUTH = {
     'REGISTER_SERIALIZER': 'apps.authentication.serializers.RegisterSerializer',
-    'LOGIN_SERIALIZER': 'apps.authentication.serializers.LoginSerializer'
+    'LOGIN_SERIALIZER': 'apps.authentication.serializers.LoginSerializer',
 }
 
 # Email setup
