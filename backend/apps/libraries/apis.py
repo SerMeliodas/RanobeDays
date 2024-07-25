@@ -21,7 +21,8 @@ from .serializers import (
     LibrarySerializer,
     LibraryCreateUpdateSerializer,
     LibraryItemSerializer,
-    LibraryItemCreateUpdateSerializer
+    LibraryItemCreateUpdateSerializer,
+    LibraryFilterSerializer
 )
 
 from .services import (
@@ -45,7 +46,10 @@ class LibraryAPI(APIView):
     permission_classes = (IsLibraryOwner | IsAdminUser, )
 
     def get(self, request) -> Response:
-        libraries = get_libraries()
+        filter_serializer = LibraryFilterSerializer(data=request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        libraries = get_libraries(filters=filter_serializer.validated_data)
 
         data = LibrarySerializer(libraries, many=True).data
 

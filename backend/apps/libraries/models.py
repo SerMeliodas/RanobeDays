@@ -21,7 +21,9 @@ class Library(models.Model):
 
 
 class LibraryItem(BaseModel):
-    library = models.ForeignKey(Library, on_delete=models.CASCADE)
+    library = models.ForeignKey(
+        Library, on_delete=models.CASCADE, related_name='items'
+    )
     novel = models.ForeignKey('novels.Novel', on_delete=models.CASCADE)
 
     def clean(self):
