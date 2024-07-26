@@ -9,6 +9,9 @@ class Library(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.name} - {self.user}"
+
     def clean(self):
         instance = Library.objects.filter(name=self.name)
 
@@ -25,6 +28,9 @@ class LibraryItem(BaseModel):
         Library, on_delete=models.CASCADE, related_name='items'
     )
     novel = models.ForeignKey('novels.Novel', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.novel} - {self.library}"
 
     def clean(self):
         instance = LibraryItem.objects.filter(name=self.name)

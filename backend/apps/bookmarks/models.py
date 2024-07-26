@@ -14,3 +14,6 @@ class Bookmark(BaseModel):
     class Meta:
         db_table = 'bookmarks'
         unique_together = (('user', 'novel'))
+
+    def __str__(self):
+        return f"{self.user} - {self.novel} - {self.chapter}"

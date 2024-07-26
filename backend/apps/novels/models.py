@@ -40,3 +40,6 @@ class Novel(BaseModel):
         self.slug = slugify(self.title)
 
         super(self.__class__, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.title} - {self.status}"

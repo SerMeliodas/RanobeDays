@@ -14,6 +14,9 @@ class Tag(models.Model):
         if instance.exists():
             raise AlreadyExistError(self)
 
+    def __str__(self):
+        return self.name
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -26,6 +29,9 @@ class Genre(models.Model):
 
         if instance.exists():
             raise AlreadyExistError(self)
+
+    def __str__(self):
+        return self.name
 
 
 class Country(models.Model):
@@ -40,6 +46,9 @@ class Country(models.Model):
         if instance.exists():
             raise AlreadyExistError(self)
 
+    def __str__(self):
+        return self.name
+
 
 class Language(models.Model):
     name = models.CharField(max_length=100)
@@ -53,3 +62,6 @@ class Language(models.Model):
 
         if instance.exists():
             raise AlreadyExistError(self)
+
+    def __str__(self):
+        return f"{self.name} - {self.abbreviation}"

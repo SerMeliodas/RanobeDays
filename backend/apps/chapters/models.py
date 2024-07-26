@@ -22,3 +22,6 @@ class Chapter(BaseModel):
 
         if instance.exists():
             raise AlreadyExistError(self)
+
+    def __str__(self):
+        return f"{self.volume}:{self.number} - {self.title} - {self.novel}"
