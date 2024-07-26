@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from apps.common.models import BaseModel
-from apps.common.exceptions import AlreadyExistError
+from apps.core.exceptions import AlreadyExistError
 
 
 class Library(models.Model):

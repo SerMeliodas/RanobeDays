@@ -66,7 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.common.middlewares.RequestLoggingMiddleware',
+    'apps.core.middlewares.RequestLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -130,7 +130,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
-    'EXCEPTION_HANDLER': 'apps.common.exceptions.api_exception_handler',
+    'EXCEPTION_HANDLER': 'apps.core.exceptions.api_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.LimitOffsetPagination',
 }
 
