@@ -37,7 +37,7 @@ class BookmarkAPI(APIView):
     permission_classes = (IsBookmarkOwner | IsAdminUser, )
 
     def get(self, request):
-        bookmarks = get_bookmarks()
+        bookmarks = get_bookmarks(request.user)
 
         data = BookmarkBaseSerializer(bookmarks, many=True).data
 
