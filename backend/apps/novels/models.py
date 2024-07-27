@@ -42,4 +42,4 @@ class Novel(BaseModel):
         super(self.__class__, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.title} - {self.status}"
+        return f"{self.title} - {Novel.STATUS[self.status - 1][1]}"
