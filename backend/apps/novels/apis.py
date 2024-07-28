@@ -22,7 +22,8 @@ from apps.novels.serializers import (
     NovelSerializer,
     NovelCreateSerializer,
     NovelUpdateSerializer,
-    NovelFilterSerializer
+    NovelFilterSerializer,
+    NovelListSerializer
 )
 from apps.common.services import delete_model
 
@@ -51,7 +52,7 @@ class NovelAPI(APIView):
         novels = novel_list(filters=filter_serializer.validated_data)
 
         return get_paginated_response(
-            serializer_class=NovelSerializer,
+            serializer_class=NovelListSerializer,
             queryset=novels,
             view=self,
             request=request

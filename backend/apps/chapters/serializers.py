@@ -6,9 +6,12 @@ class ChapterSerializer(serializers.Serializer):
     title = serializers.CharField()
     volume = serializers.IntegerField()
     number = serializers.IntegerField()
-    novel = serializers.IntegerField(source="novel.id")
     team = serializers.IntegerField(source="team.id")
     text = serializers.CharField()
+
+
+class ChapterCreateSerializer(ChapterSerializer):
+    novel = None
 
 
 class ChapterFilterSerializer(serializers.Serializer):
@@ -20,3 +23,11 @@ class ChapterUpdateSerializer(ChapterSerializer):
     title = serializers.CharField(required=False)
     novel = serializers.IntegerField(required=False)
     text = serializers.CharField(required=False)
+
+
+class ChapterShortenedSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    title = serializers.CharField()
+    volume = serializers.IntegerField()
+    number = serializers.IntegerField()
+    team = serializers.IntegerField(source="team.id")

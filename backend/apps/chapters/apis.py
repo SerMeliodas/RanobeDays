@@ -12,7 +12,8 @@ from .permissions import IsChapterOwner
 from .serializers import (
     ChapterSerializer,
     ChapterUpdateSerializer,
-    ChapterFilterSerializer
+    ChapterFilterSerializer,
+    ChapterCreateSerializer
 )
 
 from .services import (
@@ -31,19 +32,19 @@ class ChapterDetailAPI(APIView):
 
     permission_classes = (IsChapterOwner | IsAdminUser, )
 
-    def get(self, request, pk: int):
+    def get(self, request, slug: str, pk: int):
         chapter = get_chapter_by_id(pk=pk)
 
         data = ChapterSerializer(chapter).data
 
         return Response(data=data)
 
-    def delete(self, request, pk: int):
+    def delete(self, request, slug: str, pk: int):
         delete_model(model=Chapter, pk=pk)
 
         return Response(status=status.HTTP_200_OK)
 
-    def patch(self, request, pk: int):
+    def patch(self, request, slug: str, pk: int):
         serializer = ChapterUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
@@ -60,21 +61,21 @@ class ChapterAPI(APIView):
 
     permission_classes = (IsChapterOwner | IsAdminUser, )
 
-    def get(self, request):
-        filter_serializer = ChapterFilterSerializer(data=request.query_params)
-        filter_serializer.is_valid(raise_exception=True)
-
-        queryset = get_chapters_list(filters=filter_serializer.validated_data)
+    def get(self, request, slug: str):
+        queryset = get_chapters_list(novel_slug=slug)
 
         data = ChapterSerializer(queryset, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        serializer = ChapterSerializer(data=request.data)
+    def post(self, request, slug: str):
+        serializer = ChapterCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        chapter = create_chapter(ChapterObject(**serializer.data))
+        chapter_object = ChapterObject(**serializer.data, novel=slug)
+
+        chapter = create_chapter(chapter_object)
+
         data = ChapterSerializer(chapter).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)

@@ -17,13 +17,8 @@ class ChapterFilter(django_filters.FilterSet):
         fields = ('novel', )
 
 
-def get_chapters_list(*, filters=None) -> QuerySet:
-    filters = filters or {}
-
-    qs = Chapter.objects.all()
-    filter = ChapterFilter(filters, qs)
-
-    return filter.qs
+def get_chapters_list(*, novel_slug) -> QuerySet:
+    return Chapter.objects.filter(novel__slug=novel_slug)
 
 
 def get_chapter_by_id(pk: int) -> Chapter:

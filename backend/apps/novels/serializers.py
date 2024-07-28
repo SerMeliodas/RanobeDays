@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.chapters.serializers import ChapterSerializer
+from apps.chapters.serializers import ChapterShortenedSerializer
 from apps.metadata.serializers import (
     TagSerializer,
     CountrySerializer,
@@ -29,7 +29,7 @@ class NovelSerializer(serializers.Serializer):
 
     status = serializers.ChoiceField(STATUS)
 
-    chapters = ChapterSerializer(many=True, required=False)
+    chapters = ChapterShortenedSerializer(many=True, read_only=True)
     country = CountrySerializer()
     tags = TagSerializer(many=True)
     genres = GenreSerializer(many=True)
@@ -71,3 +71,10 @@ class NovelUpdateSerializer(NovelSerializer):
         child=serializers.IntegerField(min_value=1),
         required=False
     )
+
+
+class NovelListSerializer(NovelSerializer):
+    chapters = None
+    updated_at = None
+    original_title = None
+    synopsys = None

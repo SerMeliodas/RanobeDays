@@ -15,13 +15,7 @@ class Chapter(BaseModel):
     class Meta:
         db_table = 'chapters'
         default_related_name = 'chapters'
-        ordering = ['novel', '-created_at', 'team']
-
-    def clean(self):
-        instance = Chapter.objects.filter(title=self.title, novel=self.novel)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
+        ordering = ['volume', 'number', 'team']
 
     def __str__(self):
         return f"{self.volume}:{self.number} - {self.title} - {self.novel}"

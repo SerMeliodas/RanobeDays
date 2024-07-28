@@ -26,7 +26,7 @@ urlpatterns = [
     path('documentation/', include(docs_patterns)),
 
     path('', include('apps.novels.urls')),
-    path('chapters/', include('apps.chapters.urls')),
+    # path('chapters/', include('apps.chapters.urls')),
     path('teams/', include('apps.teams.urls')),
     path('libraries/', include('apps.libraries.urls')),
     path('auth/', include('apps.authentication.urls')),
