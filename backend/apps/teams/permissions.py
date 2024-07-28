@@ -11,7 +11,7 @@ class IsTeamUser(permissions.BasePermission):
             return True
 
         if request.user.is_authenticated \
-                and len(request.user.team_set.all()) != 0:
+                and len(request.user.teams.all()) != 0:
             return True
 
         return False
@@ -21,8 +21,8 @@ class IsTeamUser(permissions.BasePermission):
             obj.__class__.__name__}"
 
         if obj.__class__.__name__ == "Novel":
-            for team in obj.team_set.all():
-                if team in request.user.team_set.all():
+            for team in obj.teams.all():
+                if team in request.user.teams.all():
                     return True
 
         if obj.__class__.__name__ == "Team" \

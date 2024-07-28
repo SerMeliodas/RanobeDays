@@ -4,7 +4,7 @@ from rest_framework import permissions
 class IsChapterOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated \
-                and len(request.user.team_set.all()) > 0:
+                and len(request.user.teams.all()) > 0:
             return True
 
         if not request.user.is_authenticated \

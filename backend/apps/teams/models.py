@@ -12,7 +12,7 @@ class Team(models.Model):
 
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(get_user_model())
-    novels = models.ManyToManyField('novels.Novel')
+    novels = models.ManyToManyField('novels.Novel', related_name="teams")
     team_type = models.IntegerField(choices=TEAM_TYPES, default=1)
     description = models.TextField(null=True)
 
@@ -20,4 +20,4 @@ class Team(models.Model):
         db_table = 'teams'
 
     def __str__(self):
-        return f"Team '{self.name}' with id: {self.pk}"
+        return f"{self.name} -- {Team.TEAM_TYPES[self.team_type][1]}"
