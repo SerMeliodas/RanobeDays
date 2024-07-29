@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from apps.users.serializers import UserSerializer
-from apps.novels.serializers import NovelSerializer
 from apps.novels.models import Novel
 from apps.users.models import User
 from .models import Team
@@ -11,8 +10,13 @@ class TeamSerializer(serializers.Serializer):
     team_type = serializers.IntegerField()
     name = serializers.CharField(max_length=150)
     users = UserSerializer(many=True)
-    novels = NovelSerializer(many=True)
+    novels = serializers.SerializerMethodField()
     description = serializers.CharField(required=False)
+
+    def get_novels(self, instance):
+        from apps.novels.serializers import NovelShortenedSerializer
+        novels = Novel.objects.filter(teams=instance)
+        return NovelShortenedSerializer(novels, many=True).data
 
     def validate_name(self, data):
         if Team.objects.filter(name=data).exists():
@@ -83,3 +87,9 @@ class TeamFilterSerializer(serializers.Serializer):
     novels = serializers.ListField(
         child=serializers.IntegerField(min_value=0), required=False
     )
+
+
+class TeamShortenedSerializer(TeamSerializer):
+    users = None
+    novels = None
+    description = None

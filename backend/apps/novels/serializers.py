@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from apps.chapters.serializers import ChapterShortenedSerializer
+from apps.teams.serializers import TeamShortenedSerializer
 from apps.metadata.serializers import (
     TagSerializer,
     CountrySerializer,
@@ -33,6 +34,8 @@ class NovelSerializer(serializers.Serializer):
     country = CountrySerializer()
     tags = TagSerializer(many=True)
     genres = GenreSerializer(many=True)
+
+    teams = TeamShortenedSerializer(many=True, read_only=True)
 
     synopsys = serializers.CharField(required=False)
 
@@ -78,3 +81,18 @@ class NovelListSerializer(NovelSerializer):
     updated_at = None
     original_title = None
     synopsys = None
+
+
+class NovelShortenedSerializer(NovelSerializer):
+    id = None
+    chapters = None
+    updated_at = None
+    created_at = None
+    original_title = None
+    synopsys = None
+    language = None
+    translate_language = None
+    tags = None
+    genres = None
+    country = None
+    teams = None
