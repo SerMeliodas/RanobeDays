@@ -22,8 +22,8 @@ def create_library(data: LibraryObject) -> Library:
 
 # service function thats create the new instance of LibraryItem model
 def create_library_item(data: LibraryItemObject) -> LibraryItem:
-    library = Library(pk=data.library)
-    novel = Novel(pk=data.novel)
+    library = Library.objects.get(pk=data.library)
+    novel = Novel.objects.get(pk=data.novel)
     item = LibraryItem(library=library, novel=novel)
     item.save()
 
