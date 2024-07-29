@@ -28,5 +28,5 @@ def get_library_item(pk: int) -> LibraryItem:
     return LibraryItem.objects.get(pk=pk)
 
 
-def get_library_items() -> QuerySet:
-    return LibraryItem.objects.all()
+def get_library_items(library_id: int) -> QuerySet:
+    return LibraryItem.objects.filter(library__pk=library_id)

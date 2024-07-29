@@ -73,15 +73,15 @@ class LibraryDetailAPI(APIView):
 
     permission_classes = (IsLibraryOwner | IsAdminUser,)
 
-    def get(self, request, pk: int) -> Response:
-        library = get_library(pk)
+    def get(self, request, library_id: int) -> Response:
+        library = get_library(library_id)
 
         data = LibrarySerializer(library).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def patch(self, request, pk: int) -> Response:
-        library = get_library(pk)
+    def patch(self, request, library_id: int) -> Response:
+        library = get_library(library_id)
         self.check_object_permissions(library, request)
 
         serializer = LibraryCreateUpdateSerializer(data=request.data)
@@ -90,16 +90,16 @@ class LibraryDetailAPI(APIView):
         library_object = LibraryObject(
             name=serializer.validated_data['name'], user=request.user)
 
-        library = update_library(pk, library_object)
+        library = update_library(library_id, library_object)
 
         data = LibrarySerializer(library).data
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def delete(self, request, pk: int) -> Response:
-        library = get_library(pk)
+    def delete(self, request, library_id: int) -> Response:
+        library = get_library(library_id)
         self.check_object_permissions(library, request)
 
-        delete_model(model=Library, pk=pk)
+        delete_model(model=Library, pk=library_id)
 
         return Response(data={}, status=status.HTTP_200_OK)
 
@@ -110,18 +110,20 @@ class LibraryItemAPI(APIView):
 
     permission_classes = (IsLibraryItemOwner | IsAdminUser, )
 
-    def get(self, request):
-        items = get_library_items()
+    def get(self, request, library_id: int):
+        items = get_library_items(library_id)
 
         data = LibraryItemSerializer(items, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, library_id: int):
         serializer = LibraryItemCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         item_object = LibraryItemObject(**serializer.validated_data)
+        item_object.library = library_id
+
         item = create_library_item(item_object)
 
         data = LibraryItemSerializer(item).data
@@ -133,23 +135,23 @@ class LibraryItemDetailAPI(APIView):
 
     permission_classes = (IsLibraryItemOwner | IsAdminUser,)
 
-    def get(self, request, pk: int):
-        item = get_library_item(pk)
+    def get(self, request, library_id: int, library_item_id: int):
+        item = get_library_item(library_item_id)
 
         data = LibraryItemSerializer(item).data
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def patch(self, request, pk: int):
+    def patch(self, request, library_id: int, library_item_id: int):
         serializer = LibraryItemCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         item_object = LibraryItemObject(**serializer.validated_data)
-        item = update_library_item(pk, item_object)
+        item = update_library_item(library_item_id, item_object)
 
         data = LibraryItemSerializer(item).data
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def delete(self, request, pk: int):
-        delete_model(model=LibraryItem, pk=pk)
+    def delete(self, request, library_id: int, library_item_id: int):
+        delete_model(model=LibraryItem, pk=library_item_id)
 
         return Response(data={}, status=status.HTTP_200_OK)

@@ -28,5 +28,5 @@ novel_patterns = [
 
 
 urlpatterns = [
-    path('novels/', include((novel_patterns, 'novels'))),
+    path('', include((novel_patterns, 'novels'))),
 ]

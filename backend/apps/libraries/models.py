@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from apps.common.models import BaseModel
-from apps.core.exceptions import AlreadyExistError
 
 
 class Library(models.Model):
@@ -11,12 +10,6 @@ class Library(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.user}"
-
-    def clean(self):
-        instance = Library.objects.filter(name=self.name)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
 
     class Meta:
         db_table = 'libraries'
@@ -31,12 +24,6 @@ class LibraryItem(BaseModel):
 
     def __str__(self):
         return f"{self.novel} - {self.library}"
-
-    def clean(self):
-        instance = LibraryItem.objects.filter(name=self.name)
-
-        if instance.exists():
-            raise AlreadyExistError(self)
 
     class Meta:
         db_table = 'libraries_items'
