@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 from .models import Library, LibraryItem
 
@@ -52,6 +53,7 @@ class LibraryAPI(APIView):
         libraries = get_libraries(filters=filter_serializer.validated_data)
 
         data = LibrarySerializer(libraries, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -65,6 +67,8 @@ class LibraryAPI(APIView):
         library = create_library(library_object)
 
         data = LibrarySerializer(library).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)
 
 
@@ -77,6 +81,7 @@ class LibraryDetailAPI(APIView):
         library = get_library(library_id)
 
         data = LibrarySerializer(library).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -93,6 +98,8 @@ class LibraryDetailAPI(APIView):
         library = update_library(library_id, library_object)
 
         data = LibrarySerializer(library).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, library_id: int) -> Response:
@@ -114,6 +121,7 @@ class LibraryItemAPI(APIView):
         items = get_library_items(library_id)
 
         data = LibraryItemSerializer(items, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -127,6 +135,8 @@ class LibraryItemAPI(APIView):
         item = create_library_item(item_object)
 
         data = LibraryItemSerializer(item).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)
 
 
@@ -139,6 +149,8 @@ class LibraryItemDetailAPI(APIView):
         item = get_library_item(library_item_id)
 
         data = LibraryItemSerializer(item).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, library_id: int, library_item_id: int):
@@ -149,6 +161,8 @@ class LibraryItemDetailAPI(APIView):
         item = update_library_item(library_item_id, item_object)
 
         data = LibraryItemSerializer(item).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, library_id: int, library_item_id: int):

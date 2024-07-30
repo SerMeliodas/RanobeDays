@@ -5,6 +5,7 @@ from rest_framework import status
 
 
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 from .permissions import IsBookmarkOwner
 from .models import Bookmark
@@ -40,6 +41,7 @@ class BookmarkAPI(APIView):
         bookmarks = get_bookmarks(request.user)
 
         data = BookmarkBaseSerializer(bookmarks, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -53,6 +55,7 @@ class BookmarkAPI(APIView):
         bookmark = create_bookmark(bookmark_object)
 
         data = BookmarkBaseSerializer(bookmark).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -66,6 +69,8 @@ class BookmarkDetailAPI(APIView):
         bookmark = get_bookmark(pk)
 
         data = BookmarkBaseSerializer(bookmark).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
@@ -81,4 +86,6 @@ class BookmarkDetailAPI(APIView):
         bookmark = update_bookmark(pk, bookmark_object)
 
         data = BookmarkBaseSerializer(bookmark).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data=data, status=status.HTTP_200_OK)

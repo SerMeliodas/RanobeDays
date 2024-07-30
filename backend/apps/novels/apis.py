@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework import status
 
+from apps.core.utils import get_response_data
+
 from apps.novels.services import (
     create_novel,
     update_novel,
@@ -42,7 +44,7 @@ class NovelAPI(APIView):
 
         data = NovelSerializer(obj).data
 
-        return Response(data=data,
+        return Response(data=get_response_data(status.HTTP_201_CREATED, data),
                         status=status.HTTP_201_CREATED)
 
     def get(self, request) -> Response:
@@ -70,6 +72,8 @@ class NovelDetailAPI(APIView):
 
         data = NovelSerializer(novel).data
 
+        data = get_response_data(status.HTTP_200_OK, data)
+
         return Response(data)
 
     def delete(self, request, slug: str) -> Response:
@@ -90,5 +94,7 @@ class NovelDetailAPI(APIView):
         obj = update_novel(slug, NovelObject(**serializer.validated_data))
 
         data = NovelSerializer(obj).data
+
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)

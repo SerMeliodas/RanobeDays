@@ -8,6 +8,7 @@ from apps.metadata.models import Tag
 from apps.metadata.types import TagObject
 from apps.metadata.serializers import TagSerializer
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 from apps.metadata.selectors import (
     tag_list,
@@ -30,6 +31,7 @@ class TagAPI(APIView):
         queryset = tag_list()
 
         data = TagSerializer(queryset, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data)
 
@@ -40,6 +42,7 @@ class TagAPI(APIView):
         instance = create_tag(TagObject(**serializer.validated_data))
 
         data = TagSerializer(instance).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
@@ -53,6 +56,7 @@ class TagDetailAPI(APIView):
         tag = get_tag(pk=pk)
 
         data = TagSerializer(tag).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data)
 
@@ -65,6 +69,7 @@ class TagDetailAPI(APIView):
             **serializer.validated_data))
 
         data = TagSerializer(instance).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 

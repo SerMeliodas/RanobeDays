@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 from .permissions import IsTeamUser
 from .models import Team
@@ -38,6 +39,7 @@ class TeamsAPI(APIView):
         team_list = get_teams(filters=filter_serializer.validated_data)
 
         data = TeamSerializer(team_list, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -49,6 +51,7 @@ class TeamsAPI(APIView):
             TeamObject(**serializer.validated_data))
 
         data = TeamSerializer(instance).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
@@ -61,6 +64,7 @@ class TeamsDetailAPI(APIView):
         team = get_team(pk)
 
         data = TeamSerializer(team).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -83,5 +87,6 @@ class TeamsDetailAPI(APIView):
             pk, TeamObject(**serializer.validated_data))
 
         data = TeamSerializer(team).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)

@@ -8,6 +8,7 @@ from apps.metadata.models import Language
 from apps.metadata.types import LanguageObject
 from apps.metadata.serializers import LanguageSerializer
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 from apps.metadata.selectors import (
     language_list,
@@ -30,6 +31,7 @@ class LanguageAPI(APIView):
         queryset = language_list()
 
         data = LanguageSerializer(queryset, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data)
 
@@ -40,6 +42,7 @@ class LanguageAPI(APIView):
         instance = create_language(LanguageObject(**serializer.validated_data))
 
         data = LanguageSerializer(instance).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
@@ -53,6 +56,7 @@ class LanguageDetailAPI(APIView):
         tag = get_language(pk=pk)
 
         data = LanguageSerializer(tag).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data)
 
@@ -65,6 +69,7 @@ class LanguageDetailAPI(APIView):
             **serializer.validated_data))
 
         data = LanguageSerializer(instance).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 

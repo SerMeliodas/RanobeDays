@@ -1,30 +1,37 @@
 from rest_framework.pagination import LimitOffsetPagination as _LimitOffsetPagination
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.settings import api_settings
+from .utils import get_response_data
 
 
 class LimitOffsetPagination(_LimitOffsetPagination):
     max_limit = 50
 
     def get_paginated_data(self, data):
-        return {
+        data = get_response_data(status=status.HTTP_200_OK, data=data)
+        result = {
             'limit': self.limit,
             'offset': self.offset,
             'count': self.count,
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
-            'data': data
         }
+        result.update(data)
+
+        return result
 
     def get_paginated_response(self, data):
-        return Response({
+        data = get_response_data(status.HTTP_200_OK, data)
+        result = {
             'limit': self.limit,
             'offset': self.offset,
             'count': self.count,
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
-            'data': data
-        })
+        }
+        result.update(data)
+        return Response(result, status.HTTP_200_OK)
 
 
 def get_paginated_response(*, pagination_class=None, serializer_class,
@@ -38,7 +45,8 @@ def get_paginated_response(*, pagination_class=None, serializer_class,
 
     if page is not None:
         serializer = serializer_class(page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+    return paginator.get_paginated_response(serializer.data)
 
     serializer = serializer_class(queryset, many=True)
-    return Response(data=serializer.data)
+    return Response(data=get_response_data(status.HTTP_200_OK, serializer.data),
+                    status=status.HTTP_200_OK)

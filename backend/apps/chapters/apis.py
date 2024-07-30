@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 from .models import Chapter
 from .types import ChapterObject
@@ -36,6 +37,7 @@ class ChapterDetailAPI(APIView):
         chapter = get_chapter_by_id(pk=pk)
 
         data = ChapterSerializer(chapter).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data)
 
@@ -52,6 +54,7 @@ class ChapterDetailAPI(APIView):
             **serializer.validated_data), pk)
 
         data = ChapterSerializer(chapter).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data, status=status.HTTP_200_OK)
 
@@ -65,6 +68,7 @@ class ChapterAPI(APIView):
         queryset = get_chapters_list(novel_slug=slug)
 
         data = ChapterSerializer(queryset, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -77,5 +81,6 @@ class ChapterAPI(APIView):
         chapter = create_chapter(chapter_object)
 
         data = ChapterSerializer(chapter).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)

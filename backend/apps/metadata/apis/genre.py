@@ -17,6 +17,7 @@ from apps.metadata.models import Genre
 from apps.metadata.types import GenreObject
 from apps.metadata.serializers import GenreSerializer
 from apps.common.services import delete_model
+from apps.core.utils import get_response_data
 
 
 class GenreAPI(APIView):
@@ -28,6 +29,7 @@ class GenreAPI(APIView):
         genres = genre_list()
 
         data = GenreSerializer(genres, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data)
 
@@ -38,6 +40,7 @@ class GenreAPI(APIView):
         obj = create_genre(GenreObject(**serializer.validated_data))
 
         data = GenreSerializer(obj).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
@@ -51,6 +54,7 @@ class GenreDetailAPI(APIView):
         genre = get_genre(pk=pk)
 
         data = GenreSerializer(genre).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data)
 
@@ -66,5 +70,6 @@ class GenreDetailAPI(APIView):
         obj = update_genre(pk, GenreObject(**serializer.validated_data))
 
         data = GenreSerializer(obj).data
+        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
