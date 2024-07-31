@@ -1,7 +1,7 @@
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated
+from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, ValidationError
 
 from django.db.models import Model
 from django.db import IntegrityError
@@ -53,5 +53,10 @@ def api_exception_handler(exc, context):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_404_NOT_FOUND, detail=str(exc)),
                         status=status.HTTP_404_NOT_FOUND)
+
+    if isinstance(exc, ValidationError):
+        logger.debug(str(exc))
+        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST, detail=str(exc)),
+                        status=status.HTTP_400_BAD_REQUEST)
 
     return response
