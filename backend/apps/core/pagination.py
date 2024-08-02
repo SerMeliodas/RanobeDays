@@ -45,7 +45,7 @@ def get_paginated_response(*, pagination_class=None, serializer_class,
 
     if page is not None:
         serializer = serializer_class(page, many=True)
-    return paginator.get_paginated_response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
 
     serializer = serializer_class(queryset, many=True)
     return Response(data=get_response_data(status.HTTP_200_OK, serializer.data),

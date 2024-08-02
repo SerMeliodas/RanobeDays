@@ -1,7 +1,8 @@
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, ValidationError
+from django.core.exceptions import ValidationError
+from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated
 
 from django.db.models import Model
 from django.db import IntegrityError
@@ -31,32 +32,38 @@ def api_exception_handler(exc, context):
     if isinstance(exc, AuthenticationFailed):
         print(11)
         logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED, detail=str(exc)),
+        return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED,
+                                               detail=str(exc)),
                         status=status.HTTP_401_UNAUTHORIZED)
 
     if isinstance(exc, NotAuthenticated):
         logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED, detail=str(exc)),
+        return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED,
+                                               detail=str(exc)),
                         status=status.HTTP_401_UNAUTHORIZED)
 
     if isinstance(exc, IntegrityError):
         logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)),
+        return Response(data=get_response_data(status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                               detail=str(exc)),
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     if isinstance(exc, AlreadyExistError):
         logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST, detail=str(exc)),
+        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
+                                               detail=str(exc)),
                         status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(exc, ObjectDoesNotExist):
         logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_404_NOT_FOUND, detail=str(exc)),
+        return Response(data=get_response_data(status.HTTP_404_NOT_FOUND,
+                                               detail=str(exc)),
                         status=status.HTTP_404_NOT_FOUND)
 
     if isinstance(exc, ValidationError):
         logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST, detail=str(exc)),
+        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
+                                               detail=exc),
                         status=status.HTTP_400_BAD_REQUEST)
 
     return response
