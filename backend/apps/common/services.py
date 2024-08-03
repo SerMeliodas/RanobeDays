@@ -71,6 +71,7 @@ def model_update(*, instance: models.Model, fields: list[str],
             if isinstance(model_fields[field], models.ForeignKey):
                 foreign_key_fields[field] = data[field]
                 continue
+
             has_updated = True
             updated_fields.append(field)
             setattr(instance, field, data[field])
