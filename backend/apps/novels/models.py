@@ -38,7 +38,7 @@ class Novel(BaseModel):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        if kwargs["update_fields"]:
+        if kwargs.get("update_fields"):
             kwargs["update_fields"].append("slug")
 
         super(self.__class__, self).save(*args, **kwargs)
