@@ -160,3 +160,4 @@ curl/
 
 #pyright
 pyproject.toml
+backend/media/users_avatars

@@ -18,6 +18,7 @@ django-allauth = "^0.61.1"
 drf-debug = "^1.2.1"
 django-filter = "^24.2"
 setuptools = "^70.0.0"
+pillow = "^10.4.0"
 
 
 [build-system]

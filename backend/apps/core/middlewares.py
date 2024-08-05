@@ -14,5 +14,8 @@ class RequestLoggingMiddleware:
                      request.body} --- {request.method}:{request.path}")
 
         response = self.get_response(request)
-        logger.debug(f"{response.content}")
+        try:
+            logger.debug(f"{response.content}")
+        except AttributeError:
+            logger.debug(str(response.streaming_content))
         return response
