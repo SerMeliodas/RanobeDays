@@ -12,7 +12,8 @@ class UserAdmin(UserAdmin):
     list_display = ("username", "email", "is_staff", "is_superuser")
     list_filter = ("username", "email", "is_staff", "is_superuser")
     fieldsets = (
-        (None, {"fields": ("username", "email", "password")}),
+        (None, {"fields": ("public_username",
+         "username", "email", "avatar", "password")}),
         ("Permisions", {"classes": ("collapse",),
                         "fields": ("is_staff", "is_active",
                                    "groups", "user_permissions"),
