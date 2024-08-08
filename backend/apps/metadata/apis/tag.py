@@ -4,10 +4,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apps.metadata.models import Tag
 from apps.metadata.types import TagObject
 from apps.metadata.serializers import TagSerializer
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 from apps.core.permissions import ReadOnly
 
@@ -80,9 +78,6 @@ class TagDetailAPI(APIView):
         tag = get_tag(pk)
         self.check_object_permissions(request, tag)
 
-        delete_model(model=Tag, pk=pk)
+        tag.delete()
 
-        return Response(data={
-            "message": f"The tag with id {pk} was successfuly deleted"
-        },
-            status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)

@@ -18,7 +18,6 @@ from apps.core.pagination import (
     get_paginated_response
 )
 from apps.teams.permissions import IsTeamUser
-from apps.novels.models import Novel
 from apps.novels.types import NovelObject
 from apps.novels.serializers import (
     NovelSerializer,
@@ -27,7 +26,6 @@ from apps.novels.serializers import (
     NovelFilterSerializer,
     NovelListSerializer
 )
-from apps.common.services import delete_model
 
 
 class NovelAPI(APIView):
@@ -80,7 +78,7 @@ class NovelDetailAPI(APIView):
         novel = get_novel(slug)
         self.check_object_permissions(request, novel)
 
-        delete_model(model=Novel, slug=slug)
+        novel.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)
 

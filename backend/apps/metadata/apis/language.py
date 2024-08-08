@@ -4,10 +4,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apps.metadata.models import Language
 from apps.metadata.types import LanguageObject
 from apps.metadata.serializers import LanguageSerializer
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 from apps.core.permissions import ReadOnly
 
@@ -80,6 +78,6 @@ class LanguageDetailAPI(APIView):
         language = get_language(pk)
         self.check_object_permissions(request, language)
 
-        delete_model(model=Language, pk=pk)
+        language.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)

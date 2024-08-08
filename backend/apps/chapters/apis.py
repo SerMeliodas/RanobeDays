@@ -3,10 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 
-from .models import Chapter
 from .types import ChapterObject
 from .permissions import IsChapterOwner
 
@@ -41,7 +39,10 @@ class ChapterDetailAPI(APIView):
         return Response(data=data)
 
     def delete(self, request, slug: str, pk: int):
-        delete_model(model=Chapter, pk=pk)
+        chapter = get_chapter_by_id(pk)
+        self.check_object_permissions(request, chapter)
+
+        chapter.delete()
 
         return Response(status=status.HTTP_200_OK)
 

@@ -3,10 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
-
-from .models import Library, LibraryItem
 
 from .types import (
     LibraryItemObject,
@@ -106,7 +103,7 @@ class LibraryDetailAPI(APIView):
         library = get_library(library_id)
         self.check_object_permissions(library, request)
 
-        delete_model(model=Library, pk=library_id)
+        library.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)
 
@@ -172,6 +169,6 @@ class LibraryItemDetailAPI(APIView):
         item = get_library_item(library_item_id)
         self.check_object_permissions(request, item)
 
-        delete_model(model=LibraryItem, pk=library_item_id)
+        item.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)

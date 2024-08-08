@@ -13,10 +13,8 @@ from apps.metadata.selectors import (
     genre_list
 )
 
-from apps.metadata.models import Genre
 from apps.metadata.types import GenreObject
 from apps.metadata.serializers import GenreSerializer
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 from apps.core.permissions import ReadOnly
 
@@ -38,9 +36,9 @@ class GenreAPI(APIView):
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
-        obj = create_genre(GenreObject(**serializer.validated_data))
+        genre = create_genre(GenreObject(**serializer.validated_data))
 
-        data = GenreSerializer(obj).data
+        data = GenreSerializer(genre).data
         data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
@@ -63,7 +61,7 @@ class GenreDetailAPI(APIView):
         genre = get_genre(pk)
         self.check_object_permissions(request, genre)
 
-        delete_model(model=Genre, pk=pk)
+        genre.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)
 

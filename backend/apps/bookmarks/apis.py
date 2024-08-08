@@ -3,12 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 
-
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 
 from .permissions import IsBookmarkOwner
-from .models import Bookmark
 
 from .types import (
     BookmarkObject,
@@ -77,7 +74,7 @@ class BookmarkDetailAPI(APIView):
         bookmark = get_bookmark(pk)
         self.check_object_permissions(request, bookmark)
 
-        delete_model(model=Bookmark, pk=pk)
+        bookmark.delete()
 
         return Response(status=status.HTTP_200_OK)
 

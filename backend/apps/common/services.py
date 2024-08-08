@@ -14,15 +14,6 @@ def get_fields_to_update(data: BaseModel):
     return fields
 
 
-def delete_model(*, model: models.Model, pk: int | None = None,
-                 slug: str | None = None):
-    """Function thats delete the model instance from data base"""
-    if pk:
-        model.objects.get(pk=pk).delete()
-    elif slug:
-        model.objects.get(slug=slug).delete()
-
-
 def _update_foreign_key_fields(instance: models.Model,
                                fields: dict[str, int]) -> bool:
     for field, value in fields.items():

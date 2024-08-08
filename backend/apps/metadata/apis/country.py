@@ -3,10 +3,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 from rest_framework import status
 
-from apps.metadata.models import Country
 from apps.metadata.types import CountryObject
 from apps.metadata.serializers import CountrySerializer
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 from apps.core.permissions import ReadOnly
 
@@ -79,6 +77,6 @@ class CountryDetailAPI(APIView):
         country = get_country(pk)
         self.check_object_permissions(request, country)
 
-        delete_model(model=Country, pk=pk)
+        country.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)

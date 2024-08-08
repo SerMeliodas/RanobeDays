@@ -3,11 +3,9 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
 
-from apps.common.services import delete_model
 from apps.core.utils import get_response_data
 
 from .permissions import IsTeamUser
-from .models import Team
 from .serializers import (
     TeamSerializer,
     TeamCreateSerializer,
@@ -72,7 +70,7 @@ class TeamsDetailAPI(APIView):
         team = get_teams(pk)
         self.check_object_permissions(request, team)
 
-        delete_model(model=Team, pk=pk)
+        team.delete()
 
         return Response(data={}, status=status.HTTP_200_OK)
 
