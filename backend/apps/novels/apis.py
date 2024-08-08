@@ -40,9 +40,9 @@ class NovelAPI(APIView):
         serializer = NovelCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        obj = create_novel(NovelObject(**serializer.validated_data))
+        novel = create_novel(NovelObject(**serializer.validated_data))
 
-        data = NovelSerializer(obj).data
+        data = NovelSerializer(novel).data
 
         return Response(data=get_response_data(status.HTTP_201_CREATED, data),
                         status=status.HTTP_201_CREATED)
@@ -91,9 +91,9 @@ class NovelDetailAPI(APIView):
         serializer = NovelUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        obj = update_novel(slug, NovelObject(**serializer.validated_data))
+        novel = update_novel(novel, NovelObject(**serializer.validated_data))
 
-        data = NovelSerializer(obj).data
+        data = NovelSerializer(novel).data
 
         data = get_response_data(status.HTTP_200_OK, data)
 

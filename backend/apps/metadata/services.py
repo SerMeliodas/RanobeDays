@@ -8,10 +8,8 @@ from apps.common.services import model_update, get_fields_to_update
 logger = logging.getLogger(__name__)
 
 
-def update_tag(pk: int, data: TagObject) -> Tag:
+def update_tag(tag: Tag, data: TagObject) -> Tag:
     """Service for updating the tag instance"""
-    tag = Tag.objects.get(pk=pk)
-
     fields = ['name']
 
     tag, _ = model_update(instance=tag, fields=fields,
@@ -42,9 +40,7 @@ def create_genre(data: GenreObject) -> Genre:
     return obj
 
 
-def update_genre(pk: int, data: GenreObject) -> Genre:
-    genre = Genre.objects.get(pk=pk)
-
+def update_genre(genre: Genre, data: GenreObject) -> Genre:
     fields = ['name']
 
     genre, _ = model_update(instance=genre, fields=fields,
@@ -65,12 +61,10 @@ def create_language(data: LanguageObject) -> Language:
     return obj
 
 
-def update_language(pk: int, data: LanguageObject) -> Language:
-    obj = Language.objects.get(pk=pk)
-
+def update_language(language: Language, data: LanguageObject) -> Language:
     fields = get_fields_to_update(data)
 
-    obj, _ = model_update(instance=obj, fields=fields,
+    obj, _ = model_update(instance=language, fields=fields,
                           data=data.dict())
 
     logger.info(f"Language {obj.pk}  data: {data.name} was updated")
@@ -88,12 +82,10 @@ def create_country(data: CountryObject) -> Country:
     return obj
 
 
-def update_country(pk: int, data: CountryObject) -> Country:
-    obj = Country.objects.get(pk=pk)
-
+def update_country(country: Country, data: CountryObject) -> Country:
     fields = ['name']
 
-    obj, _ = model_update(instance=obj, fields=fields,
+    obj, _ = model_update(instance=country, fields=fields,
                           data=data.dict())
 
     logger.info(f"Counrtry {obj.pk}  data: {data.name} was updated")

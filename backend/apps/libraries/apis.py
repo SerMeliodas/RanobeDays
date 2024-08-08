@@ -95,7 +95,7 @@ class LibraryDetailAPI(APIView):
         library_object = LibraryObject(
             name=serializer.validated_data['name'], user=request.user)
 
-        library = update_library(library_id, library_object)
+        library = update_library(library, library_object)
 
         data = LibrarySerializer(library).data
         data = get_response_data(status.HTTP_200_OK, data)
@@ -154,11 +154,14 @@ class LibraryItemDetailAPI(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, library_id: int, library_item_id: int):
+        item = get_library_item(library_item_id)
+        self.check_object_permissions(request, item)
+
         serializer = LibraryItemCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         item_object = LibraryItemObject(**serializer.validated_data)
-        item = update_library_item(library_item_id, item_object)
+        item = update_library_item(item, item_object)
 
         data = LibraryItemSerializer(item).data
         data = get_response_data(status.HTTP_200_OK, data)
@@ -166,6 +169,9 @@ class LibraryItemDetailAPI(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, library_id: int, library_item_id: int):
+        item = get_library_item(library_item_id)
+        self.check_object_permissions(request, item)
+
         delete_model(model=LibraryItem, pk=library_item_id)
 
         return Response(data={}, status=status.HTTP_200_OK)

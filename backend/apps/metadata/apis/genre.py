@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework import status
 
 
@@ -23,7 +23,7 @@ from apps.core.utils import get_response_data
 class GenreAPI(APIView):
     """API for getting list of genres or creating instances"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly | IsAdminUser,)
 
     def get(self, request):
         genres = genre_list()
@@ -48,7 +48,7 @@ class GenreAPI(APIView):
 class GenreDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
     def get(self, request, pk: int):
         genre = get_genre(pk=pk)
@@ -64,12 +64,15 @@ class GenreDetailAPI(APIView):
         return Response(data={}, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
+        genre = get_genre(pk)
+        self.check_object_permissions(request, genre)
+
         serializer = GenreSerializer(data=request.data)
         serializer.is_valid()
 
-        obj = update_genre(pk, GenreObject(**serializer.validated_data))
+        genre = update_genre(genre, GenreObject(**serializer.validated_data))
 
-        data = GenreSerializer(obj).data
+        data = GenreSerializer(genre).data
         data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)

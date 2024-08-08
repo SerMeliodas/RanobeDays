@@ -34,9 +34,7 @@ def create_library_item(data: LibraryItemObject) -> LibraryItem:
 
 
 # service function thats update the instance of Library model
-def update_library(pk: int, data: LibraryObject):
-    library = Library.objects.get(pk=pk)
-
+def update_library(library: Library, data: LibraryObject):
     fields = get_fields_to_update(data)
 
     library, _ = model_update(instance=library, fields=fields,
@@ -48,9 +46,7 @@ def update_library(pk: int, data: LibraryObject):
 
 
 # service function thats update the instance of LibraryItem model
-def update_library_item(pk: int, data: LibraryItemObject):
-    item = LibraryItem.objects.get(pk=pk)
-
+def update_library_item(item: LibraryItem, data: LibraryItemObject):
     fields = get_fields_to_update(data)
 
     item, _ = model_update(instance=item, fields=fields,

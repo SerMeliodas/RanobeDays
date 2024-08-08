@@ -25,9 +25,7 @@ def create_chapter(data: ChapterObject) -> Chapter:
     return chapter
 
 
-def update_chapter(data: ChapterObject, pk: int) -> Chapter:
-    chapter = Chapter.objects.get(pk=pk)
-
+def update_chapter(chapter: Chapter, data: ChapterObject) -> Chapter:
     fields = get_fields_to_update(data)
 
     chapter, _ = model_update(instance=chapter, fields=fields,

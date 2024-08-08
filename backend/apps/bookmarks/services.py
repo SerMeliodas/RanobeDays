@@ -25,9 +25,7 @@ def create_bookmark(data: BookmarkObject) -> Bookmark:
     return obj
 
 
-def update_bookmark(pk: int, data: BookmarkUpdateObject):
-    bookmark = Bookmark.objects.get(pk=pk)
-
+def update_bookmark(bookmark: Bookmark, data: BookmarkUpdateObject):
     fields = get_fields_to_update(data)
 
     bookmark, _ = model_update(instance=bookmark, fields=fields,

@@ -3,8 +3,7 @@ from .models import User
 from .types import UserObject, UserNewPassObject
 
 
-def update_user(username: str, data: UserObject) -> User:
-    user = User.objects.get(username=username)
+def update_user(user: User, data: UserObject) -> User:
     fields = get_fields_to_update(data)
 
     user, _ = model_update(instance=user, fields=fields,
@@ -13,9 +12,7 @@ def update_user(username: str, data: UserObject) -> User:
     return user
 
 
-def new_password(username: str, data: UserNewPassObject) -> bool:
-    user = User.objects.get(username=username)
-
+def new_password(user: User, data: UserNewPassObject) -> bool:
     user.set_password(data.new_password1)
     user.save()
 

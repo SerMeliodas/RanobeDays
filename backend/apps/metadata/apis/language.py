@@ -61,22 +61,24 @@ class LanguageDetailAPI(APIView):
         return Response(data)
 
     def patch(self, request, pk: int) -> Response:
+        language = get_language(pk)
+        self.check_object_permissions(request, language)
 
         serializer = LanguageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = update_language(pk=pk, data=LanguageObject(
+        language = update_language(language, data=LanguageObject(
             **serializer.validated_data))
 
-        data = LanguageSerializer(instance).data
+        data = LanguageSerializer(language).data
         data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int) -> Response:
+        language = get_language(pk)
+        self.check_object_permissions(request, language)
+
         delete_model(model=Language, pk=pk)
 
-        return Response(data={
-            "message": f"The tag with id {pk} was successfuly deleted"
-        },
-            status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)

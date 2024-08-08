@@ -13,35 +13,33 @@ logger = logging.getLogger(__name__)
 @transaction.atomic
 def create_novel(data: NovelObject) -> Novel:
     """Service for creating the novel instance"""
-    obj = Novel(title=data.title, status=data.status,
-                country=Country.objects.get(pk=data.country),
-                language=Language.objects.get(pk=data.language))
+    novel = Novel(title=data.title, status=data.status,
+                  country=Country.objects.get(pk=data.country),
+                  language=Language.objects.get(pk=data.language))
 
     if data.original_title:
-        obj.original_title = data.original_title
+        novel.original_title = data.original_title
 
     if data.translate_language:
-        obj.translate_language = Language.objects.get(
+        novel.translate_language = Language.objects.get(
             pk=data.translate_language)
 
     if data.synopsys:
-        obj.synopsys = data.synopsys
+        novel.synopsys = data.synopsys
 
-    obj.clean()
-    obj.save()
+    novel.clean()
+    novel.save()
 
-    obj.genres.set(data.genres)
-    obj.tags.set(data.tags)
+    novel.genres.set(data.genres)
+    novel.tags.set(data.tags)
 
-    logger.info(f"Novel {obj.title} was created")
+    logger.info(f"Novel {novel.title} was created")
 
-    return obj
+    return novel
 
 
-def update_novel(slug: str, data: NovelObject) -> Novel:
+def update_novel(novel: Novel, data: NovelObject) -> Novel:
     """Service for updating the novel instance"""
-    novel = Novel.objects.get(slug=slug)
-
     fields = get_fields_to_update(data)
 
     novel, _ = model_update(instance=novel, fields=fields,

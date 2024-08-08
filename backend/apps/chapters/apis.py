@@ -13,7 +13,6 @@ from .permissions import IsChapterOwner
 from .serializers import (
     ChapterSerializer,
     ChapterUpdateSerializer,
-    ChapterFilterSerializer,
     ChapterCreateSerializer
 )
 
@@ -47,11 +46,14 @@ class ChapterDetailAPI(APIView):
         return Response(status=status.HTTP_200_OK)
 
     def patch(self, request, slug: str, pk: int):
+        chapter = get_chapter_by_id(pk)
+        self.check_object_permissions(request, chapter)
+
         serializer = ChapterUpdateSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        chapter = update_chapter(ChapterObject(
-            **serializer.validated_data), pk)
+        chapter = update_chapter(chapter, ChapterObject(
+            **serializer.validated_data))
 
         data = ChapterSerializer(chapter).data
         data = get_response_data(status.HTTP_200_OK, data)

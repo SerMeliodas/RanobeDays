@@ -26,9 +26,7 @@ def create_team(data: TeamObject):
     return team
 
 
-def update_team(team_id: int, data: TeamObject) -> dict:
-    team = Team.objects.get(pk=team_id)
-
+def update_team(team: Team, data: TeamObject) -> dict:
     fields = get_fields_to_update(data)
 
     team, _ = model_update(instance=team,

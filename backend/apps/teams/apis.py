@@ -84,7 +84,7 @@ class TeamsDetailAPI(APIView):
         serializer.is_valid(raise_exception=True)
 
         team = update_team(
-            pk, TeamObject(**serializer.validated_data))
+            team, TeamObject(**serializer.validated_data))
 
         data = TeamSerializer(team).data
         data = get_response_data(status.HTTP_200_OK, data)

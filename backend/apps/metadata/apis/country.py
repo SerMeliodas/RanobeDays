@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from rest_framework.views import APIView
 from rest_framework import status
@@ -25,7 +25,7 @@ from apps.metadata.services import (
 class CountryAPI(APIView):
     """API for getting list of tags or creating instances"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly | IsAdminUser, )
 
     def get(self, request) -> Response:
         queryset = country_list()
@@ -50,7 +50,7 @@ class CountryAPI(APIView):
 class CountryDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly | IsAdminUser,)
 
     def get(self, request, pk: int) -> Response:
         tag = get_country(pk=pk)
@@ -61,22 +61,24 @@ class CountryDetailAPI(APIView):
         return Response(data)
 
     def patch(self, request, pk: int) -> Response:
+        country = get_country(pk)
+        self.check_object_permissions(request, country)
 
         serializer = CountrySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = update_country(pk=pk, data=CountryObject(
+        country = update_country(country, data=CountryObject(
             **serializer.validated_data))
 
-        data = CountrySerializer(instance).data
+        data = CountrySerializer(country).data
         data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int) -> Response:
+        country = get_country(pk)
+        self.check_object_permissions(request, country)
+
         delete_model(model=Country, pk=pk)
 
-        return Response(data={
-            "message": f"The tag with id {pk} was successfuly deleted"
-        },
-            status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)

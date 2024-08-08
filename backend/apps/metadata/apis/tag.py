@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from rest_framework.views import APIView
 from rest_framework import status
@@ -25,7 +25,7 @@ from apps.metadata.services import (
 class TagAPI(APIView):
     """API for getting list of tags or creating instances"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly | IsAdminUser, )
 
     def get(self, request) -> Response:
         queryset = tag_list()
@@ -50,7 +50,7 @@ class TagAPI(APIView):
 class TagDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly | IsAdminUser, )
 
     def get(self, request, pk: int) -> Response:
         tag = get_tag(pk=pk)
@@ -61,19 +61,24 @@ class TagDetailAPI(APIView):
         return Response(data)
 
     def patch(self, request, pk: int) -> Response:
+        tag = get_tag(pk)
+        self.check_object_permissions(request, tag)
 
         serializer = TagSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance = update_tag(pk=pk, data=TagObject(
+        tag = update_tag(tag, data=TagObject(
             **serializer.validated_data))
 
-        data = TagSerializer(instance).data
+        data = TagSerializer(tag).data
         data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int) -> Response:
+        tag = get_tag(pk)
+        self.check_object_permissions(request, tag)
+
         delete_model(model=Tag, pk=pk)
 
         return Response(data={

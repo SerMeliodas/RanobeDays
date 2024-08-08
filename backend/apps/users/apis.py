@@ -40,7 +40,7 @@ class UserDetailAPI(APIView):
         serializer = UserUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user = update_user(username, UserObject(**serializer.validated_data))
+        user = update_user(user, UserObject(**serializer.validated_data))
 
         data = UserSerializer(user).data
         data = get_response_data(status.HTTP_200_OK, data)
@@ -57,7 +57,7 @@ class UserPasswordDetailAPI(APIView):
             data=request.data, context={'user': user})
         serializer.is_valid(raise_exception=True)
 
-        user = new_password(username, UserNewPassObject(
+        user = new_password(user, UserNewPassObject(
             **serializer.validated_data))
 
         data = UserSerializer(user).data
