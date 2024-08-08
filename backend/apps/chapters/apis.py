@@ -42,9 +42,14 @@ class ChapterDetailAPI(APIView):
         chapter = get_chapter_by_id(pk)
         self.check_object_permissions(request, chapter)
 
+        data = ChapterSerializer(chapter).data
+
         chapter.delete()
 
-        return Response(status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, slug: str, pk: int):
         chapter = get_chapter_by_id(pk)

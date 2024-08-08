@@ -103,9 +103,14 @@ class LibraryDetailAPI(APIView):
         library = get_library(library_id)
         self.check_object_permissions(library, request)
 
+        data = LibrarySerializer(library).data
+
         library.delete()
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, detail='Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class LibraryItemAPI(APIView):
@@ -169,6 +174,11 @@ class LibraryItemDetailAPI(APIView):
         item = get_library_item(library_item_id)
         self.check_object_permissions(request, item)
 
+        data = LibraryItemSerializer(item).data
+
         item.delete()
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)

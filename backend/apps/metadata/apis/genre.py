@@ -61,7 +61,12 @@ class GenreDetailAPI(APIView):
         genre = get_genre(pk)
         self.check_object_permissions(request, genre)
 
+        data = GenreSerializer(genre).data
+
         genre.delete()
+
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
 
         return Response(data={}, status=status.HTTP_200_OK)
 

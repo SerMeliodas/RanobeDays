@@ -67,15 +67,20 @@ class TeamsDetailAPI(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk: int):
-        team = get_teams(pk)
+        team = get_team(pk)
         self.check_object_permissions(request, team)
+
+        data = TeamSerializer(team).data
 
         team.delete()
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
-        team = get_teams(pk)
+        team = get_team(pk)
         self.check_object_permissions(request, team)
 
         serializer = TeamUpdateSerializer(data=request.data)

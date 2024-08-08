@@ -78,6 +78,11 @@ class TagDetailAPI(APIView):
         tag = get_tag(pk)
         self.check_object_permissions(request, tag)
 
+        data = TagSerializer(tag).data
+
         tag.delete()
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)

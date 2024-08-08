@@ -74,9 +74,14 @@ class BookmarkDetailAPI(APIView):
         bookmark = get_bookmark(pk)
         self.check_object_permissions(request, bookmark)
 
+        data = BookmarkBaseSerializer(bookmark).data
+
         bookmark.delete()
 
-        return Response(status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk: int):
         bookmark = get_bookmark(pk)

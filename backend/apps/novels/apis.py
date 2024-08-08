@@ -78,9 +78,14 @@ class NovelDetailAPI(APIView):
         novel = get_novel(slug)
         self.check_object_permissions(request, novel)
 
+        data = NovelSerializer(novel).data
+
         novel.delete()
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, slug: str) -> Response:
         novel = get_novel(slug)

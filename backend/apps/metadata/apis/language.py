@@ -78,6 +78,11 @@ class LanguageDetailAPI(APIView):
         language = get_language(pk)
         self.check_object_permissions(request, language)
 
+        data = LanguageSerializer(language).data
+
         language.delete()
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        data = get_response_data(
+            status.HTTP_200_OK, data, 'Was successfully deleted')
+
+        return Response(data=data, status=status.HTTP_200_OK)
