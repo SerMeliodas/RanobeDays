@@ -52,6 +52,6 @@ language_patterns = [
 urlpatterns = [
     path('tags/', include((tag_patterns, 'tags'))),
     path('genres/', include((genre_patterns, 'genres'))),
-    path('country/', include((country_patterns, 'country'))),
-    path('language/', include((language_patterns, 'language'))),
+    path('countries/', include((country_patterns, 'country'))),
+    path('languages/', include((language_patterns, 'language'))),
 ]

@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 
 
@@ -18,12 +18,13 @@ from apps.metadata.types import GenreObject
 from apps.metadata.serializers import GenreSerializer
 from apps.common.services import delete_model
 from apps.core.utils import get_response_data
+from apps.core.permissions import ReadOnly
 
 
 class GenreAPI(APIView):
     """API for getting list of genres or creating instances"""
 
-    permission_classes = (IsAuthenticatedOrReadOnly | IsAdminUser,)
+    permission_classes = (ReadOnly | IsAdminUser,)
 
     def get(self, request):
         genres = genre_list()
@@ -48,7 +49,7 @@ class GenreAPI(APIView):
 class GenreDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (IsAdminUser,)
+    permission_classes = (ReadOnly | IsAdminUser,)
 
     def get(self, request, pk: int):
         genre = get_genre(pk=pk)
@@ -59,6 +60,9 @@ class GenreDetailAPI(APIView):
         return Response(data=data)
 
     def delete(self, request, pk: int):
+        genre = get_genre(pk)
+        self.check_object_permissions(request, genre)
+
         delete_model(model=Genre, pk=pk)
 
         return Response(data={}, status=status.HTTP_200_OK)

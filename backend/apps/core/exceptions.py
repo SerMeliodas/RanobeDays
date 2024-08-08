@@ -2,7 +2,7 @@ from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ValidationError
-from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated
+from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, PermissionDenied
 
 from django.db.models import Model
 from django.db import IntegrityError
@@ -66,4 +66,9 @@ def api_exception_handler(exc, context):
                                                detail=exc),
                         status=status.HTTP_400_BAD_REQUEST)
 
+    if isinstance(exc, PermissionDenied):
+        logger.debug(str(exc))
+        return Response(data=get_response_data(status.HTTP_403_FORBIDDEN,
+                                               detail=str(exc)),
+                        status=status.HTTP_403_FORBIDDEN)
     return response

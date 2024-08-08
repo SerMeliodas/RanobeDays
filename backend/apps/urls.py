@@ -31,6 +31,6 @@ urlpatterns = [
     path('libraries/', include('apps.libraries.urls')),
     path('auth/', include('apps.authentication.urls')),
     path('bookmarks/', include('apps.bookmarks.urls')),
-    path('metadata/', include('apps.metadata.urls')),
+    path('metadatas/', include('apps.metadata.urls')),
     path('users/', include('apps.users.urls'))
 ]
