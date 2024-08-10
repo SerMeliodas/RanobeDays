@@ -4,19 +4,23 @@ from rest_framework import status
 
 from apps.core.utils import get_response_data
 
-
 from .selectors import get_user
-from .types import UserObject, UserNewPassObject
+
+from .types import (
+    UserObject, UserNewPassObject,
+    RequestPasswordResetObject, ResetPasswordObject
+)
 
 from .services import (
-    update_user,
-    new_password
+    update_user, new_password,
+
+    request_reset_password, reset_password
 )
 
 from .serializers import (
-    UserSerializer,
-    UserUpdateSerializer,
-    UserChangePasswordSerializer
+    UserSerializer, UserUpdateSerializer, UserChangePasswordSerializer,
+
+    ResetPasswordSerializer, RequestPasswordResetSerializer
 )
 
 from .permissions import IsUser
@@ -62,5 +66,33 @@ class UserPasswordDetailAPI(APIView):
 
         data = UserSerializer(user).data
         data = get_response_data(status.HTTP_200_OK, data)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class RequestPasswordResetAPI(APIView):
+    def post(self, request):
+        serializer = RequestPasswordResetSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        detail = request_reset_password(
+            RequestPasswordResetObject(**serializer.validated_data)
+        )
+
+        data = get_response_data(status=status.HTTP_200_OK, detail=detail)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class ResetPasswordAPI(APIView):
+    def post(self, request, token: str):
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        detail = reset_password(
+            ResetPasswordObject(**serializer.validated_data, token=token)
+        )
+
+        data = get_response_data(status=status.HTTP_200_OK, detail=detail)
 
         return Response(data=data, status=status.HTTP_200_OK)

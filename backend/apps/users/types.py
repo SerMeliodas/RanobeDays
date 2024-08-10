@@ -12,3 +12,13 @@ class UserNewPassObject(BaseModel):
     old_password: str | None = None
     new_password1: str | None = None
     new_password2: str | None = None
+
+
+class RequestPasswordResetObject(BaseModel):
+    email: str
+
+
+class ResetPasswordObject(BaseModel):
+    token: str
+    new_password1: str
+    new_password2: str

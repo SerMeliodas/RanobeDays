@@ -32,5 +32,5 @@ urlpatterns = [
     path('auth/', include('apps.authentication.urls')),
     path('bookmarks/', include('apps.bookmarks.urls')),
     path('metadatas/', include('apps.metadata.urls')),
-    path('users/', include('apps.users.urls'))
+    path('users/', include(('apps.users.urls', 'users'), namespace='users'))
 ]

@@ -2,8 +2,17 @@ from django.urls import path, include
 
 from .apis import (
     UserDetailAPI,
-    UserPasswordDetailAPI
+    UserPasswordDetailAPI,
+    RequestPasswordResetAPI,
+    ResetPasswordAPI
 )
+
+password_patterns = [
+    path('request/',  RequestPasswordResetAPI.as_view(),
+         name='request-password-reset'),
+    path('reset/<str:token>/', ResetPasswordAPI.as_view(),
+         name='reset-password'),
+]
 
 user_patterns = [
     path('', UserDetailAPI.as_view(), name='user-detail'),
@@ -12,5 +21,6 @@ user_patterns = [
 ]
 
 urlpatterns = [
+    path('password/', include((password_patterns, 'password'), 'password')),
     path('<str:username>/', include((user_patterns, 'user'))),
 ]

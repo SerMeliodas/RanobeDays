@@ -16,6 +16,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY_WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
+BASE_URL = 'http://localhost:8000'
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
@@ -29,7 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # third-party
     'rest_framework',
     'django_filters',
 
@@ -141,9 +141,7 @@ REST_AUTH = {
 }
 
 # Email setup
-EMAIL_CONFIRM_REDIRECT_BASE_URL = 'http://localhost:8000/email/confirm/'
-PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = \
-    'http://localhost:8000/password-reset/confirm/'
+EMAIL_CONFIRM_REDIRECT_BASE_URL = BASE_URL + '/email/confirm/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = env('EMAIL_HOST')

@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from django.utils.text import slugify
 from django.db import models
 from PIL import Image
 
@@ -42,3 +41,9 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
         self._change_avatar_size()
+
+
+class PasswordReset(models.Model):
+    email = models.EmailField()
+    token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)

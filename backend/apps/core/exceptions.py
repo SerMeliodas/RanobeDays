@@ -10,6 +10,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from apps.core.utils import get_response_data
 
+from apps.users.exceptions import TokenError
+
 import logging
 
 
@@ -71,4 +73,10 @@ def api_exception_handler(exc, context):
         return Response(data=get_response_data(status.HTTP_403_FORBIDDEN,
                                                detail=str(exc)),
                         status=status.HTTP_403_FORBIDDEN)
+
+    if isinstance(exc, TokenError):
+        logger.debug(str(exc))
+        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
+                                               detail=str(exc)),
+                        status=status.HTTP_400_BAD_REQUEST)
     return response
