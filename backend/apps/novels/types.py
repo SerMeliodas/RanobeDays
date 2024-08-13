@@ -3,10 +3,11 @@ from pydantic import BaseModel
 
 class NovelObject(BaseModel):
     title: str | None = None
+    creator: int | None = None
     original_title: str | None = None
 
     language: int | None = None
-    translate_language: int | None = None
+    translated_language: int | None = None
 
     status: int | None = None
 

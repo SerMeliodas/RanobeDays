@@ -13,17 +13,20 @@ class Novel(BaseModel):
     )
 
     title = models.CharField(max_length=255)
+    creator = models.ForeignKey("teams.Team", on_delete=models.DO_NOTHING,
+                                related_name="created_novels", default=None)
+
     slug = models.SlugField(max_length=255, default=title, db_index=True)
     original_title = models.CharField(max_length=255, null=True)
     language = models.ForeignKey("metadata.Language", db_index=True,
                                  on_delete=models.DO_NOTHING,
                                  related_name="novels",
                                  default=None)
-    translate_language = models.ForeignKey("metadata.Language",
-                                           db_index=True,
-                                           on_delete=models.DO_NOTHING,
-                                           related_name="translated_novels",
-                                           null=True)
+    translated_language = models.ForeignKey("metadata.Language",
+                                            db_index=True,
+                                            on_delete=models.DO_NOTHING,
+                                            related_name="translated_novels",
+                                            null=True)
     country = models.ForeignKey("metadata.Country", db_index=True,
                                 on_delete=models.DO_NOTHING,
                                 default=None)

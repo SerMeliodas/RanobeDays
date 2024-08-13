@@ -26,7 +26,7 @@ class NovelSerializer(serializers.Serializer):
     original_title = serializers.CharField(required=False)
 
     language = LanguageSerializer()
-    translate_language = LanguageSerializer()
+    translated_language = LanguageSerializer(required=False)
 
     status = serializers.ChoiceField(STATUS)
 
@@ -36,6 +36,7 @@ class NovelSerializer(serializers.Serializer):
     genres = GenreSerializer(many=True)
 
     teams = TeamShortenedSerializer(many=True, read_only=True)
+    creator = TeamShortenedSerializer(read_only=True)
 
     synopsys = serializers.CharField(required=False)
 
@@ -54,8 +55,9 @@ class NovelFilterSerializer(serializers.Serializer):
 
 class NovelCreateSerializer(NovelSerializer):
     country = serializers.IntegerField()
+    creator = serializers.IntegerField()
     language = serializers.IntegerField()
-    translate_language = serializers.IntegerField()
+    translated_language = serializers.IntegerField(required=False)
     tags = serializers.ListField(
         child=serializers.IntegerField(min_value=1)
     )
@@ -91,7 +93,6 @@ class NovelShortenedSerializer(NovelSerializer):
     original_title = None
     synopsys = None
     language = None
-    translate_language = None
     tags = None
     genres = None
     country = None

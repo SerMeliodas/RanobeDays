@@ -32,7 +32,7 @@ class Command(BaseCommand):
             novel = Novel(title=title, original_title=title,
                           language=languages[randint(
                               0, self.LANGUAGES_COUNT - 1)],
-                          translate_language=languages[randint(
+                          translated_language=languages[randint(
                               0, self.LANGUAGES_COUNT - 1)],
                           country=countries[randint(
                               0, self.COUNTRIES_COUNT - 1)],

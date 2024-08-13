@@ -52,6 +52,12 @@ class TeamSerializer(serializers.Serializer):
 
         return data
 
+    def validate_team_type(self, data):
+        if data not in range(1, len(Team.TEAM_TYPES)+1):
+            raise serializers.ValidationError("Invalid Team Type")
+
+        return data
+
 
 class TeamCreateSerializer(TeamSerializer):
     users = serializers.ListField(
