@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -10,7 +10,8 @@ from .serializers import (
     TeamSerializer,
     TeamCreateSerializer,
     TeamUpdateSerializer,
-    TeamFilterSerializer
+    TeamFilterSerializer,
+    TeamNovelAppendSerializer
 )
 
 from .types import TeamObject
@@ -18,6 +19,8 @@ from .types import TeamObject
 from .services import (
     create_team,
     update_team,
+    add_novel_to_team,
+    remove_novel_from_team
 )
 
 from .selectors import (
@@ -88,6 +91,49 @@ class TeamsDetailAPI(APIView):
 
         team = update_team(
             team, TeamObject(**serializer.validated_data))
+
+        data = TeamSerializer(team).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class TeamsNovelAPI(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          (IsAdminUser | IsTeamUser))
+
+    def get(self, request, slug):
+        teams = get_teams(filters={"novels": [slug]})
+
+        data = TeamSerializer(teams, many=True).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    def post(self, request, slug):
+        serializer = TeamNovelAppendSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        team = get_team(serializer.validated_data["team"])
+        self.check_object_permissions(request, team)
+
+        team = add_novel_to_team(slug, team)
+
+        data = TeamSerializer(team).data
+        data = get_response_data(status.HTTP_200_OK, data)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class TeamsNovelDetailAPI(APIView):
+    permission_classes = (IsAuthenticated,
+                          (IsAdminUser | IsTeamUser))
+
+    def delete(self, request, slug, pk):
+        team = get_team(pk)
+        self.check_object_permissions(request, team)
+
+        team = remove_novel_from_team(slug, team)
 
         data = TeamSerializer(team).data
         data = get_response_data(status.HTTP_200_OK, data)

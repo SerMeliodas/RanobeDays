@@ -7,7 +7,7 @@ class TeamFilter(django_filters.FilterSet):
     users = django_filters.BaseInFilter(
         field_name='users__pk', lookup_expr='in')
     novels = django_filters.BaseInFilter(
-        field_name='novels__pk', lookup_expr='in')
+        field_name='novels__slug', lookup_expr='in')
     team_type = django_filters.ChoiceFilter(choices=Team.TEAM_TYPES)
 
     class Meta:

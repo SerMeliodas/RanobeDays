@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.core.utils import get_response_data
 
 from apps.users.exceptions import TokenError
+from apps.teams.exceptions import TeamIsCreator
 
 import logging
 
@@ -35,48 +36,54 @@ def api_exception_handler(exc, context):
         print(11)
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED,
-                                               detail=str(exc)),
+                                               str(exc)),
                         status=status.HTTP_401_UNAUTHORIZED)
 
     if isinstance(exc, NotAuthenticated):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED,
-                                               detail=str(exc)),
+                                               str(exc)),
                         status=status.HTTP_401_UNAUTHORIZED)
 
     if isinstance(exc, IntegrityError):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                               detail=str(exc)),
+                                               str(exc)),
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     if isinstance(exc, AlreadyExistError):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               detail=str(exc)),
+                                               str(exc)),
                         status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(exc, ObjectDoesNotExist):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_404_NOT_FOUND,
-                                               detail=str(exc)),
+                                               str(exc)),
                         status=status.HTTP_404_NOT_FOUND)
 
     if isinstance(exc, ValidationError):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               detail=exc),
+                                               exc),
                         status=status.HTTP_400_BAD_REQUEST)
 
     if isinstance(exc, PermissionDenied):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_403_FORBIDDEN,
-                                               detail=str(exc)),
+                                               str(exc)),
                         status=status.HTTP_403_FORBIDDEN)
 
     if isinstance(exc, TokenError):
         logger.debug(str(exc))
         return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               detail=str(exc)),
+                                               str(exc)),
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    if isinstance(exc, TeamIsCreator):
+        logger.debug(str(exc))
+        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
+                                               str(exc)),
                         status=status.HTTP_400_BAD_REQUEST)
     return response

@@ -1,7 +1,10 @@
 from .models import Team
 from .types import TeamObject
+from .exceptions import TeamIsCreator
+
 from apps.common.services import model_update
 from apps.common.services import get_fields_to_update
+from apps.novels.selectors import get_novel
 from django.db import transaction
 
 import logging
@@ -21,7 +24,7 @@ def create_team(data: TeamObject):
     if data.novels is not None:
         team.novels.set(data.novels)
 
-    logger.info(f"Translator \"{team.name}\" was created")
+    logger.info(f'Translator \"{team.name}\" was created')
 
     return team
 
@@ -33,6 +36,23 @@ def update_team(team: Team, data: TeamObject) -> dict:
                            fields=fields,
                            data=data.dict())
 
-    logger.info(f"Translator team {team.name} data: {data.dict()} was updated")
+    logger.info(f'Translator team {team.name} data: {data.dict()} was updated')
+
+    return team
+
+
+def add_novel_to_team(novel_slug, team):
+    team.novels.add(get_novel(novel_slug))
+
+    return team
+
+
+def remove_novel_from_team(novel_slug, team):
+    novel = get_novel(novel_slug)
+
+    if novel.creator == team:
+        raise TeamIsCreator('You can not remove creator of this novel')
+
+    team.novels.remove(novel)
 
     return team

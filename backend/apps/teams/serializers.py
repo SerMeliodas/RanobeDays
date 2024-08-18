@@ -91,7 +91,7 @@ class TeamFilterSerializer(serializers.Serializer):
         child=serializers.IntegerField(min_value=0), required=False
     )
     novels = serializers.ListField(
-        child=serializers.IntegerField(min_value=0), required=False
+        child=serializers.CharField(), required=False
     )
 
 
@@ -99,3 +99,7 @@ class TeamShortenedSerializer(TeamSerializer):
     users = None
     novels = None
     description = None
+
+
+class TeamNovelAppendSerializer(serializers.Serializer):
+    team = serializers.IntegerField(min_value=1)
