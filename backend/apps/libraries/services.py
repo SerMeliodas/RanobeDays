@@ -1,6 +1,5 @@
 from apps.common.services import model_update, get_fields_to_update
 
-from apps.novels.models import Novel
 from .models import Library, LibraryItem
 from .types import LibraryObject, LibraryItemObject
 
@@ -22,13 +21,11 @@ def create_library(data: LibraryObject) -> Library:
 
 # service function thats create the new instance of LibraryItem model
 def create_library_item(data: LibraryItemObject) -> LibraryItem:
-    library = Library.objects.get(pk=data.library)
-    novel = Novel.objects.get(pk=data.novel)
-    item = LibraryItem(library=library, novel=novel)
+    item = LibraryItem(library_id=data.library, novel=data.novel)
     item.save()
 
     logger.info(f"Library item with Novel {
-                novel.title} in Library({library.pk})")
+                data.novel} in Library({data.library})")
 
     return item
 

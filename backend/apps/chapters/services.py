@@ -12,15 +12,12 @@ logger = logging.getLogger(__name__)
 
 
 def create_chapter(data: ChapterObject) -> Chapter:
-    novel = Novel.objects.get(slug=data.novel)
-    team = Team.objects.get(pk=data.team)
-
-    chapter = Chapter(title=data.title, novel=novel, text=data.text,
-                      team=team, number=data.number, volume=data.volume)
+    chapter = Chapter(title=data.title, novel_id=data.novel, text=data.text,
+                      team_id=data.team, number=data.number, volume=data.volume)
     chapter.full_clean()
     chapter.save()
 
-    logger.info(f"Chapter {chapter.pk} for novel {novel.pk} was created")
+    logger.info(f"Chapter {chapter.pk} for novel {data.novel} was created")
 
     return chapter
 

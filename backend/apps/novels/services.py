@@ -2,8 +2,6 @@ from .models import Novel
 from .types import NovelObject
 
 from apps.common.services import model_update, get_fields_to_update
-from apps.metadata.models import Country, Language
-from apps.teams.models import Team
 
 from django.db import transaction
 
@@ -17,16 +15,15 @@ logger = logging.getLogger(__name__)
 def create_novel(data: NovelObject) -> Novel:
     """Service for creating the novel instance"""
     novel = Novel(title=data.title, status=data.status,
-                  country=Country.objects.get(pk=data.country),
-                  language=Language.objects.get(pk=data.language),
-                  creator=Team.objects.get(pk=data.creator))
+                  country_id=data.country,
+                  language_id=data.language,
+                  creator_id=data.creator)
 
     if data.original_title:
         novel.original_title = data.original_title
 
     if data.translated_language:
-        novel.translated_language = Language.objects.get(
-            pk=data.translated_language)
+        novel.translated_language_id = data.translated_language
 
     if data.synopsys:
         novel.synopsys = data.synopsys
