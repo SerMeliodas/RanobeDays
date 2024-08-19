@@ -25,12 +25,13 @@ docs_patterns = [
 urlpatterns = [
     path('documentation/', include(docs_patterns)),
 
-    # path('chapters/', include('apps.chapters.urls')),
     path('novels/', include('apps.novels.urls')),
     path('teams/', include('apps.teams.urls')),
     path('libraries/', include('apps.libraries.urls')),
     path('auth/', include('apps.authentication.urls')),
     path('bookmarks/', include('apps.bookmarks.urls')),
     path('metadatas/', include('apps.metadata.urls')),
-    path('users/', include(('apps.users.urls', 'users'), namespace='users'))
+    path('users/', include(('apps.users.urls', 'users'), namespace='users')),
+    path('notifications/', include(('apps.notifications.urls',
+         'notifications'), namespace='notifications')),
 ]
