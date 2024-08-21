@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.libraries',
     'apps.bookmarks',
     'apps.notifications',
+    'apps.comments',
 ]
 
 MIDDLEWARE = [

@@ -34,4 +34,5 @@ urlpatterns = [
     path('users/', include(('apps.users.urls', 'users'), namespace='users')),
     path('notifications/', include(('apps.notifications.urls',
          'notifications'), namespace='notifications')),
+    path('comments/', include(('apps.comments.urls', 'comments')))
 ]

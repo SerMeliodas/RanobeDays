@@ -3,6 +3,7 @@ from .types import NovelObject
 
 from apps.common.services import model_update, get_fields_to_update
 
+from apps.metadata.models import Language
 from django.db import transaction
 
 import logging
@@ -23,7 +24,8 @@ def create_novel(data: NovelObject) -> Novel:
         novel.original_title = data.original_title
 
     if data.translated_language:
-        novel.translated_language_id = data.translated_language
+        novel.translated_language = Language.objects.get(
+            pk=data.translated_language)
 
     if data.synopsys:
         novel.synopsys = data.synopsys

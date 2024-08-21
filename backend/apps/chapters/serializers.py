@@ -25,9 +25,5 @@ class ChapterUpdateSerializer(ChapterSerializer):
     text = serializers.CharField(required=False)
 
 
-class ChapterShortenedSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    title = serializers.CharField()
-    volume = serializers.IntegerField()
-    number = serializers.IntegerField()
-    team = serializers.IntegerField(source="team.id")
+class ChapterShortenedSerializer(ChapterSerializer):
+    text = None
