@@ -1,8 +1,6 @@
 from .models import Chapter
 from .types import ChapterObject
 
-from apps.novels.models import Novel
-from apps.teams.models import Team
 from apps.common.services import model_update, get_fields_to_update
 
 import logging
@@ -13,7 +11,8 @@ logger = logging.getLogger(__name__)
 
 def create_chapter(data: ChapterObject) -> Chapter:
     chapter = Chapter(title=data.title, novel_id=data.novel, text=data.text,
-                      team_id=data.team, number=data.number, volume=data.volume)
+                      team_id=data.team, number=data.number,
+                      volume=data.volume)
     chapter.full_clean()
     chapter.save()
 

@@ -30,7 +30,7 @@ class ChapterDetailAPI(APIView):
 
     permission_classes = (IsChapterOwner | IsAdminUser, )
 
-    def get(self, request, slug: str, pk: int):
+    def get(self, request, slug: str, pk: int) -> Response:
         chapter = get_chapter_by_id(pk=pk)
 
         data = ChapterSerializer(chapter).data
@@ -38,7 +38,7 @@ class ChapterDetailAPI(APIView):
 
         return Response(data=data)
 
-    def delete(self, request, slug: str, pk: int):
+    def delete(self, request, slug: str, pk: int) -> Response:
         chapter = get_chapter_by_id(pk)
         self.check_object_permissions(request, chapter)
 
@@ -51,7 +51,7 @@ class ChapterDetailAPI(APIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def patch(self, request, slug: str, pk: int):
+    def patch(self, request, slug: str, pk: int) -> Response:
         chapter = get_chapter_by_id(pk)
         self.check_object_permissions(request, chapter)
 
@@ -72,7 +72,7 @@ class ChapterAPI(APIView):
 
     permission_classes = (IsChapterOwner | IsAdminUser, )
 
-    def get(self, request, slug: str):
+    def get(self, request, slug: str) -> Response:
         queryset = get_chapters_list(novel_slug=slug)
 
         data = ChapterSerializer(queryset, many=True).data
@@ -80,7 +80,7 @@ class ChapterAPI(APIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def post(self, request, slug: str):
+    def post(self, request, slug: str) -> Response:
         serializer = ChapterCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

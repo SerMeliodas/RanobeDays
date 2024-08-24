@@ -1,6 +1,5 @@
 from django.db import models
 from apps.common.models import BaseModel
-from apps.core.exceptions import AlreadyExistError
 
 
 class Chapter(BaseModel):
