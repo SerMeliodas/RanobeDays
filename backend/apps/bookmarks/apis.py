@@ -5,7 +5,7 @@ from rest_framework import status
 
 from apps.core.utils import get_response_data
 
-from .permissions import IsBookmarkOwner
+from apps.core.permissions import IsOwner
 
 from .types import (
     BookmarkObject,
@@ -32,9 +32,9 @@ from .serializers import (
 class BookmarkAPI(APIView):
     """API for getting list of bookmarks or creating instances"""
 
-    permission_classes = (IsBookmarkOwner | IsAdminUser, )
+    permission_classes = (IsOwner | IsAdminUser, )
 
-    def get(self, request):
+    def get(self, request) -> Response:
         bookmarks = get_bookmarks(request.user)
 
         data = BookmarkBaseSerializer(bookmarks, many=True).data
@@ -42,7 +42,7 @@ class BookmarkAPI(APIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request) -> Response:
         serializer = BookmarkCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -60,9 +60,9 @@ class BookmarkAPI(APIView):
 class BookmarkDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Bookmark"""
 
-    permission_classes = (IsBookmarkOwner | IsAdminUser, )
+    permission_classes = (IsOwner | IsAdminUser, )
 
-    def get(self, request, pk: int):
+    def get(self, request, pk: int) -> Response:
         bookmark = get_bookmark(pk)
 
         data = BookmarkBaseSerializer(bookmark).data
@@ -70,7 +70,7 @@ class BookmarkDetailAPI(APIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def delete(self, request, pk: int):
+    def delete(self, request, pk: int) -> Response:
         bookmark = get_bookmark(pk)
         self.check_object_permissions(request, bookmark)
 
@@ -83,7 +83,7 @@ class BookmarkDetailAPI(APIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    def patch(self, request, pk: int):
+    def patch(self, request, pk: int) -> Response:
         bookmark = get_bookmark(pk)
         self.check_object_permissions(request, bookmark)
 

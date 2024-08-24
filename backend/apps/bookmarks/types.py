@@ -3,8 +3,7 @@ from apps.users.models import User
 
 
 class BookmarkObject(BaseModel):
-    id: int | None = None
-    user: User | None = None
+    user: User
     novel: int
     chapter: int
 
