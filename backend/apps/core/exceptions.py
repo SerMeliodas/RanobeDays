@@ -40,7 +40,7 @@ def api_exception_handler(exc, context):
         (IntegrityError, status.HTTP_422_UNPROCESSABLE_ENTITY),
         (AlreadyExistError, status.HTTP_400_BAD_REQUEST),
         (ObjectDoesNotExist, status.HTTP_400_BAD_REQUEST),
-        (PermissionDenied, status.HTTP_403_FORBIDDEN)
+        (PermissionDenied, status.HTTP_403_FORBIDDEN),
         (TokenError, status.HTTP_400_BAD_REQUEST),
         (TeamIsCreator, status.HTTP_400_BAD_REQUEST)
     )
