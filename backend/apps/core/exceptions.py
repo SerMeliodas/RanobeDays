@@ -50,4 +50,5 @@ def api_exception_handler(exc, context):
             logger.debug(str(exc))
             return Response(get_response_data(status_code, str(exc)),
                             status_code)
-        return response
+
+    return response
