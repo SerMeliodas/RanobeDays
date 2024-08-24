@@ -5,8 +5,7 @@ from apps.novels.models import Novel
 from apps.chapters.models import Chapter
 
 
-def create_comment(data: CommentObject):
-    print(data)
+def create_comment(data: CommentObject) -> Comment:
     comment = Comment(user=data.user,
                       comment_type=data.comment_type,
                       message=data.message)

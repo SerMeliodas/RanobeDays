@@ -1,4 +1,5 @@
 from .models import Comment
+from django.db.models import QuerySet
 import django_filters
 
 
@@ -12,7 +13,7 @@ class CommentFilter(django_filters.FilterSet):
         fields = ('user', 'novel', 'chapter')
 
 
-def get_comments(*, filters: dict | None = None):
+def get_comments(*, filters: dict | None = None) -> QuerySet[Comment]:
     filters = filters or {}
 
     qs = Comment.objects.all()
@@ -21,5 +22,5 @@ def get_comments(*, filters: dict | None = None):
     return filter.qs
 
 
-def get_comment(pk: int):
+def get_comment(pk: int) -> Comment:
     return Comment.objects.get(pk=pk)

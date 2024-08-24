@@ -20,7 +20,7 @@ from .selectors import get_comments, get_comment
 
 
 class CommentAPI(APIView):
-    def get(self, request):
+    def get(self, request) -> Response:
         filter_serializer = CommentFilterSerializer(data=request.query_params)
         filter_serializer.is_valid(raise_exception=True)
 
@@ -33,7 +33,7 @@ class CommentAPI(APIView):
             request=request
         )
 
-    def post(self, request):
+    def post(self, request) -> Response:
         serializer = CommentCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -49,7 +49,7 @@ class CommentAPI(APIView):
 class CommentDetailAPI(APIView):
     permission_classes = ((IsAuthenticated & IsOwner) | IsAdminUser,)
 
-    def delete(self, request, pk: int):
+    def delete(self, request, pk: int) -> Response:
         comment = get_comment(pk)
         self.check_object_permissions(request, comment)
 
