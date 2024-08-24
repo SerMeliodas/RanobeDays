@@ -1,17 +1,18 @@
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
-from django.core.exceptions import ValidationError
-from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, PermissionDenied
-
 from django.db.models import Model
-from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
-
 from apps.core.utils import get_response_data
 
+from rest_framework.exceptions import (
+    AuthenticationFailed, NotAuthenticated, PermissionDenied
+)
+from django.core.exceptions import ObjectDoesNotExist
 from apps.users.exceptions import TokenError
 from apps.teams.exceptions import TeamIsCreator
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+
 
 import logging
 
@@ -32,58 +33,21 @@ the same instance in db"
 def api_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
-    if isinstance(exc, AuthenticationFailed):
-        print(11)
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED,
-                                               str(exc)),
-                        status=status.HTTP_401_UNAUTHORIZED)
+    exceptions_to_check = (
+        (ValidationError, status.HTTP_400_BAD_REQUEST),
+        (NotAuthenticated, status.HTTP_401_UNAUTHORIZED),
+        (AuthenticationFailed, status.HTTP_401_UNAUTHORIZED),
+        (IntegrityError, status.HTTP_422_UNPROCESSABLE_ENTITY),
+        (AlreadyExistError, status.HTTP_400_BAD_REQUEST),
+        (ObjectDoesNotExist, status.HTTP_400_BAD_REQUEST),
+        (PermissionDenied, status.HTTP_403_FORBIDDEN)
+        (TokenError, status.HTTP_400_BAD_REQUEST),
+        (TeamIsCreator, status.HTTP_400_BAD_REQUEST)
+    )
 
-    if isinstance(exc, NotAuthenticated):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_401_UNAUTHORIZED,
-                                               str(exc)),
-                        status=status.HTTP_401_UNAUTHORIZED)
-
-    if isinstance(exc, IntegrityError):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                               str(exc)),
-                        status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
-    if isinstance(exc, AlreadyExistError):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               str(exc)),
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    if isinstance(exc, ObjectDoesNotExist):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_404_NOT_FOUND,
-                                               str(exc)),
-                        status=status.HTTP_404_NOT_FOUND)
-
-    if isinstance(exc, ValidationError):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               exc),
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    if isinstance(exc, PermissionDenied):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_403_FORBIDDEN,
-                                               str(exc)),
-                        status=status.HTTP_403_FORBIDDEN)
-
-    if isinstance(exc, TokenError):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               str(exc)),
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    if isinstance(exc, TeamIsCreator):
-        logger.debug(str(exc))
-        return Response(data=get_response_data(status.HTTP_400_BAD_REQUEST,
-                                               str(exc)),
-                        status=status.HTTP_400_BAD_REQUEST)
-    return response
+    for error, status_code in exceptions_to_check:
+        if isinstance(exc, error):
+            logger.debug(str(exc))
+            return Response(get_response_data(status_code, str(exc)),
+                            status_code)
+        return response
