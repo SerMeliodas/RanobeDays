@@ -4,7 +4,7 @@ from django.utils import timezone
 from pydantic import BaseModel
 
 
-def get_fields_to_update(data: BaseModel):
+def get_fields_to_update(data: BaseModel) -> list[str]:
     fields = []
 
     for field, value in data.dict().items():
