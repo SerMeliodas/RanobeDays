@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from apps.core.permissions import ReadOnly, IsOwner
 
 from apps.core.utils import get_response_data
 
@@ -11,7 +12,6 @@ from .types import (
 )
 
 from .permissions import (
-    IsLibraryOwner,
     IsLibraryItemOwner
 )
 
@@ -41,7 +41,7 @@ from .selectors import (
 class LibraryAPI(APIView):
     """API thats return list of Library instances or creates the instance"""
 
-    permission_classes = (IsLibraryOwner | IsAdminUser, )
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request) -> Response:
         filter_serializer = LibraryFilterSerializer(data=request.query_params)
@@ -72,7 +72,10 @@ class LibraryAPI(APIView):
 class LibraryDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Library"""
 
-    permission_classes = (IsLibraryOwner | IsAdminUser,)
+    permission_classes = (
+        IsAuthenticated | ReadOnly,
+        IsOwner | IsAdminUser
+    )
 
     def get(self, request, library_id: int) -> Response:
         library = get_library(library_id)
@@ -84,13 +87,14 @@ class LibraryDetailAPI(APIView):
 
     def patch(self, request, library_id: int) -> Response:
         library = get_library(library_id)
-        self.check_object_permissions(library, request)
+        self.check_object_permissions(request, library)
 
         serializer = LibraryCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         library_object = LibraryObject(
-            name=serializer.validated_data['name'], user=request.user)
+            name=serializer.validated_data['name']
+        )
 
         library = update_library(library, library_object)
 
@@ -101,7 +105,7 @@ class LibraryDetailAPI(APIView):
 
     def delete(self, request, library_id: int) -> Response:
         library = get_library(library_id)
-        self.check_object_permissions(library, request)
+        self.check_object_permissions(request, library)
 
         data = LibrarySerializer(library).data
 
@@ -117,7 +121,7 @@ class LibraryItemAPI(APIView):
     """API thats return list of LibraryItem instances or
     creates the instance"""
 
-    permission_classes = (IsLibraryItemOwner | IsAdminUser, )
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request, library_id: int):
         items = get_library_items(library_id)
@@ -145,7 +149,10 @@ class LibraryItemAPI(APIView):
 class LibraryItemDetailAPI(APIView):
     """API for getting, updating, deleting the instance of Library"""
 
-    permission_classes = (IsLibraryItemOwner | IsAdminUser,)
+    permission_classes = (
+        IsAuthenticated | ReadOnly,
+        IsLibraryItemOwner | IsAdminUser
+    )
 
     def get(self, request, library_id: int, library_item_id: int):
         item = get_library_item(library_item_id)

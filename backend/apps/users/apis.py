@@ -53,6 +53,8 @@ class UserDetailAPI(APIView):
 
 
 class UserPasswordDetailAPI(APIView):
+    permission_classes = (IsUser,)
+
     def patch(self, request, username: str):
         user = get_user(username)
         self.check_object_permissions(request, user)

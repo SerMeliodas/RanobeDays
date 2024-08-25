@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.views import APIView
 from rest_framework import status
@@ -24,7 +24,7 @@ from apps.metadata.services import (
 class LanguageAPI(APIView):
     """API for getting list of tags or creating instances"""
 
-    permission_classes = (ReadOnly | IsAdminUser,)
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request) -> Response:
         queryset = language_list()
@@ -49,7 +49,7 @@ class LanguageAPI(APIView):
 class LanguageDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (ReadOnly | IsAdminUser,)
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request, pk: int) -> Response:
         tag = get_language(pk=pk)

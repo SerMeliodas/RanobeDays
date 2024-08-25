@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from apps.core.permissions import IsOwner
+from apps.core.permissions import IsOwner, ReadOnly
 
 from apps.core.utils import get_response_data
 from apps.core.pagination import get_paginated_response
@@ -20,6 +20,8 @@ from .selectors import get_comments, get_comment
 
 
 class CommentAPI(APIView):
+    permission_classes = (IsAuthenticated | ReadOnly,)
+
     def get(self, request) -> Response:
         filter_serializer = CommentFilterSerializer(data=request.query_params)
         filter_serializer.is_valid(raise_exception=True)
@@ -47,7 +49,7 @@ class CommentAPI(APIView):
 
 
 class CommentDetailAPI(APIView):
-    permission_classes = ((IsAuthenticated & IsOwner) | IsAdminUser,)
+    permission_classes = (IsAuthenticated, IsOwner | IsAdminUser,)
 
     def delete(self, request, pk: int) -> Response:
         comment = get_comment(pk)

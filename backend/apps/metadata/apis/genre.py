@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 
@@ -22,7 +22,7 @@ from apps.core.permissions import ReadOnly
 class GenreAPI(APIView):
     """API for getting list of genres or creating instances"""
 
-    permission_classes = (ReadOnly | IsAdminUser,)
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request):
         genres = genre_list()
@@ -47,7 +47,7 @@ class GenreAPI(APIView):
 class GenreDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (ReadOnly | IsAdminUser,)
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request, pk: int):
         genre = get_genre(pk=pk)

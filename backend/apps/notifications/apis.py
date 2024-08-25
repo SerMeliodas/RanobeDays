@@ -28,7 +28,7 @@ class NotificationAPI(APIView):
 
 
 class NotificationDetailAPI(APIView):
-    permission_classes = ((IsAuthenticated & IsOwner) | IsAdminUser,)
+    permission_classes = (IsAuthenticated, IsOwner | IsAdminUser,)
 
     def delete(self, request, pk):
         notification = get_notification(pk)

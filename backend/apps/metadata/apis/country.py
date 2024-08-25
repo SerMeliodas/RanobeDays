@@ -1,11 +1,12 @@
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 
 from apps.metadata.types import CountryObject
 from apps.metadata.serializers import CountrySerializer
 from apps.core.utils import get_response_data
+
 from apps.core.permissions import ReadOnly
 
 from apps.metadata.selectors import (
@@ -23,7 +24,7 @@ from apps.metadata.services import (
 class CountryAPI(APIView):
     """API for getting list of tags or creating instances"""
 
-    permission_classes = (ReadOnly | IsAdminUser, )
+    permission_classes = (IsAuthenticated | ReadOnly, )
 
     def get(self, request) -> Response:
         queryset = country_list()
@@ -48,7 +49,7 @@ class CountryAPI(APIView):
 class CountryDetailAPI(APIView):
     """API for getting, deletin, updating the instance of tag"""
 
-    permission_classes = (ReadOnly | IsAdminUser,)
+    permission_classes = (IsAuthenticated | ReadOnly,)
 
     def get(self, request, pk: int) -> Response:
         tag = get_country(pk=pk)
