@@ -7,4 +7,4 @@ class TeamObject(BaseModel):
     users: list[int] | None = None
     novels: list[int] | None = None
     description: str | None = None
-    team_type: int | None = None
+    team_type: str | None = None

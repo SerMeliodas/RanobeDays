@@ -7,7 +7,7 @@ from .models import Team
 
 class TeamSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    team_type = serializers.IntegerField()
+    team_type = serializers.ChoiceField(choices=Team.TEAM_TYPES)
     name = serializers.CharField(max_length=150)
     users = UserSerializer(many=True)
     novels = serializers.SerializerMethodField()
@@ -70,7 +70,8 @@ class TeamCreateSerializer(TeamSerializer):
 
 class TeamUpdateSerializer(TeamCreateSerializer):
     name = serializers.CharField(max_length=150, required=False)
-    team_type = serializers.IntegerField(required=False)
+    team_type = serializers.ChoiceField(
+        choices=Team.TEAM_TYPES, required=False)
     users = serializers.ListField(
         child=serializers.IntegerField(min_value=0),
         required=False
@@ -85,7 +86,8 @@ class TeamUpdateSerializer(TeamCreateSerializer):
 
 
 class TeamFilterSerializer(serializers.Serializer):
-    team_type = serializers.IntegerField(required=False)
+    team_type = serializers.ChoiceField(
+        choices=Team.TEAM_TYPES, required=False)
 
     users = serializers.ListField(
         child=serializers.IntegerField(min_value=0), required=False
