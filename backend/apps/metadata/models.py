@@ -12,7 +12,8 @@ class Tag(models.Model):
         instance = Tag.objects.filter(name=self.name)
 
         if instance.exists():
-            raise AlreadyExistError(self)
+            raise AlreadyExistError(
+                f"{self.__class__} already exists with this name")
 
     def __str__(self):
         return self.name
@@ -28,7 +29,8 @@ class Genre(models.Model):
         instance = Genre.objects.filter(name=self.name)
 
         if instance.exists():
-            raise AlreadyExistError(self)
+            raise AlreadyExistError(
+                f"{self.__class__} already exists with this name")
 
     def __str__(self):
         return self.name
@@ -44,7 +46,8 @@ class Country(models.Model):
         instance = Country.objects.filter(name=self.name)
 
         if instance.exists():
-            raise AlreadyExistError(self)
+            raise AlreadyExistError(
+                f"{self.__class__} already exists with this name")
 
     def __str__(self):
         return self.name
@@ -61,7 +64,8 @@ class Language(models.Model):
         instance = Language.objects.filter(name=self.name)
 
         if instance.exists():
-            raise AlreadyExistError(self)
+            raise AlreadyExistError(
+                f"{self.__class__} already exists with this name")
 
     def __str__(self):
         return f"{self.name} - {self.abbreviation}"
