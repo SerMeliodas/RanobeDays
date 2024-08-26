@@ -140,9 +140,9 @@ class LibraryItemAPI(APIView):
         item = create_library_item(item_object)
 
         data = LibraryItemSerializer(item).data
-        data = get_response_data(status.HTTP_200_OK, data)
+        data = get_response_data(status.HTTP_201_CREATED, data)
 
-        return Response(data=data, status=status.HTTP_200_OK)
+        return Response(data=data, status=status.HTTP_201_CREATED)
 
 
 class LibraryItemDetailAPI(APIView):

@@ -43,9 +43,9 @@ class CommentAPI(APIView):
             **serializer.data, user=request.user))
 
         data = CommentSerializer(comment).data
-        data = get_response_data(status.HTTP_200_OK, data)
+        data = get_response_data(status.HTTP_201_CREATED, data)
 
-        return Response(data, status.HTTP_200_OK)
+        return Response(data, status.HTTP_201_CREATED)
 
 
 class CommentDetailAPI(APIView):
