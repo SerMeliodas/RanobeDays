@@ -5,7 +5,7 @@ import django_filters
 
 class LibraryFilter(django_filters.FilterSet):
     user = django_filters.CharFilter(
-        field_name="user__slug", lookup_expr="exact")
+        field_name="user__username", lookup_expr="exact")
 
     class Meta:
         model = Library
