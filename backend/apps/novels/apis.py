@@ -41,8 +41,9 @@ class NovelAPI(APIView):
         novel = create_novel(NovelObject(**serializer.validated_data))
 
         data = NovelSerializer(novel).data
+        data = get_response_data(status.HTTP_201_CREATED, data)
 
-        return Response(data=get_response_data(status.HTTP_201_CREATED, data),
+        return Response(data=data,
                         status=status.HTTP_201_CREATED)
 
     def get(self, request) -> Response:

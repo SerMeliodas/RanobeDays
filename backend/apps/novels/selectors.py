@@ -17,7 +17,7 @@ class NovelFilter(django_filters.FilterSet):
 
     class Meta:
         model = Novel
-        fields = ['tags', 'genres']
+        fields = ('tags', 'genres', 'order_by')
 
 
 def novel_list(*, filters=None):

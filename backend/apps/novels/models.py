@@ -7,9 +7,10 @@ from apps.common.models import BaseModel
 
 class Novel(BaseModel):
     STATUS = (
-        (1, _("Continues")),
-        (2, _("Finished")),
-        (3, _("Frozen"))
+        ('continues', _("Continues")),
+        ('finished', _("Finished")),
+        ('frozen', _("Frozen")),
+        ('licensed', _("Licensed"))
     )
 
     title = models.CharField(max_length=255)
@@ -30,7 +31,7 @@ class Novel(BaseModel):
     country = models.ForeignKey("metadata.Country", db_index=True,
                                 on_delete=models.DO_NOTHING,
                                 default=None)
-    status = models.IntegerField(choices=STATUS, default=1)
+    status = models.CharField(choices=STATUS, default=STATUS[0][0])
     tags = models.ManyToManyField("metadata.Tag", db_index=True)
     genres = models.ManyToManyField("metadata.Genre", db_index=True)
     synopsys = models.TextField(null=True)

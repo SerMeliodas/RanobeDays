@@ -8,14 +8,10 @@ from apps.metadata.serializers import (
     GenreSerializer
 )
 
+from .models import Novel
+
 
 class NovelSerializer(serializers.Serializer):
-    STATUS = (
-        (1, "Continues"),
-        (2, "Finished"),
-        (3, "Frozen")
-    )
-
     id = serializers.ReadOnlyField()
     slug = serializers.SlugField(required=False)
 
@@ -28,7 +24,7 @@ class NovelSerializer(serializers.Serializer):
     language = LanguageSerializer()
     translated_language = LanguageSerializer(required=False)
 
-    status = serializers.ChoiceField(STATUS)
+    status = serializers.ChoiceField(Novel.STATUS)
 
     chapters = ChapterShortenedSerializer(many=True, read_only=True)
     country = CountrySerializer()

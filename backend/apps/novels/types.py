@@ -9,7 +9,7 @@ class NovelObject(BaseModel):
     language: int | None = None
     translated_language: int | None = None
 
-    status: int | None = None
+    status: str | None = None
 
     country: int | None = None
     tags: list[int] | None = None
