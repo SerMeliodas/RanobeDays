@@ -41,7 +41,7 @@ class TagAPI(APIView):
         instance = create_tag(TagObject(**serializer.validated_data))
 
         data = TagSerializer(instance).data
-        data = get_response_data(status.HTTP_200_OK, data)
+        data = get_response_data(status.HTTP_201_CREATED, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 

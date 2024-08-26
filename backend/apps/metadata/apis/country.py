@@ -22,7 +22,7 @@ from apps.metadata.services import (
 
 
 class CountryAPI(APIView):
-    """API for getting list of tags or creating instances"""
+    """API for getting list of country or creating instances"""
 
     permission_classes = (IsAuthenticated | ReadOnly, )
 
@@ -41,13 +41,13 @@ class CountryAPI(APIView):
         instance = create_country(CountryObject(**serializer.validated_data))
 
         data = CountrySerializer(instance).data
-        data = get_response_data(status.HTTP_200_OK, data)
+        data = get_response_data(status.HTTP_201_CREATED, data)
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
 class CountryDetailAPI(APIView):
-    """API for getting, deletin, updating the instance of tag"""
+    """API for getting, deleting, updating the instance of country"""
 
     permission_classes = (IsAuthenticated | ReadOnly,)
 
