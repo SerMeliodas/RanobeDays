@@ -13,7 +13,7 @@ class Novel(BaseModel):
         ('licensed', _("Licensed"))
     )
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     creator = models.ForeignKey("teams.Team", on_delete=models.DO_NOTHING,
                                 related_name="created_novels", default=None)
 
