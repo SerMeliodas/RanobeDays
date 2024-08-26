@@ -1,8 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from apps.core.permissions import ReadOnly, IsOwner
+from .permissions import IsLibraryItemOwner
 
 from apps.core.utils import get_response_data
 
@@ -11,9 +13,6 @@ from .types import (
     LibraryObject
 )
 
-from .permissions import (
-    IsLibraryItemOwner
-)
 
 from .serializers import (
     LibrarySerializer,

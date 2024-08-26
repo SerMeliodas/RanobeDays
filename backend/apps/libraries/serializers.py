@@ -20,9 +20,9 @@ class LibraryItemSerializer(serializers.Serializer):
 
 
 class LibraryItemCreateUpdateSerializer(serializers.Serializer):
-    # library = serializers.IntegerField()
+    library = serializers.IntegerField(required=False)
     novel = serializers.IntegerField()
 
 
 class LibraryFilterSerializer(serializers.Serializer):
-    user = serializers.IntegerField(min_value=1, required=False)
+    user = serializers.CharField(required=False)

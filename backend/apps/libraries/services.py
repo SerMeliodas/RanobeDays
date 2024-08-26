@@ -32,10 +32,8 @@ def create_library_item(data: LibraryItemObject) -> LibraryItem:
 
 # service function thats update the instance of Library model
 def update_library(library: Library, data: LibraryObject):
-    fields = get_fields_to_update(data)
-
-    library, _ = model_update(instance=library, fields=fields,
-                              data=data.dict())
+    library.name = data.name
+    library.save()
 
     logger.info(f"Library {library.pk} data: {data.dict()} was updated")
 
