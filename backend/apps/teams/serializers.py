@@ -7,7 +7,7 @@ from .models import Team
 
 class TeamSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    team_type = serializers.ChoiceField(choices=Team.TEAM_TYPES)
+    team_type = serializers.ChoiceField(Team.TEAM_TYPES)
     name = serializers.CharField(max_length=150)
     users = UserSerializer(many=True)
     novels = serializers.SerializerMethodField()
@@ -49,12 +49,6 @@ class TeamSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 f'Novel(\'s) with id(\'s) does not exist(\'s):\
 {non_existing_novels}')
-
-        return data
-
-    def validate_team_type(self, data):
-        if data not in range(1, len(Team.TEAM_TYPES)+1):
-            raise serializers.ValidationError("Invalid Team Type")
 
         return data
 

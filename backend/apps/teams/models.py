@@ -20,4 +20,4 @@ class Team(models.Model):
         db_table = 'teams'
 
     def __str__(self):
-        return f"{self.name} -- {Team.TEAM_TYPES[self.team_type][1]}"
+        return f"{self.name} -- {self.team_type}"
