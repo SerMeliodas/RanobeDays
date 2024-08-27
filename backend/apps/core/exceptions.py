@@ -17,10 +17,13 @@ class AlreadyExistError(Exception):
 def api_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
-    if isinstance(exc, ValidationError):
-        return Response(get_response_data(exc.status_code, exc))
-
     if response is not None:
+        logger.debug(str(exc))
+
+        if isinstance(exc, ValidationError):
+            return Response(data=get_response_data(exc.status_code, exc.detail),
+                            status=exc.status_code)
+
         return Response(get_response_data(response.status_code, str(exc)),
                         response.status_code)
 

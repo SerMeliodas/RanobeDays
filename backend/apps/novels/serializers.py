@@ -15,6 +15,8 @@ class NovelSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     slug = serializers.SlugField(required=False)
 
+    cover = serializers.ImageField(required=False)
+
     created_at = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
 

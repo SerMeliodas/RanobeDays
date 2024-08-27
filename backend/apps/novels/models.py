@@ -4,6 +4,13 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
 
+from PIL import Image
+
+
+def _get_image_save_path(instance, filename):
+    extension = filename.split(".")[-1]
+    return f"novel_covers/{instance.title}.{extension}"
+
 
 class Novel(BaseModel):
     STATUS = (
@@ -14,11 +21,15 @@ class Novel(BaseModel):
     )
 
     title = models.CharField(max_length=255, unique=True)
+
+    cover = models.ImageField(default="default_novel_cover.png",
+                              upload_to=_get_image_save_path)
+
     creator = models.ForeignKey("teams.Team", on_delete=models.DO_NOTHING,
                                 related_name="created_novels", default=None)
 
     slug = models.SlugField(max_length=255, default=title, db_index=True)
-    original_title = models.CharField(max_length=255, null=True)
+    original_title = models.CharField(max_length=255, null=True, blank=True)
     language = models.ForeignKey("metadata.Language", db_index=True,
                                  on_delete=models.DO_NOTHING,
                                  related_name="novels",
@@ -40,12 +51,23 @@ class Novel(BaseModel):
         ordering = ["-created_at"]
         db_table = "novels"
 
+    def _resize_cover(self):
+        cover = Image.open(self.cover.path)
+        output_size = (600, 800)
+        if cover.width != output_size[0] or cover.height != output_size[1]:
+            cover = cover.resize(
+                size=output_size, resample=Image.Resampling.LANCZOS
+            )
+            cover.save(self.cover.path)
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         if kwargs.get("update_fields"):
             kwargs["update_fields"].append("slug")
 
-        super(self.__class__, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+        self._resize_cover()
 
     def __str__(self):
-        return f"{self.title} - {Novel.STATUS[self.status - 1][1]}"
+        return f"{self.title} - {self.status}"

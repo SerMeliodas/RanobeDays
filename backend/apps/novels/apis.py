@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework import status
@@ -30,7 +31,7 @@ from apps.novels.serializers import (
 
 class NovelAPI(APIView):
     """API for getting list of novels or creating novel instance"""
-
+    parser_classes = (MultiPartParser, JSONParser)
     permission_classes = (IsAuthenticatedOrReadOnly,
                           (IsAdminUser | IsTeamUser))
 
