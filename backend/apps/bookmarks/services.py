@@ -1,6 +1,4 @@
-from apps.common.services import get_fields_to_update, model_update
-
-from .types import BookmarkObject, BookmarkUpdateObject
+from .types import BookmarkObject
 from .models import Bookmark
 
 import logging
@@ -19,14 +17,3 @@ def create_bookmark(data: BookmarkObject) -> Bookmark:
     logger.info(f"Bookmark {obj.pk} was created")
 
     return obj
-
-
-def update_bookmark(bookmark: Bookmark, data: BookmarkUpdateObject) -> Bookmark:
-    fields = get_fields_to_update(data)
-
-    bookmark, _ = model_update(instance=bookmark, fields=fields,
-                               auto_updated_at=True, data=data.dict())
-
-    logger.info(f"Bookmark {bookmark.pk} data: {data.dict()} was updated")
-
-    return bookmark

@@ -13,7 +13,3 @@ class BookmarkCreateSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     novel = serializers.IntegerField()
     chapter = serializers.IntegerField()
-
-
-class BookmarkUpdateSerializer(serializers.Serializer):
-    chapter = serializers.IntegerField()

@@ -9,13 +9,9 @@ from apps.core.permissions import IsOwner
 
 from .types import (
     BookmarkObject,
-    BookmarkUpdateObject
 )
 
-from .services import (
-    create_bookmark,
-    update_bookmark
-)
+from .services import create_bookmark
 
 from .selectors import (
     get_bookmark,
@@ -25,7 +21,6 @@ from .selectors import (
 from .serializers import (
     BookmarkBaseSerializer,
     BookmarkCreateSerializer,
-    BookmarkUpdateSerializer
 )
 
 
@@ -80,20 +75,5 @@ class BookmarkDetailAPI(APIView):
 
         data = get_response_data(
             status.HTTP_200_OK, data, 'Was successfully deleted')
-
-        return Response(data=data, status=status.HTTP_200_OK)
-
-    def patch(self, request, pk: int) -> Response:
-        bookmark = get_bookmark(pk)
-        self.check_object_permissions(request, bookmark)
-
-        serializer = BookmarkUpdateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        bookmark_object = BookmarkUpdateObject(**serializer.validated_data)
-        bookmark = update_bookmark(bookmark, bookmark_object)
-
-        data = BookmarkBaseSerializer(bookmark).data
-        data = get_response_data(status.HTTP_200_OK, data)
 
         return Response(data=data, status=status.HTTP_200_OK)
