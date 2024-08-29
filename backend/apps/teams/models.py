@@ -12,9 +12,11 @@ class Team(models.Model):
 
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(get_user_model())
-    novels = models.ManyToManyField('novels.Novel', related_name="teams")
+    novels = models.ManyToManyField(
+        'novels.Novel', related_name="teams", blank=True
+    )
     team_type = models.CharField(choices=TEAM_TYPES, default=TEAM_TYPES[0][0])
-    description = models.TextField(null=True)
+    description = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'teams'
