@@ -23,16 +23,26 @@ docs_patterns = [
 
 
 urlpatterns = [
-    path('documentation/', include(docs_patterns)),
+    path('documentation/', include((docs_patterns, 'docs'), 'docs')),
 
-    path('novels/', include('apps.novels.urls')),
-    path('teams/', include('apps.teams.urls')),
-    path('libraries/', include('apps.libraries.urls')),
-    path('auth/', include('apps.authentication.urls')),
-    path('bookmarks/', include('apps.bookmarks.urls')),
-    path('metadatas/', include('apps.metadata.urls')),
-    path('users/', include(('apps.users.urls', 'users'), namespace='users')),
+    path('novels/', include(('apps.novels.urls', 'novels'), 'novels')),
+
+    path('teams/', include(('apps.teams.urls', 'teams'), 'teams')),
+
+    path('libraries/', include(('apps.libraries.urls', 'libraries'),
+                               'libraries')),
+
+    path('auth/', include(('apps.authentication.urls', 'auth'), 'auth')),
+
+    path('bookmarks/', include(('apps.bookmarks.urls',
+         'bookmarks'), 'bookmarks')),
+
+    path('metadata/', include(('apps.metadata.urls', 'metadata'), 'metadata')),
+
+    path('users/', include(('apps.users.urls', 'users'), 'users')),
+
     path('notifications/', include(('apps.notifications.urls',
-         'notifications'), namespace='notifications')),
-    path('comments/', include(('apps.comments.urls', 'comments')))
+         'notifications'), 'notifications')),
+
+    path('comments/', include(('apps.comments.urls', 'comments'), 'comments'))
 ]
