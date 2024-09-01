@@ -38,7 +38,7 @@ class Novel(BaseModel):
                                             db_index=True,
                                             on_delete=models.DO_NOTHING,
                                             related_name="translated_novels",
-                                            null=True)
+                                            null=True, blank=True)
     country = models.ForeignKey("metadata.Country", db_index=True,
                                 on_delete=models.DO_NOTHING,
                                 default=None)
