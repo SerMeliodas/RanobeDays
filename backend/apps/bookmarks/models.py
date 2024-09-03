@@ -14,4 +14,4 @@ class Bookmark(BaseModel):
         unique_together = (('chapter', 'user'))
 
     def __str__(self):
-        return f"{self.user} - {self.novel} - {self.chapter}"
+        return f"{self.pk} - {self.user} - {self.chapter}"

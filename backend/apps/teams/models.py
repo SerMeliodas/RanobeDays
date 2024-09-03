@@ -11,7 +11,7 @@ class Team(models.Model):
     )
 
     name = models.CharField(max_length=255)
-    users = models.ManyToManyField(get_user_model())
+    users = models.ManyToManyField(get_user_model(), related_name='teams')
     novels = models.ManyToManyField(
         'novels.Novel', related_name="teams", blank=True
     )

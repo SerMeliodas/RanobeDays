@@ -132,6 +132,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
     'EXCEPTION_HANDLER': 'apps.core.exceptions.api_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.LimitOffsetPagination',
 }

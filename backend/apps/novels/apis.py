@@ -32,6 +32,7 @@ from apps.novels.serializers import (
 class NovelAPI(APIView):
     """API for getting list of novels or creating novel instance"""
     parser_classes = (MultiPartParser, JSONParser)
+
     permission_classes = (IsAuthenticatedOrReadOnly,
                           (IsAdminUser | IsTeamUser))
 
