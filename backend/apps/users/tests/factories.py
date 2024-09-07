@@ -7,4 +7,4 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     username = factory.Faker('user_name')
     email = factory.Faker('email')
-    password = factory.Faker('password')
+    password = factory.django.Password(factory.Faker('password'))
