@@ -20,6 +20,12 @@ class AuthTest(APITestCase):
              }, response.json()['data'],
             f'{response.status_code} -- {response.json()}')
 
+    def test_verify_email(self):
+        ...
+
+    # def test_login_with_verified_email(self):
+    #     ...
+    #
     # def test_logout(self):
     #     ...
     #
