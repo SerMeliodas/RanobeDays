@@ -35,11 +35,6 @@ INSTALLED_APPS = [
 
     # authentication
     'rest_framework.authtoken',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
 
     # documentation swagger
     'drf_yasg',

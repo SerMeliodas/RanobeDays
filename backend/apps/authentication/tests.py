@@ -8,26 +8,44 @@ class AuthTest(APITestCase):
         self.client = APIClient()
         self.user = UserFactory(password='testpass')
 
-    def test_login_without_verified_email(self):
+    def test_login(self):
         response = self.client.post(reverse('auth:login'), format='json',
                                     data={
                                     'email': self.user.email,
                                     'password': 'testpass'
                                     })
 
-        self.assertEqual(
-            {'non_field_errors': ['E-mail is not verified.']
-             }, response.json()['data'],
-            f'{response.status_code} -- {response.json()}')
+        self.assertEqual(response.status_code, 200,
+                         f'{response.status_code} -- {response.json()}')
 
-    def test_verify_email(self):
-        ...
-
-    # def test_login_with_verified_email(self):
+    # def test_verify_email(self):
     #     ...
     #
-    # def test_logout(self):
-    #     ...
-    #
-    # def test_register(self):
-    #     ...
+
+    def test_logout(self):
+        response = self.client.post(reverse('auth:login'), format='json',
+                                    data={
+                                    'email': self.user.email,
+                                    'password': 'testpass'
+                                    })
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {
+                                response.json()['data']['token']}')
+
+        response = self.client.post(reverse('auth:logout'))
+
+        self.assertEqual(response.status_code, 200,
+                         f'{response.status_code} -- {response.json()}')
+
+    def test_register(self):
+        response = self.client.post(reverse('auth:register'), format='json',
+                                    data={
+                                    'username': 'testuser',
+                                    'public_username': 'user',
+                                    'email': 'test@test.com',
+                                    'password1': 'qwdqwd!@#!@#',
+                                    'password2': 'qwdqwd!@#!@#'
+                                    })
+
+        self.assertEqual(response.status_code, 201,
+                         f'{response.status_code} -- {response.json()}')
