@@ -8,6 +8,16 @@ class AuthTest(APITestCase):
         self.client = APIClient()
         self.user = UserFactory(password='testpass')
 
+    def _set_auth_token(self):
+        response = self.client.post(reverse('auth:login'), format='json',
+                                    data={
+                                    'email': self.user.email,
+                                    'password': 'testpass'
+                                    })
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {
+                                response.json()['data']['token']}')
+
     def test_login(self):
         response = self.client.post(reverse('auth:login'), format='json',
                                     data={
@@ -18,19 +28,20 @@ class AuthTest(APITestCase):
         self.assertEqual(response.status_code, 200,
                          f'{response.status_code} -- {response.json()}')
 
-    # def test_verify_email(self):
-    #     ...
-    #
+    def test_send_confirmation_email(self):
+        self._set_auth_token()
 
-    def test_logout(self):
-        response = self.client.post(reverse('auth:login'), format='json',
+        response = self.client.post(reverse('auth:send-verification-email'),
+                                    format='json',
                                     data={
-                                    'email': self.user.email,
-                                    'password': 'testpass'
+                                    'email': self.user.email
                                     })
 
-        self.client.credentials(HTTP_AUTHORIZATION=f'Token {
-                                response.json()['data']['token']}')
+        self.assertEqual(response.status_code, 200,
+                         f'{response.status_code} -- {response.json()}')
+
+    def test_logout(self):
+        self._set_auth_token()
 
         response = self.client.post(reverse('auth:logout'))
 

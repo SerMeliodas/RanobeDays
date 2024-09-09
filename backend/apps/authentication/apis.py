@@ -72,9 +72,18 @@ class AuthLogoutAPI(APIView):
 
 class SendEmailVerificationAPI(APIView):
     def post(self, request):
-        ...
+        serializer = SendVerificationEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = send_verification_email(
+            SendVerificationEmailObject(**serializer.validated_data))
+
+        data = get_response_data(status.HTTP_200_OK,
+                                 detail=data)
+
+        return Response(data, status.HTTP_200_OK)
 
 
 class VerifyEmailAPI(APIView):
-    def post(self, request):
+    def post(self, request, token: str):
         ...
