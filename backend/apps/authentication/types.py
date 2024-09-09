@@ -15,7 +15,7 @@ class LoginObject(BaseModel):
 
 
 class VerifyEmailObject(BaseModel):
-    code: int
+    token: str
 
 
 class SendVerificationEmailObject(BaseModel):

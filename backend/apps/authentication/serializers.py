@@ -39,4 +39,4 @@ class SendVerificationEmailSerializer(serializers.Serializer):
 
 
 class VerifyEmailSerializer(serializers.Serializer):
-    code = serializers.IntegerField(min_value=1000, max_value=9999)
+    token = serializers.CharField()
