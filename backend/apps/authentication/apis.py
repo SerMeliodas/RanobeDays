@@ -13,7 +13,6 @@ from .serializers import (
     RegisterSerializer,
     LoginSerializer,
     SendVerificationEmailSerializer,
-    VerifyEmailSerializer,
 )
 
 from .services import (
@@ -27,7 +26,6 @@ from .types import (
     RegisterObject,
     LoginObject,
     SendVerificationEmailObject,
-    VerifyEmailObject
 )
 
 
@@ -75,15 +73,19 @@ class SendEmailVerificationAPI(APIView):
         serializer = SendVerificationEmailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        data = send_verification_email(
+        status_code, data = send_verification_email(
             SendVerificationEmailObject(**serializer.validated_data))
 
-        data = get_response_data(status.HTTP_200_OK,
+        data = get_response_data(status_code,
                                  detail=data)
 
-        return Response(data, status.HTTP_200_OK)
+        return Response(data, status_code)
 
 
 class VerifyEmailAPI(APIView):
-    def post(self, request, token: str):
-        ...
+    def post(self, request, uid: str, token: str):
+        status_code, data = verify_email(uid, token)
+        data = get_response_data(status_code,
+                                 detail=data)
+
+        return Response(data, status_code)

@@ -16,6 +16,6 @@ urlpatterns = [
 
     path('send-email/', SendEmailVerificationAPI.as_view(),
          name='send-verification-email'),
-    path('confirm-email/<str:token>/',
+    path('confirm-email/<str:uid>/<str:token>/',
          VerifyEmailAPI.as_view(), name='confirm-email')
 ]

@@ -14,9 +14,5 @@ class LoginObject(BaseModel):
     password: str
 
 
-class VerifyEmailObject(BaseModel):
-    token: str
-
-
 class SendVerificationEmailObject(BaseModel):
     email: str

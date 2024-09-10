@@ -14,12 +14,15 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data['password1'] != data['password2']:
-            raise serializers.ValidationError('passwords must be equal')
+            raise serializers.ValidationError(
+                {'password': 'passwords must be equal'}
+            )
 
         return data
 
     def validate_password1(self, value):
         errors = dict()
+
         try:
             password_validation.validate_password(value)
         except DjangoValidationError as err:
@@ -35,6 +38,13 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                'User with provided email does not exists')
+
+        return value
+
 
 class SendVerificationEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -42,10 +52,6 @@ class SendVerificationEmailSerializer(serializers.Serializer):
     def validate_email(self, value):
         if not User.objects.filter(email=value).exists():
             raise serializers.ValidationError(
-                {'email': 'User with provided email does not exists'})
+                'User with provided email does not exists')
 
         return value
-
-
-class VerifyEmailSerializer(serializers.Serializer):
-    token = serializers.CharField()

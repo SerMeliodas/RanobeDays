@@ -1,8 +1,10 @@
 from apps.users.models import User
 from rest_framework.authtoken.models import Token
-from rest_framework.exceptions import ValidationError
+from rest_framework import status
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.conf import settings
 from django.urls import reverse
 
@@ -13,7 +15,6 @@ from django.template.loader import render_to_string
 from .types import (
     RegisterObject,
     LoginObject,
-    VerifyEmailObject,
     SendVerificationEmailObject
 )
 
@@ -55,18 +56,32 @@ def _send_confirm_email(url: str, email: str):
     )
 
 
-def send_verification_email(data: SendVerificationEmailObject):
+def send_verification_email(data: SendVerificationEmailObject) -> (int, str):
     user = User.objects.filter(email=data.email).first()
 
     token = default_token_generator.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
 
     url = settings.BASE_URL + \
-        reverse('auth:confirm-email', args=[token])
+        reverse('auth:confirm-email', kwargs={
+            'token': token,
+            'uid': uid
+        })
 
     _send_confirm_email(url, data.email)
 
-    return f'Confirmation email was sent to {data.email}'
+    return status.HTTP_200_OK, f'Confirmation email was sent to {data.email}'
 
 
-def verify_email(data: VerifyEmailObject):
-    ...
+def verify_email(uid: str, token: str) -> (int, str):
+    user_pk = urlsafe_base64_decode(uid)
+    user = User.objects.get(pk=user_pk)
+
+    if user.is_verified:
+        return status.HTTP_400_BAD_REQUEST, 'User email is already verified'
+
+    if default_token_generator.check_token(user, token):
+        user.is_verified = True
+        user.save()
+
+    return status.HTTP_200_OK, 'Email was successfully confirmed'
