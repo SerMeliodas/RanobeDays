@@ -48,6 +48,19 @@ class AuthTest(APITestCase):
         self.assertEqual(response.status_code, 200,
                          f'{response.status_code} -- {response.json()}')
 
+    def test_register_password_missmatch(self):
+        response = self.client.post(reverse('auth:register'), format='json',
+                                    data={
+                                    'username': 'testuser',
+                                    'public_username': 'user',
+                                    'email': 'test@test.com',
+                                    'password1': 'qwdqwdasdaad',
+                                    'password2': 'qwdqwd!@#!@#'
+                                    })
+
+        self.assertEqual(response.status_code, 400,
+                         f'{response.status_code} -- {response.json()}')
+
     def test_register(self):
         response = self.client.post(reverse('auth:register'), format='json',
                                     data={

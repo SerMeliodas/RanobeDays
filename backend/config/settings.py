@@ -134,11 +134,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.LimitOffsetPagination',
 }
 
-# dj-rest-auth settings
-REST_AUTH = {
-    'REGISTER_SERIALIZER': 'apps.authentication.serializers.RegisterSerializer',
-    'LOGIN_SERIALIZER': 'apps.authentication.serializers.LoginSerializer',
-}
+# this setting also works for email reset
+PASSWORD_RESET_TIMEOUT = 5 * 60
 
 # Email setup
 EMAIL_CONFIRM_REDIRECT_BASE_URL = BASE_URL + '/email/confirm/'
