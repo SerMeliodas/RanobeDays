@@ -1,32 +1,21 @@
-from django.urls import path, include
+from django.urls import path
 
-from .apis import email_confirm_redirect
+from .apis import (
+    AuthRegisterAPI,
+    AuthLoginAPI,
+    AuthLogoutAPI,
 
-from dj_rest_auth.registration.views import (
-    RegisterView,
-    VerifyEmailView,
-    ResendEmailVerificationView
+    SendEmailVerificationAPI,
+    VerifyEmailAPI
 )
-from dj_rest_auth.views import (
-    LoginView,
-    LogoutView
-)
-
-register_patterns = [
-    path('', RegisterView.as_view(), name='register'),
-    path('verify-email/', VerifyEmailView.as_view(), name='verify_email'),
-    path('resend-email/', ResendEmailVerificationView.as_view(),
-         name='resend_email'),
-]
 
 urlpatterns = [
-    path('confirm-email/<str:key>/', email_confirm_redirect,
-         name='account_confirm_email'),
-    path('confirm-email/', VerifyEmailView.as_view(),
-         name='account_email_verification_sent'),
+    path('login/', AuthLoginAPI.as_view(), name='login'),
+    path('register/', AuthRegisterAPI.as_view(), name='register'),
+    path('logout/', AuthLogoutAPI.as_view(), name='logout'),
 
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('register/', include((register_patterns, 'authentication')),
-         name='register'),
+    path('send-email/', SendEmailVerificationAPI.as_view(),
+         name='send-verification-email'),
+    path('confirm-email/<str:uid>/<str:token>/',
+         VerifyEmailAPI.as_view(), name='confirm-email')
 ]

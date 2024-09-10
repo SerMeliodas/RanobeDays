@@ -9,10 +9,10 @@ from .models import User
 class UserChangeForm(UserChForm):
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('username', 'email', 'is_active')
 
 
 class UserCreationForm(UserCForm):
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('username', 'email', 'password', 'is_active')

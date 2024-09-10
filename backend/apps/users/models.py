@@ -18,6 +18,9 @@ class User(AbstractUser):
         "public username", max_length=150, default="user")
 
     email = models.EmailField("email", unique=True)
+
+    is_verified = models.BooleanField(default=False)
+
     avatar = models.ImageField(
         default="default_avatar.png", upload_to=_get_save_path)
 

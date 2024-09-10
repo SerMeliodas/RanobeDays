@@ -1,15 +1,57 @@
-from dj_rest_auth.registration.serializers import RegisterSerializer as BaseRegisterSerializer
-from dj_rest_auth.serializers import LoginSerializer as BaseLoginSerializer
+from rest_framework import serializers
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.contrib.auth import password_validation, get_user_model
+
+User = get_user_model()
 
 
-class RegisterSerializer(BaseRegisterSerializer):
-    def validate_username(self, username):
-        ...
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    public_username = serializers.CharField()
+    email = serializers.EmailField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+
+    def validate(self, data):
+        if data['password1'] != data['password2']:
+            raise serializers.ValidationError(
+                {'password': 'passwords must be equal'}
+            )
+
+        return data
+
+    def validate_password1(self, value):
+        errors = dict()
+
+        try:
+            password_validation.validate_password(value)
+        except DjangoValidationError as err:
+            errors['passoword'] = list(err.messages)
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return value
 
 
-class LoginSerializer(BaseLoginSerializer):
-    def _validate_username(self, username, password):
-        ...
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
-    def _validate_username_email(self, username, email, password):
-        ...
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                'User with provided email does not exists')
+
+        return value
+
+
+class SendVerificationEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                'User with provided email does not exists')
+
+        return value
