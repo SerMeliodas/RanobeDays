@@ -9,11 +9,13 @@ class UserAdmin(UserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
     model = User
-    list_display = ("username", "email", "is_staff", "is_superuser")
-    list_filter = ("username", "email", "is_staff", "is_superuser")
+    list_display = ("username", "email", "is_staff",
+                    "is_superuser", "is_verified")
+    list_filter = ("username", "email", "is_staff",
+                   "is_superuser", "is_verified")
     fieldsets = (
         (None, {"fields": ("public_username",
-         "username", "email", "avatar", "password")}),
+         "username", "email", "avatar", "password", "is_verified")}),
         ("Permisions", {"classes": ("collapse",),
                         "fields": ("is_staff", "is_active",
                                    "groups", "user_permissions"),
