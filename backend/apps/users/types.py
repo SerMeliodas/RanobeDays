@@ -19,6 +19,7 @@ class RequestPasswordResetObject(BaseModel):
 
 
 class ResetPasswordObject(BaseModel):
+    uid: str
     token: str
     new_password1: str
     new_password2: str
