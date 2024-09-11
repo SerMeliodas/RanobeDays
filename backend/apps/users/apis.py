@@ -87,12 +87,13 @@ class RequestPasswordResetAPI(APIView):
 
 
 class ResetPasswordAPI(APIView):
-    def post(self, request, token: str):
+    def post(self, request, uid: str, token: str):
         serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         detail = reset_password(
-            ResetPasswordObject(**serializer.validated_data, token=token)
+            ResetPasswordObject(**serializer.validated_data,
+                                token=token, uid=uid)
         )
 
         data = get_response_data(status=status.HTTP_200_OK, detail=detail)

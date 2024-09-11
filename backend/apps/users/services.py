@@ -1,21 +1,24 @@
 from apps.common.services import model_update, get_fields_to_update
-import datetime
 
 from rest_framework.exceptions import ValidationError
-from .models import User, PasswordReset
+from .models import User
 from .types import (
     UserObject, UserNewPassObject,
     ResetPasswordObject, RequestPasswordResetObject
 )
 
+from .exceptions import TokenError
+
 from django.urls import reverse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from .exceptions import TokenError
+genarator = PasswordResetTokenGenerator()
 
 
 def update_user(user: User, data: UserObject) -> User:
@@ -56,16 +59,19 @@ def request_reset_password(data: RequestPasswordResetObject):
     user = User.objects.filter(email__iexact=data.email).first()
 
     if not user:
-        raise ValidationError('User with this email do not exist')
+        raise ValidationError('User with this email does not exist')
 
-    genarator = PasswordResetTokenGenerator()
+    if not user.is_verified:
+        raise ValidationError('User email is not verified')
+
     token = genarator.make_token(user)
-
-    reset_obj = PasswordReset(email=user.email, token=token)
-    reset_obj.save()
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
 
     reset_url = settings.BASE_URL + \
-        reverse('users:password:reset-password', args=[token])
+        reverse('users:password:reset-password', kwargs={
+            'token': token,
+            'uid': uid
+        })
 
     _send_pass_reset_email(reset_url, data.email)
 
@@ -73,19 +79,12 @@ def request_reset_password(data: RequestPasswordResetObject):
 
 
 def reset_password(data: ResetPasswordObject):
-    reset_obj = PasswordReset.objects.filter(token=data.token).first()
+    user = User.objects.get(pk=urlsafe_base64_decode(data.uid))
 
-    if not reset_obj:
+    if not genarator.check_token(user, data.token):
         raise TokenError('Invalid token')
 
-    if datetime.datetime.now().timestamp() - reset_obj.created_at.timestamp() >= 5*60:
-        reset_obj.delete()
-        raise TokenError('Token has been expired')
-
-    user = User.objects.get(email=reset_obj.email)
     user.set_password(data.new_password1)
     user.save()
-
-    reset_obj.delete()
 
     return 'Password was reset successfully'

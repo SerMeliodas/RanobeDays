@@ -10,7 +10,7 @@ from .apis import (
 password_patterns = [
     path('request/',  RequestPasswordResetAPI.as_view(),
          name='request-password-reset'),
-    path('reset/<str:token>/', ResetPasswordAPI.as_view(),
+    path('reset/<str:uid>/<str:token>/', ResetPasswordAPI.as_view(),
          name='reset-password'),
 ]
 
