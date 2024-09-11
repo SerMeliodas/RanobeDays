@@ -1,6 +1,5 @@
 from apps.users.models import User
 from rest_framework.authtoken.models import Token
-from rest_framework import status
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -10,6 +9,9 @@ from django.urls import reverse
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+
+from .exceptions import AlreadyVerifiedError
+from apps.core.exceptions import TokenError
 
 
 from .types import (
@@ -70,7 +72,7 @@ def send_verification_email(data: SendVerificationEmailObject) -> (int, str):
 
     _send_confirm_email(url, data.email)
 
-    return status.HTTP_200_OK, f'Confirmation email was sent to {data.email}'
+    return f'Confirmation email was sent to {data.email}'
 
 
 def verify_email(uid: str, token: str) -> (int, str):
@@ -78,10 +80,12 @@ def verify_email(uid: str, token: str) -> (int, str):
     user = User.objects.get(pk=user_pk)
 
     if user.is_verified:
-        return status.HTTP_400_BAD_REQUEST, 'User email is already verified'
+        raise AlreadyVerifiedError('User email is already verified')
 
-    if default_token_generator.check_token(user, token):
-        user.is_verified = True
-        user.save()
+    if not default_token_generator.check_token(user, token):
+        raise TokenError('Invalid token')
 
-    return status.HTTP_200_OK, 'Email was successfully confirmed'
+    user.is_verified = True
+    user.save()
+
+    return 'Email was successfully confirmed'

@@ -73,19 +73,20 @@ class SendEmailVerificationAPI(APIView):
         serializer = SendVerificationEmailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        status_code, data = send_verification_email(
+        data = send_verification_email(
             SendVerificationEmailObject(**serializer.validated_data))
 
-        data = get_response_data(status_code,
+        data = get_response_data(status.HTTP_200_OK,
                                  detail=data)
 
-        return Response(data, status_code)
+        return Response(data, status.HTTP_200_OK)
 
 
 class VerifyEmailAPI(APIView):
     def post(self, request, uid: str, token: str):
-        status_code, data = verify_email(uid, token)
-        data = get_response_data(status_code,
+        data = verify_email(uid, token)
+
+        data = get_response_data(status.HTTP_200_OK,
                                  detail=data)
 
-        return Response(data, status_code)
+        return Response(data, status.HTTP_200_OK)

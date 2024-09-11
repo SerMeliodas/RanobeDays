@@ -7,7 +7,7 @@ from .types import (
     ResetPasswordObject, RequestPasswordResetObject
 )
 
-from .exceptions import TokenError
+from apps.core.exceptions import TokenError
 
 from django.urls import reverse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator

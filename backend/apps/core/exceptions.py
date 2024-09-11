@@ -13,6 +13,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class TokenError(Exception):
+    ...
+
+
 class AlreadyExistError(Exception):
     ...
 
