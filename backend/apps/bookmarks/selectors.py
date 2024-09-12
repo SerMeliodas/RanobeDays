@@ -1,6 +1,9 @@
 from .models import Bookmark
-from apps.users.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
+
+
+User = get_user_model()
 
 
 def get_bookmark(pk: int) -> Bookmark:

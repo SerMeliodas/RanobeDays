@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from apps.users.serializers import UserSerializer
 from apps.novels.models import Novel
-from apps.users.models import User
+from django.contrib.auth import get_user_model
 from .models import Team
+
+
+User = get_user_model()
 
 
 class TeamSerializer(serializers.Serializer):
