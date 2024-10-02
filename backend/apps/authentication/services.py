@@ -23,7 +23,7 @@ from .types import (
 User = get_user_model()
 
 
-def register(data: RegisterObject):
+def register(data: RegisterObject) -> User:
     user = User.objects.create_user(email=data.email,
                                     password=data.password1,
                                     username=data.username,
@@ -32,7 +32,7 @@ def register(data: RegisterObject):
     return user
 
 
-def login(data: LoginObject):
+def login(data: LoginObject) -> str:
     user = authenticate(email=data.email, password=data.password)
 
     if user:

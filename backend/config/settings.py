@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.teams',
     'apps.authentication',
+    'apps.oauth',
     'apps.libraries',
     'apps.bookmarks',
     'apps.notifications',
@@ -148,10 +149,12 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
-# allauth
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# oauth
+# google
+GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
+GOOGLE_CLIENT_PROJECT_ID = env('GOOGLE_CLIENT_PROJECT_ID')
+
 
 # media
 MEDIA_URL = '/media/'
