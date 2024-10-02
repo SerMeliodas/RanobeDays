@@ -1,0 +1,15 @@
+{
+  "iss": "https://accounts.google.com",
+  "azp": "77478233637-fga1t0ph3300jf27jqav8sdd1fbvevkl.apps.googleusercontent.com",
+  "aud": "77478233637-fga1t0ph3300jf27jqav8sdd1fbvevkl.apps.googleusercontent.com",
+  "sub": "107475059883949927769",
+  "email": "oliver9574@gmail.com",
+  "email_verified": true,
+  "at_hash": "46ZPKyxNIzJwjuUcTBXS4g",
+  "name": "Demind Channel",
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocI08Ifko_ILH-CTojATDWmfZX1C-B2Ms2ORIz47Bwi21CphHlem=s96-c",
+  "given_name": "Demind",
+  "family_name": "Channel",
+  "iat": 1726843333,
+  "exp": 1726846933
+}

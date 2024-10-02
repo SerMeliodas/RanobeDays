@@ -34,6 +34,8 @@ urlpatterns = [
 
     path('auth/', include(('apps.authentication.urls', 'auth'), 'auth')),
 
+    path('auth/', include(('apps.oauth.urls', 'oauth'), 'oauth')),
+
     path('bookmarks/', include(('apps.bookmarks.urls',
          'bookmarks'), 'bookmarks')),
 
