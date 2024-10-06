@@ -1,2 +1,6 @@
 class AlreadyVerifiedError(Exception):
     ...
+
+
+class LoginError(Exception):
+    ...

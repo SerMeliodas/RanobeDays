@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from .exceptions import AlreadyVerifiedError
+from .exceptions import AlreadyVerifiedError, LoginError
 from apps.core.exceptions import TokenError
 
 
@@ -39,6 +39,8 @@ def login(data: LoginObject) -> str:
         token, _ = Token.objects.get_or_create(user=user)
 
         return token
+
+    raise LoginError('User was not found')
 
 
 def _send_confirm_email(url: str, email: str):
